@@ -19,8 +19,6 @@ services:
     restart: always
     environment:
       - ADMINER_DESIGN=dracula
-    networks:
-      - my_network
     ports: 
       - '8080:8080'
   
