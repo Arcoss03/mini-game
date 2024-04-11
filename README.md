@@ -18,3 +18,14 @@ make database backup:
 ```bash
 ./scripts/backup.sh 
 ```
+
+
+## use vps:
+- the mysql database is running on a vps
+- nginx docker container is running on the vps
+- front end and api are running on the same docker container
+
+to access to the mysql console:
+```bash
+mysql -u root -p
+```
