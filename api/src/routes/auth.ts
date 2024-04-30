@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import db from '../db';
-import type { User } from '../interfaces/user.interface';
+import type { User, UserLogin } from '../interfaces/user.interface';
 import { generateRandomSalt, hashPassword } from '../utils/hash.utils';
 
 // Define the JSON Schema for user creation
@@ -18,9 +17,14 @@ const userSchema = {
     }
 };
 
+interface JwtPayload {
+    id: number;  // Assuming 'id' is a number. Adjust the type if necessary.
+    // You can add more fields here as per your JWT payload structure.
+}
+
 // Route for creating a new user
 async function routes(fastify: FastifyInstance) {
-    fastify.post('/users', {
+    fastify.post('/auth', {
         schema: {
             body: userSchema
         }
@@ -30,7 +34,7 @@ async function routes(fastify: FastifyInstance) {
         const hashedPassword = hashPassword(password, salt);
 
         try {
-            await db.query(
+            await fastify.db.query(
                 'INSERT INTO users (pseudo, email, password, salt, creation_date) VALUES (?, ?, ?, ?, ?)',
                 [pseudo, email, hashedPassword, salt, new Date()]
             );
@@ -50,6 +54,42 @@ async function routes(fastify: FastifyInstance) {
             }
         }
     });
+
+    // login with password and email or pseudo
+    
+    fastify.post('/auth/login',async (request: FastifyRequest<{ Body: UserLogin }>, reply) => {
+        const { username, password } = request.body;
+        const [rows]: any = await fastify.db.query('SELECT * FROM users WHERE email = ? OR pseudo = ?', [username, username]);
+        if (rows.length === 0) {
+            reply.status(404);
+            return { error: 'User not found' };
+        }
+        const user = rows[0];
+        if (user.password !== hashPassword(password, user.salt)) {
+            reply.status(401);
+            return { error: 'Invalid password' };
+        }
+        const token = fastify.jwt.sign({ id: user.id });
+        return { token, user: { id: user.id, pseudo: user.pseudo, email: user.email } };
+
+    });
+
+    //token login: check if the token is valid must return the user and use bearer token
+    fastify.post('/auth/token', async (request: FastifyRequest, reply) => {
+        try {
+            await request.jwtVerify();
+            const res = request.user as JwtPayload;
+            if (!res.id) { // Assuming 'id' is a required field in the JWT payload
+                reply.status(401).send({ error: 'Invalid token' });
+            }
+            const user = await fastify.db.query('SELECT id, pseudo, email FROM users WHERE id = ?', [res.id]);
+            return { user: user[0] };
+            
+        } catch (error) {
+            reply.status(401).send({ error: 'Invalid token' });
+        }
+    });
+
 }
 
 export default routes;

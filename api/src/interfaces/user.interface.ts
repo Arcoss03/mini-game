@@ -6,3 +6,8 @@ export interface User {
     profil:JSON | null;
     creation_date: Date;
 }
+
+export interface UserLogin {
+    username: string;
+    password: string;
+}
