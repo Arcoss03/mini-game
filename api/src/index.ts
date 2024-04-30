@@ -2,6 +2,7 @@ import fastify from 'fastify';
 import { AddressInfo } from 'net';
 import dotenv from 'dotenv';
 import postsRoutes from './routes/posts';
+import usersRoutes from './routes/users';
 
 const app = fastify({ logger: true });
 
@@ -12,6 +13,7 @@ app.get('/', async (request, reply) => {
 });
 
 postsRoutes(app);
+usersRoutes(app);
 
 const start = async () => {
     try {
