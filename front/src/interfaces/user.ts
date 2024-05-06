@@ -4,3 +4,7 @@ export interface signUp {
     password: string;
   }
   
+export interface logIn{
+  username:string;
+  password:string;
+}
