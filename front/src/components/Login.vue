@@ -43,7 +43,7 @@ async function SendPost() {
       <div>
         <label for="password"></label>
         <input v-model="password" placeholder="Password"  type="password" required>
-        <a href="/login">Sign in</a>
+        <a href="/signup">Sign in</a>
       </div>
       
       <button type=submit>Log In</button>
