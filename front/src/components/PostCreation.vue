@@ -2,22 +2,16 @@
 import ky from 'ky';
 import Toast from './Toast.vue';
 import {type Post} from '@/interfaces/post';
-
+import { useUtilsStore } from '@/stores/utilsStore';
 import { onMounted, ref, type Ref } from 'vue';
+
+const showToast = useUtilsStore().showToast;
+
 let text1: Ref<string> = ref('');
 let text2: Ref<string> = ref('');
 let toastMessage = ref('');
 let toastStatus = ref(false);
 let isToastVisible = ref(false);
-
-const showToast = (message: string, isSuccess: boolean) => {
-  toastMessage.value = message;
-  toastStatus.value = isSuccess;
-  isToastVisible.value = true;
-  setTimeout(() => {
-    isToastVisible.value = false;
-  }, 3000);
-};
 
 
 async function SendPost() {
@@ -61,7 +55,6 @@ async function SendPost() {
 
 <template>
   <main>
-    <Toast class="toast" :class="{show: isToastVisible}" :message="toastMessage" :isSuccess="toastStatus" />
     <img src="../assets/logo.svg" alt="logo">
     <form @submit.prevent="SendPost()">
       <div class='prompt-input'>
