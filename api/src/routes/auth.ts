@@ -24,7 +24,7 @@ interface JwtPayload {
 
 // Route for creating a new user
 async function routes(fastify: FastifyInstance) {
-    fastify.post('/auth', {
+    fastify.post('/', {
         schema: {
             body: userSchema
         }
@@ -57,7 +57,7 @@ async function routes(fastify: FastifyInstance) {
 
     // login with password and email or pseudo
     
-    fastify.post('/auth/login',async (request: FastifyRequest<{ Body: UserLogin }>, reply) => {
+    fastify.post('/login',async (request: FastifyRequest<{ Body: UserLogin }>, reply) => {
         const { username, password } = request.body;
         const [rows]: any = await fastify.db.query('SELECT * FROM users WHERE email = ? OR pseudo = ?', [username, username]);
         if (rows.length === 0) {
@@ -75,7 +75,7 @@ async function routes(fastify: FastifyInstance) {
     });
 
     //token login: check if the token is valid must return the user and use bearer token
-    fastify.post('/auth/token', async (request: FastifyRequest, reply) => {
+    fastify.post('/token', async (request: FastifyRequest, reply) => {
         try {
             await request.jwtVerify();
             const res = request.user as JwtPayload;

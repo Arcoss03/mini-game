@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import authRoute from './routes/auth';
-import postsRoute from './routes/posts';
+import tpfRoute from './routes/tuPreferes';
 import jwt from '@fastify/jwt';
 import db from './db';
 import dotenv from 'dotenv';
@@ -18,8 +18,8 @@ fastify.register(jwt, {
       expiresIn: '30d'  // 30 days validity
   }
 });
-fastify.register(authRoute);
-fastify.register(postsRoute);
+fastify.register(authRoute, { prefix: '/auth' });
+fastify.register(tpfRoute, { prefix: '/tpf' });
 fastify.register(db);
 fastify.listen({ port: 3000, host: '0.0.0.0' }, function (err, address) {
   if (err) {
