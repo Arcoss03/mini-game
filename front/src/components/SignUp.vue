@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ky from 'ky';
+import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, type Ref} from 'vue';
 import {type signUp} from '@/interfaces/user';
 
@@ -30,11 +30,8 @@ async function SendPost() {
       password: password.value,
     };
 
-
+    const res=await apiHelper.kyPostWithoutToken('/auth', postData);
     // Utiliser ky pour envoyer les données
-    await ky.post('/api/auth', {
-      json: postData
-    });
 
   } catch (error) {
     // Avec ky, une erreur est lancée automatiquement si la réponse n'est pas ok
