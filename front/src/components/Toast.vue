@@ -1,31 +1,36 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useUtilsStore } from '@/stores/utilsStore';
 
-const props = defineProps({
-    message: String,
-    isSuccess: Boolean
-});
+const toast = useUtilsStore().toast;
 
 
 </script>
 
 <template>
-    <div class="toast" :class="{ 'toast-success': isSuccess, 'toast-error': !isSuccess }">
-        <p>{{ message }}</p>
+    <div class="toast" :class="{ 'toast-success': toast.isSuccess, 'toast-error': !toast.isSuccess, 'is-visible': toast.isVisible }">
+        <p>{{ toast.message }}</p>
     </div>
 </template>
 
 <style scoped lang="scss">
 .toast {
+    &.is-visible {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    opacity: 0;
     position: fixed;
-    bottom: 0;
+    transform: translateY(-100%);
+    top: 0;
     right: 0;
-    padding: 10px 20px;
-    border-radius: 8px 0 0 0;
+    padding: 5px 20px;
+    border-radius: 0 0 0 8px;
     color: #fff;
     font-weight: bold;
     z-index: 1000;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; // Réduisez la durée et ajoutez opacity
     pointer-events: none;
 
     &.toast-success {
