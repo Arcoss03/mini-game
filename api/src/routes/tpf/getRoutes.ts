@@ -3,11 +3,14 @@ import type { RouteParams } from '../../interfaces/RouteParams';
 
 
 async function getRoutes(fastify: FastifyInstance) {
+
+    //get all tu_preferes
     fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
         const [rows] = await fastify.db.query('SELECT * FROM tu_preferes');
         reply.send(rows);
     });
 
+    //get one tu_preferes by id
     fastify.get<{ Params: RouteParams }>('/:id', async (request: FastifyRequest<{ Params: RouteParams }>, reply: FastifyReply) => {
         const [rows]: any = await fastify.db.query('SELECT * FROM tu_preferes WHERE id = ?', [request.params.id]);
         if (rows.length === 0) {

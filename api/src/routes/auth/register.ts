@@ -10,7 +10,7 @@ async function registerRoutes(fastify: FastifyInstance) {
         }
     }, async (request: FastifyRequest<{ Body: User }>, reply: FastifyReply) => {
         const { pseudo, email, password } = request.body;
-        const salt = generateRandomSalt();
+        const salt = generateRandomSalt(); // Generate a random salt unique to the user
         const hashedPassword = hashPassword(password, salt);
 
         try {
@@ -22,9 +22,9 @@ async function registerRoutes(fastify: FastifyInstance) {
         } catch (error: any) {
             if (error.code === 'ER_DUP_ENTRY') {
                 let message = 'Unknown error';
-                if (error.sqlMessage.includes('email')) {
+                if (error.sqlMessage.includes('email')) { //Check if the error is email already exists
                     message = 'Email already exists';
-                } else if (error.sqlMessage.includes('pseudo')) {
+                } else if (error.sqlMessage.includes('pseudo')) { //Check if the error is pseudo already exists
                     message = 'Pseudo already exists';
                 }
                 reply.status(409).send({ error: message });

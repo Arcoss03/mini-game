@@ -4,8 +4,8 @@ import registerRoutes from './auth/register';
 import tokenRoutes from './auth/token';
 import postRoutes from './tpf/postRoutes';
 import getRoutes from './tpf/getRoutes';
-import { get } from 'http';
 
+//used to register all routes
 async function routes(fastify: FastifyInstance) {
     fastify.register(loginRoutes, { prefix: '/auth' });
     fastify.register(registerRoutes, { prefix: '/auth' });

@@ -9,7 +9,7 @@ const showToast = useUtilsStore().showToast;
 let username: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 
-async function SendPost() {
+async function Login() {
     const postData: logIn = {
       "username": username.value,
       "password": password.value,
@@ -34,7 +34,7 @@ async function SendPost() {
         <img src="../assets/logo.svg" alt="logo">
     </div>
     
-    <form @submit.prevent="SendPost()">
+    <form @submit.prevent="Login()">
       <div>
         <label for="username"></label>
         <input v-model="username" placeholder="username" required>

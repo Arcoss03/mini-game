@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import type { JwtPayload } from '../../interfaces/JwtPayload';
 
+// Route to login a user with his token
 async function tokenRoutes(fastify: FastifyInstance) {
     fastify.post('/token', async (request: FastifyRequest, reply: FastifyReply) => {
         try {

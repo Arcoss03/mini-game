@@ -5,6 +5,7 @@ interface ApiResponse {
     data: Record<string, unknown>
 }
 
+//create ky instance with api key and base url
 const api = ky.create({
   prefixUrl: import.meta.env.VITE_API_URL as string,
   headers: {
@@ -13,6 +14,7 @@ const api = ky.create({
   }
 })
 
+//function to make a post request with token
 const kyPost = async (url: string, data: any, token:string): Promise<ApiResponse> => {
     try {
         const response:Record<string, unknown> = await api.post(url, { 
@@ -28,6 +30,7 @@ const kyPost = async (url: string, data: any, token:string): Promise<ApiResponse
     }
 };
 
+//function to make a put request with token
 const kyPut = async (url: string, data: any, token:string): Promise<ApiResponse> => {
     try {
         const response:Record<string, unknown> = await api.put(url, { 
@@ -43,6 +46,7 @@ const kyPut = async (url: string, data: any, token:string): Promise<ApiResponse>
     }
 }
 
+//function to make a delete request with token
 const kyDelete = async (url: string, token:string): Promise<ApiResponse> => {
     try {
         const response:Record<string, unknown> = await api.delete(url, { 
@@ -57,6 +61,7 @@ const kyDelete = async (url: string, token:string): Promise<ApiResponse> => {
     }
 }
 
+//function to make a get request
 const kyGet = async (url: string): Promise<ApiResponse> => {
     try {
         const response:Record<string, unknown> = await api.get(url).json();
@@ -67,6 +72,7 @@ const kyGet = async (url: string): Promise<ApiResponse> => {
     }
 }
 
+//function to make a post request without token
 const kyPostWithoutToken = async (url: string, data: any): Promise<ApiResponse> => {
     try {
         const response:Record<string, unknown> = await api.post(url, { json: data }).json();
