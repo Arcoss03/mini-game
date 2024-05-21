@@ -2,16 +2,14 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useUtilsStore = defineStore('utils', () => {
+  const fetchTokenUser = (): string | undefined => {
+    const token = localStorage.getItem('token');
+    return token ? token : undefined;
+  }
 
-    const fetchTokenUser = (error: string, isSuccess: boolean): string => {
-        const tokenElement = document.getElementById('token') as HTMLInputElement;
-        if (tokenElement) {
-          return tokenElement.value;
-        } else {
-          console.error(error);
-          return '';
-        }
-      }
+  const setTokenUser = (token: string): void => {
+    localStorage.setItem('token', token);
+  }
 
-return {fetchTokenUser}
+  return { fetchTokenUser, setTokenUser }
 })
