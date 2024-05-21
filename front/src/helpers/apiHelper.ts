@@ -13,7 +13,7 @@ const api = ky.create({
   }
 })
 
-const kiPost = async (url: string, data: any, token:string): Promise<ApiResponse> => {
+const kyPost = async (url: string, data: any, token:string): Promise<ApiResponse> => {
     try {
         const response = await api.post(url, { 
             json: data,
@@ -28,7 +28,7 @@ const kiPost = async (url: string, data: any, token:string): Promise<ApiResponse
     }
 };
 
-const kiPut = async (url: string, data: any, token:string): Promise<ApiResponse> => {
+const kyPut = async (url: string, data: any, token:string): Promise<ApiResponse> => {
     try {
         const response = await api.put(url, { 
             json: data,
@@ -77,4 +77,4 @@ const kyPostWithoutToken = async (url: string, data: any): Promise<ApiResponse> 
     }
 }
 
-export default { kiPost, kiPut, kyDelete, kyGet, kyPostWithoutToken }
+export default { kyPost, kyPut, kyDelete, kyGet, kyPostWithoutToken }
