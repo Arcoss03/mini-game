@@ -10,6 +10,13 @@ dotenv.config();
 const fastify = Fastify({
     logger: true
   });
+  fastify.register(cors, {
+    // put your options here
+    origin: "*", // Allow all origins
+    methods: ["GET","POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-API-Key"],
+    credentials: true,
+  });
 
 fastify.addHook('onRequest', async (request, reply) => {
   const apiKey = request.headers['x-api-key'];
@@ -18,13 +25,6 @@ fastify.addHook('onRequest', async (request, reply) => {
   }
 });
 
-fastify.register(cors, {
-  // put your options here
-  origin: "*", // Allow all origins
-  methods: ["GET","POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-API-Key"],
-  credentials: true,
-});
 
 fastify.register(jwt, {
     secret: process.env.JWT_SECRET as string || 'supersecret',

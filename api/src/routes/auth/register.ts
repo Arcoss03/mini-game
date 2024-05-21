@@ -18,7 +18,7 @@ async function registerRoutes(fastify: FastifyInstance) {
                 'INSERT INTO users (pseudo, email, password, salt, creation_date) VALUES (?, ?, ?, ?, ?)',
                 [pseudo, email, hashedPassword, salt, new Date()]
             );
-            reply.send({ result: "success", message: "User created successfully" });
+            reply.send({message: "User created successfully" });
         } catch (error: any) {
             if (error.code === 'ER_DUP_ENTRY') {
                 let message = 'Unknown error';

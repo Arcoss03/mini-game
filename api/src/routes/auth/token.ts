@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import type { JwtPayload } from '../../interfaces/jwtPayload';
+import type { JwtPayload } from '../../interfaces/JwtPayload';
 
 async function tokenRoutes(fastify: FastifyInstance) {
     fastify.post('/token', async (request: FastifyRequest, reply: FastifyReply) => {
