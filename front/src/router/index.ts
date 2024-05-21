@@ -46,10 +46,11 @@ const router = createRouter({
   ]
   
 })
+
+//list of protected routes by token
 const routesRequiringAuth = ['profile'];
 
 router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  const isMobile = window.innerWidth <= 768;
   if(!useUserStore().isLogedIn) {
     await useUserStore().tokenLogin();
   }

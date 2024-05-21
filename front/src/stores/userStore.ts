@@ -3,8 +3,9 @@ import { defineStore } from 'pinia'
 import  apiHelper from '../helpers/apiHelper';
 
 export const useUserStore = defineStore('userStore', () => {
-    const isLogedIn = ref(false);
+    const isLogedIn = ref(false); // This is a reactive variable that will be used to check if the user is logged in or not
 
+    // Function to check if the user is logged in using the token (is used at the refresh of the page to keep the user logged in)
     const tokenLogin = async () => {
         const token = localStorage.getItem('token') as string;
         if(token) {
@@ -14,6 +15,8 @@ export const useUserStore = defineStore('userStore', () => {
             }
         }
     }
+
+    
 
 return { isLogedIn, tokenLogin}
 })
