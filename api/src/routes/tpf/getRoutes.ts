@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import type { RouteParams } from '../../interfaces/RouteParams';
 
+
 async function getRoutes(fastify: FastifyInstance) {
     fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
         const [rows] = await fastify.db.query('SELECT * FROM tu_preferes');

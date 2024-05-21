@@ -2,6 +2,9 @@
 import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, type Ref} from 'vue';
 import {type signUp} from '@/interfaces/user';
+import { useUtilsStore } from '@/stores/utilsStore';
+
+const showToast = useUtilsStore().showToast;
 
 let email: Ref<string> = ref('');
 let pseudo: Ref<string> = ref('');
@@ -9,34 +12,32 @@ let password: Ref<string> = ref('');
 let confirmPassword: Ref<string> = ref('');
 
 
-function compare():number{
-    if (password.value === confirmPassword.value) {
-    return 0;
-  } else {
-    console.log('Error: different passwords');
-    return 1;
-  }
+
+function compare():boolean{
+    return (password.value === confirmPassword.value);
 }
 
 
 
-async function SendPost() {
-    
-  try {
-    compare()===0
+async function Singup() {
+    if(!compare()){
+        showToast('Les mots de passe ne correspondent pas', false);
+        return;
+    }
+
     const postData: signUp = {
-      email: email.value,
-      pseudo: pseudo.value,
-      password: password.value,
+      "email": email.value,
+      "pseudo": pseudo.value,
+      "password": password.value,
     };
 
-    const res=await apiHelper.kyPostWithoutToken('/auth', postData);
-    // Utiliser ky pour envoyer les données
-
-  } catch (error) {
-    // Avec ky, une erreur est lancée automatiquement si la réponse n'est pas ok
-    console.error('Erreur lors de la requête :', error);
-  }
+    const res = await apiHelper.kyPostWithoutToken('auth/register', postData);
+    if(!res.success) {
+        showToast('email ou pseudo déjà utilisé', false);
+    } else {
+        showToast('Inscription réussie', true);
+    }
+  
 }
 
 </script>
@@ -47,7 +48,7 @@ async function SendPost() {
         <img src="../assets/logo.svg" alt="logo">
     </div>
     
-    <form @submit.prevent="SendPost()">
+    <form @submit.prevent="Singup()">
       <div>
         <label for="Email"></label>
         <input v-model="email" placeholder="user@domain.com" type="email" required>
@@ -136,7 +137,6 @@ main {
             padding-top: 0.75rem;
             padding-bottom: 0.75rem;
             border-radius: 12px;
-            color: #BEBEBE;
             font-size: 16px;
             font-family: Arial, Helvetica, sans-serif;
             padding-left: 2rem;

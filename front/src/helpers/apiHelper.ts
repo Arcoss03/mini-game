@@ -2,7 +2,7 @@ import ky from 'ky'
 
 interface ApiResponse {
     success: boolean
-    data: Record<string, any>
+    data: Record<string, unknown>
 }
 
 const api = ky.create({
@@ -15,65 +15,65 @@ const api = ky.create({
 
 const kyPost = async (url: string, data: any, token:string): Promise<ApiResponse> => {
     try {
-        const response = await api.post(url, { 
+        const response:Record<string, unknown> = await api.post(url, { 
             json: data,
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }).json();
-        return response as ApiResponse;
+        return { success: true, data: response} as ApiResponse;
     } catch (error) {
         console.error(error);
-        return { success: false, data: {} };
+        return { success: false, data: {} } as ApiResponse;
     }
 };
 
 const kyPut = async (url: string, data: any, token:string): Promise<ApiResponse> => {
     try {
-        const response = await api.put(url, { 
+        const response:Record<string, unknown> = await api.put(url, { 
             json: data,
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }).json();
-        return response as ApiResponse;
+        return { success: true, data: response} as ApiResponse;
     } catch (error) {
         console.error(error);
-        return { success: false, data: {} };
+        return { success: false, data: {} } as ApiResponse;
     }
 }
 
 const kyDelete = async (url: string, token:string): Promise<ApiResponse> => {
     try {
-        const response = await api.delete(url, { 
+        const response:Record<string, unknown> = await api.delete(url, { 
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }).json();
-        return response as ApiResponse;
+        return { success: true, data: response} as ApiResponse;
     } catch (error) {
         console.error(error);
-        return { success: false, data: {} };
+        return { success: false, data: {} } as ApiResponse;
     }
 }
 
 const kyGet = async (url: string): Promise<ApiResponse> => {
     try {
-        const response = await api.get(url).json();
-        return response as ApiResponse;
+        const response:Record<string, unknown> = await api.get(url).json();
+        return { success: true, data: response} as ApiResponse;
     } catch (error) {
         console.error(error);
-        return { success: false, data: {} };
+        return { success: false, data: {} } as ApiResponse;
     }
 }
 
 const kyPostWithoutToken = async (url: string, data: any): Promise<ApiResponse> => {
     try {
-        const response = await api.post(url, { json: data }).json();
-        return response as ApiResponse;
+        const response:Record<string, unknown> = await api.post(url, { json: data }).json();
+        return { success: true, data: response } as ApiResponse;
     } catch (error) {
         console.error(error);
-        return { success: false, data: {} };
+        return { success: false, data: {} } as ApiResponse;
     }
 }
 
