@@ -2,26 +2,27 @@
 import { onMounted, ref, type Ref} from 'vue';
 import {type logIn} from '@/interfaces/user';
 import apiHelper from '@/helpers/apiHelper';
+import { useUtilsStore } from '@/stores/utilsStore';
+
+const showToast = useUtilsStore().showToast;
 
 let username: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 
 async function SendPost() {
-    
-  try {
     const postData: logIn = {
-      username: username.value,
-      password: password.value,
+      "username": username.value,
+      "password": password.value,
       
     };
     // Utiliser ky pour envoyer les données
-    const res=await apiHelper.kyPostWithoutToken('/auth/login', postData);
-    
-         
-  } catch (error) {
-    // Avec ky, une erreur est lancée automatiquement si la réponse n'est pas ok
-    console.error('Erreur lors de la requête :', error);
-  }
+    const res = await apiHelper.kyPostWithoutToken('auth/login', postData);
+    if(!res.success) {
+        showToast('email, pseudo ou mot de passe incorrect', false);
+    } else {
+        localStorage.setItem('token', res.data.token as string);
+        showToast('Connexion réussie', true);
+    }
 }
 
 
@@ -112,7 +113,6 @@ main {
             padding-top: 0.75rem;
             padding-bottom: 0.75rem;
             border-radius: 12px;
-            color: #BEBEBE;
             font-size: 16px;
             font-family: Arial, Helvetica, sans-serif;
             padding-left: 2rem;
