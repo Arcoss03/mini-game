@@ -8,7 +8,7 @@ import {userSchema} from '../../schemas/userSchema';
 
 
 
-// Route to login a user with his token
+
 async function putProfilRoutes(fastify: FastifyInstance) {
     fastify.addHook('preHandler', async (request, reply) => {
         try {
@@ -17,8 +17,8 @@ async function putProfilRoutes(fastify: FastifyInstance) {
             reply.status(401).send({ error: 'Invalid token' });
         }
     });
-    
-    fastify.put('/profil/newPassword', async (request: FastifyRequest<{ Body: ModifPassword }>, reply: FastifyReply) => {
+    // Route to change password 
+    fastify.put('/password', async (request: FastifyRequest<{ Body: ModifPassword }>, reply: FastifyReply) => {
         const payload = request.user as JwtPayload;
         if (!payload.id) {
             reply.status(401).send({ error: 'Invalid token' });
@@ -39,6 +39,9 @@ async function putProfilRoutes(fastify: FastifyInstance) {
                 return;
             }
             const pattern = new RegExp(userSchema.properties.password.pattern);
+            
+            //verifie si ne correspond pas au regex du schema user
+
             if(typeof newPassword !== userSchema.properties.password.type || newPassword.length < userSchema.properties.password.minLength || !pattern.test(newPassword)){
                 reply.status(401).send({ error: 'Invalid password' });
                 return;
@@ -57,8 +60,8 @@ async function putProfilRoutes(fastify: FastifyInstance) {
         }
     });
 
-
-    fastify.put('/profil/newPseudo', async (request: FastifyRequest, reply: FastifyReply) => {
+    // Route to change pseudo
+    fastify.put('/pseudo', async (request: FastifyRequest, reply: FastifyReply) => {
         const payload = request.user as JwtPayload;
         if (!payload.id) {
             reply.status(401).send({ error: 'Invalid token' });
@@ -90,7 +93,8 @@ async function putProfilRoutes(fastify: FastifyInstance) {
         }
     });
 
-    fastify.put('/profil/updateProfil', async (request: FastifyRequest, reply: FastifyReply) => {
+    // Route to change profil
+    fastify.put('/updateProfil', async (request: FastifyRequest, reply: FastifyReply) => {
         const payload = request.user as JwtPayload;
         if (!payload.id) {
             reply.status(401).send({ error: 'Invalid token' });
@@ -99,11 +103,6 @@ async function putProfilRoutes(fastify: FastifyInstance) {
     
         try {
             const profil = request.body as JSON;
-            const [rows]: any = await fastify.db.query('SELECT id FROM users WHERE id = ?', [payload.id]);
-            if (rows.length === 0) {
-                reply.status(404).send({ error: 'User not found' });
-                return;
-            }
             
             await fastify.db.query(
                 "UPDATE users SET profil = ? WHERE id = ?",

@@ -17,7 +17,7 @@ async function routes(fastify: FastifyInstance) {
     fastify.register(putRoutes, { prefix: '/tpf' });
     fastify.register(getRoutes, { prefix: '/tpf' });
     fastify.register(getProfilRoutes, {prefix: '/profil' });
-    fastify.register(getProfilRoutes, {prefix: '/profil' });
+    fastify.register(putProfilRoutes, {prefix: '/profil' });
 }
 
 export default routes;
