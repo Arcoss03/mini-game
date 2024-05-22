@@ -6,6 +6,7 @@ import postRoutes from './tpf/postRoutes';
 import getRoutes from './tpf/getRoutes';
 import putRoutes from './tpf/putRoutes'
 import getProfilRoutes from './profil/getProfil'
+import putProfilRoutes from './profil/putProfil'
 
 //used to register all routes
 async function routes(fastify: FastifyInstance) {
@@ -15,6 +16,7 @@ async function routes(fastify: FastifyInstance) {
     fastify.register(postRoutes, { prefix: '/tpf' });
     fastify.register(putRoutes, { prefix: '/tpf' });
     fastify.register(getRoutes, { prefix: '/tpf' });
+    fastify.register(getProfilRoutes, {prefix: '/profil' });
     fastify.register(getProfilRoutes, {prefix: '/profil' });
 }
 
