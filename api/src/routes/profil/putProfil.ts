@@ -9,6 +9,7 @@ import {userSchema} from '../../schemas/userSchema';
 
 
 
+
 async function putProfilRoutes(fastify: FastifyInstance) {
     fastify.addHook('preHandler', async (request, reply) => {
         try {
@@ -53,6 +54,8 @@ async function putProfilRoutes(fastify: FastifyInstance) {
                 "UPDATE users SET password = ?, salt = ? WHERE id = ?",
                     [hashedPassword, salt, payload.id]
               );
+              reply.status(200);
+            return;
             
             
         } catch (error) {
@@ -69,8 +72,8 @@ async function putProfilRoutes(fastify: FastifyInstance) {
         }
     
         try {
-            const pseudo = request.body as string;
-            const [rows]: any = await fastify.db.query('SELECT id FROM users WHERE pseudo = ?', [pseudo]);
+            const data = request.body as {pseudo:string} ;
+            const [rows]: any = await fastify.db.query('SELECT id FROM users WHERE pseudo = ?', [data.pseudo]);
             if (rows.length != 0) {
                 reply.status(404).send({ error: 'Pseudo already used' });
                 return;
@@ -81,11 +84,12 @@ async function putProfilRoutes(fastify: FastifyInstance) {
                 reply.status(404).send({ error: 'User not found' });
                 return;
             }
-            
             await fastify.db.query(
                 "UPDATE users SET pseudo = ? WHERE id = ?",
-                    [pseudo, payload.id]
+                    [data.pseudo, payload.id]
               );
+              reply.status(200);
+              return;
             
             
         } catch (error) {
@@ -94,7 +98,7 @@ async function putProfilRoutes(fastify: FastifyInstance) {
     });
 
     // Route to change profil
-    fastify.put('/updateProfil', async (request: FastifyRequest, reply: FastifyReply) => {
+    fastify.put('/', async (request: FastifyRequest, reply: FastifyReply) => {
         const payload = request.user as JwtPayload;
         if (!payload.id) {
             reply.status(401).send({ error: 'Invalid token' });
@@ -102,12 +106,14 @@ async function putProfilRoutes(fastify: FastifyInstance) {
         }
     
         try {
-            const profil = request.body as JSON;
-            
+            const data = request.body as {profil : JSON} ;
             await fastify.db.query(
                 "UPDATE users SET profil = ? WHERE id = ?",
-                    [profil, payload.id]
+                    [JSON.stringify(data.profil), payload.id]
               );
+              reply.status(200);
+              return;
+            
             
             
         } catch (error) {
