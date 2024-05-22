@@ -18,7 +18,7 @@ const colNum = ref(4); // Nombre initial de colonnes
 
 const updateColNum = () => {
   const width = window.innerWidth
-  colNum.value = width > 1500 ? 4 : 2
+  colNum.value = width > 1278 ? 4 : 2
 }
 
 onMounted(() => {
@@ -197,20 +197,21 @@ const hidePopup = (id: string) => {
 }
 
 .container {
-  display: flex;
   width: 100%;
-  padding: 20px 100px;
+  padding: 20px 0px;
   justify-content: space-between;
   height: 100vw;
 
   .user {
-    max-width: 300px;
+    display: flex;
+    flex-direction: column;
 
     .pp {
       width: 190px;
       height: 190px;
-      border-radius: 9999px;
+      border-radius: 999px;
       overflow: hidden;
+      margin: 20px 0;
 
       img {
         width: 100%;
@@ -220,20 +221,39 @@ const hidePopup = (id: string) => {
     }
 
     h1 {
-      font-size: 40px;
+      font-size: 44px;
       font-weight: 700;
       color: white;
     }
 
     p {
       word-break: break-all;
+      font-size: 20px;
     }
+
   }
 
   .grid-container {
-    width: 1000px;
+    width: 380px;
+    min-width: 380px;
     height: 100%;
   }
+
+  //media querie pour screen > 1278px
+  @media (min-width: 1278px) {
+    padding: 20px 30px 20px 50px;
+    display: flex;
+    .user {
+      align-items: left;
+      max-width: 400px;
+    };
+
+    .grid-container {
+      width: 900px;
+      min-width: 900px;
+    }
+  }
+
 }
 
 .GridItem {
@@ -242,6 +262,7 @@ const hidePopup = (id: string) => {
 
 .popup {
   position: absolute;
+  z-index: 999;
   bottom: 0;
   left: 0;
   right: 0;
