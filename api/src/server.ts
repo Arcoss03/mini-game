@@ -5,19 +5,22 @@ import db from './db';
 import dotenv from 'dotenv';
 import cors from '@fastify/cors'
 
-dotenv.config();
+dotenv.config(); // Load environment variables
 
+// create fastify instance
 const fastify = Fastify({
     logger: true
   });
+
+  // allow cors errors
   fastify.register(cors, {
-    // put your options here
     origin: "*", // Allow all origins
     methods: ["GET","POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-API-Key"],
     credentials: true,
   });
 
+  // Add hook to verify api key for all requests
 fastify.addHook('onRequest', async (request, reply) => {
   const apiKey = request.headers['x-api-key'];
   if (!apiKey || apiKey !== process.env.API_KEY) {
@@ -25,7 +28,7 @@ fastify.addHook('onRequest', async (request, reply) => {
   }
 });
 
-
+// Register jwt plugin
 fastify.register(jwt, {
     secret: process.env.JWT_SECRET as string || 'supersecret',
     sign: {
@@ -33,14 +36,6 @@ fastify.register(jwt, {
   }
 });
 
-fastify.decorate("authenticate", async function(request: { jwtVerify: () => any; }, reply: { send: (arg0: unknown) => void; }) {
-  try {
-      await request.jwtVerify();
-  } catch (err) {
-      reply.send(err);
-  }
-});
-  
 fastify.register(routes, { prefix: '/' });
 fastify.register(db);
 fastify.listen({ port: 3000, host: '0.0.0.0' }, function (err, address) {

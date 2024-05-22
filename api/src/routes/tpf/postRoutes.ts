@@ -2,6 +2,8 @@ import type { TuPreferes } from '../../interfaces/TuPreferes';
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 
 async function postRoutes(fastify: FastifyInstance) {
+
+//use onRequest hook to verify jwt token
     fastify.addHook('onRequest', async (request, reply) => {
         try {
           await request.jwtVerify();
@@ -9,6 +11,7 @@ async function postRoutes(fastify: FastifyInstance) {
           reply.send(err);
         }
       });
+    //create a new tu_preferes
     fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
         try {
             const newPost: TuPreferes = request.body as TuPreferes;

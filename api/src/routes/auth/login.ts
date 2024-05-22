@@ -11,11 +11,13 @@ async function loginRoutes(fastify: FastifyInstance) {
             return;
         }
         const user = rows[0];
+        //check if password is correct
         if (user.password !== hashPassword(password, user.salt)) {
             reply.status(401).send({ error: 'Invalid password' });
             return;
         }
         const token = fastify.jwt.sign({ id: user.id });
+        //return token and user info
         reply.send({ token, user: { id: user.id, pseudo: user.pseudo, email: user.email } });
     });
 }
