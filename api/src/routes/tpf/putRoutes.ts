@@ -2,16 +2,7 @@ import { RouteParams } from '../../interfaces/RouteParams';
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 
 async function putRoutes(fastify: FastifyInstance) {
-
-//use onRequest hook to verify jwt token
-    fastify.addHook('onRequest', async (request, reply) => {
-        try {
-          await request.jwtVerify();
-        } catch (err) {
-          reply.send(err);
-        }
-      });
-  
+      
   // Update a tu_preferes by id
   fastify.put<{ Params: RouteParams }>("/vote/:id", async (request, reply) => {
     const [rows]: any = await fastify.db.query(
