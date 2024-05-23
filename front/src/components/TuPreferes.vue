@@ -2,7 +2,10 @@
 import type { Post } from '@/interfaces/post';
 import ky from 'ky';
 import { onMounted, ref, type Ref } from 'vue';
+import apiHelper from '../helpers/apiHelper'
+import { useUtilsStore } from '@/stores/utilsStore';
 
+const showToast = useUtilsStore().showToast;
 let img1IsActive = ref(false);
 let img2IsActive = ref(false);
 let postTab: Ref<Post[]> = ref([]);
@@ -26,21 +29,19 @@ const setImg2 = () => {
   }
 };
 
-async function getAllPosts(): Promise<Post[]> {
-  try {
-    const posts = await ky.get('/api/posts').json();
-    return posts as Post[];
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    throw error;
-  }
+async function getAllPosts(): Promise<Post[] | undefined> {
+  const res = await apiHelper.kyGet('tpf');
+    if(!res.success) {
+        showToast('Erreur lors du chargement des tu préfères', false);
+    } else {
+        return res.data as unknown as Post[]
+    }
 }
 
 const vote = async (id: number, selectedClick: number) => {
-  try {
-    await ky.put(`/api/posts/vote/${id}`, { json: { selectedClick } });
-  } catch (error) {
-    console.error('Error voting:', error);
+  const res = await apiHelper.kyPutWithoutToken(`tpf/vote/${id}`, {"selectedClick": selectedClick} );
+  if(!res.success){
+    showToast('Erreur lors du vote', false);
   }
 };
 
@@ -54,7 +55,7 @@ const nextPost = () => {
 };
 
 onMounted(async () => {
-  postTab.value = await getAllPosts();
+  postTab.value = await getAllPosts() ?? [];
 });
 
 const getPercentage = (nbClic1: number, nbClic2: number) => {
