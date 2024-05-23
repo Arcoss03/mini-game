@@ -83,4 +83,14 @@ const kyPostWithoutToken = async (url: string, data: any): Promise<ApiResponse> 
     }
 }
 
-export default { kyPost, kyPut, kyDelete, kyGet, kyPostWithoutToken }
+const kyPutWithoutToken = async (url: string, data: any): Promise<ApiResponse> => {
+    try {
+        const response:Record<string, unknown> = await api.put(url, { json: data }).json();
+        return { success: true, data: response } as ApiResponse;
+    } catch (error) {
+        console.error(error);
+        return { success: false, data: {} } as ApiResponse;
+    }
+}
+
+export default { kyPost, kyPut, kyDelete, kyGet, kyPostWithoutToken,kyPutWithoutToken }
