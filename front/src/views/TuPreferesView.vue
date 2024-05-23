@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Home from '../components/Home.vue'
+import Tpf from '../components/TuPreferes.vue'
 </script>
 
 <template>
-    <Home />
+    <Tpf />
 </template>
 

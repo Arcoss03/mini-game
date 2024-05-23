@@ -16,22 +16,28 @@ const router = createRouter({
     {
       path: '/signup',
       name: 'signup',
-      component: SignUpView
+      component: () => import('../views/SignUpView.vue')
     }
     ,{
       path: '/login',
       name: 'login',
-      component: LogInView
+      component: () => import('../views/LogInView.vue')
     },
+    
     {
       path: '/create',
       name: 'create',
       component: () => import('../views/PostCreationView.vue')
     },
     {
+      path: '/tpf',
+      name: 'tpf',
+      component: () => import('../views/TuPreferesView.vue')
+    },
+    {
       path: '/test',
       name: 'test',
-      component: () => import('../views/HomeView.vue')
+      component: () => import('../views/TuPreferesView.vue')
     },
     {
       path: '/profile',
