@@ -8,3 +8,19 @@ export interface logIn{
   username:string;
   password:string;
 }
+
+export interface User {
+  id?: number;
+  pseudo: string;
+  email: string;
+  password: string;
+}
+
+export interface UserDetails {
+  id?: number;
+  pseudo: string;
+  email: string;
+  password: string;
+  profil:JSON;
+  creation_date: Date;
+}
