@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
+import { ref, reactive, watch, onMounted, onUnmounted, type Ref } from 'vue';
 import { GridLayout, GridItem, type Layout } from 'grid-layout-plus';
-import type { LayoutProfile } from '@/interfaces/profile';
+import type { LayoutProfil } from '@/interfaces/profil';
 import { useUserStore } from '@/stores/userStore';
+import type { UserDetails } from '@/interfaces/user';
+import { useUtilsStore } from '@/stores/utilsStore';
 
+const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
+let user: Ref<UserDetails | undefined> = ref(undefined);
 
-// Define the layout with images
-let layout = reactive<LayoutProfile[]>([]);
+let layout = reactive<LayoutProfil[]>([]);
 const layoutIsInitialized = ref(false);
 
-const getProfile = (): Promise<LayoutProfile[]> => {
+const getProfilee = (): Promise<LayoutProfil[]> => {
   //fake une fonction d'une api
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -22,6 +25,8 @@ const getProfile = (): Promise<LayoutProfile[]> => {
     }, 1000);
   });
 }
+
+
 
 const eventLogs = reactive<string[]>([]);
 
@@ -38,22 +43,15 @@ const updateColNum = () => {
 
 onMounted(async () => {
   window.addEventListener('resize', updateColNum);
-  let test = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
-  console.log(test);
-  layout.push(...await getProfile());
+  user.value = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
+  layout.push(...user.value?.profil.layout || []);
   updateColNum();
-  console.log(layout);
-
   //pour eviter que le watch du layout s'active a l'init (oui c'es moche :( )
   setTimeout(() => {
     eventLogs.push('Layout is initialized');
     layoutIsInitialized.value = true;
   }, 1000);
 
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateColNum);
 });
 
 const changeCardDimentions = (id: string, w: number, h: number) => {
@@ -90,7 +88,7 @@ const resolveCollisions = () => {
 const rearrangeLayout = () => {
   let nextX = 0;
   let nextY = 0;
-  const newLayout: LayoutProfile[] = [];
+  const newLayout: LayoutProfil[] = [];
 
   // Triez les éléments par leur position Y, puis X pour conserver un ordre de haut en bas et de gauche à droite
   const sortedLayout = [...layout].sort((a, b) => a.y - b.y || a.x - b.x);
@@ -119,8 +117,16 @@ watch(layout, () => {
   if (debounceTimeout) {
     clearTimeout(debounceTimeout);
   }
-  debounceTimeout = setTimeout(() => {
+  debounceTimeout = setTimeout(async () => {
     console.log("youuuuhou", layoutIsInitialized.value);
+    user.value!.profil.layout = layout;
+    
+    const res = await userStore.updateUserProfile(user.value!, localStorage.getItem('token') || '');
+    if (res) {
+      showToast('Profile updated', true);
+    } else {
+      showToast('Profile update failed', false);
+    }
   }, 3000);
 });
 
@@ -175,7 +181,7 @@ const newCardText = () => {
     </div>
 
     <div class="grid-container">
-      <GridLayout v-model:layout="layout" :col-num="colNum" :row-height="200" :vertical-compact="true" :auto-size="true"
+      <GridLayout class="grid" v-model:layout="layout" :col-num="colNum" :row-height="200" :vertical-compact="true" :auto-size="true"
         :margin="[20, 20]" :is-resizable="false">
         <GridItem v-for="item in layout" :key="item.i" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
           @mouseenter="showPopup(item.i)" @mouseleave="hidePopup(item.i)">
@@ -306,9 +312,9 @@ const newCardText = () => {
 .container {
   width: 100%;
   padding: 20px 0px;
-  justify-content: space-between;
-  height: 100vw;
-
+  justify-content: space-around;
+  height: 100vh;
+  
   .user {
     display: flex;
     flex-direction: column;
@@ -341,9 +347,14 @@ const newCardText = () => {
   }
 
   .grid-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .grid {
     width: 380px;
     min-width: 380px;
-    height: 100%;
+    height: auto;
   }
 
   //media querie pour screen > 1278px
@@ -358,7 +369,7 @@ const newCardText = () => {
 
     ;
 
-    .grid-container {
+    .grid {
       width: 900px;
       min-width: 900px;
     }
