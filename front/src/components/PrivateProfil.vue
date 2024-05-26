@@ -9,6 +9,7 @@ import iconRectangleH from './icons/icon-rectangleH.vue';
 import iconRectangleV from './icons/icon-rectangleV.vue';
 import iconBigSquare from './icons/icon-bigSquare.vue';
 import iconMiniSquare from './icons/icons-miniSquare.vue';
+import iconTrash from './icons/icon-trash.vue';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
@@ -194,7 +195,7 @@ const newCardText = () => {
             v-model="item.text"></textarea>
           <div class="popup" v-show="visiblePopup === item.i">
             <button @click="changeCardDimentions(item.i, 1, 1)">
-              <iconMiniSquare class="icon mini-square" color="white" />
+              <iconMiniSquare class="icon mini" color="white" />
             </button>
             <button @click="changeCardDimentions(item.i, 2, 1)">
               <iconRectangleH class="icon" color="white" />
@@ -205,7 +206,9 @@ const newCardText = () => {
             <button @click="changeCardDimentions(item.i, 2, 2)">
               <iconBigSquare class="icon" color="white" />
             </button>
-            <button @click="deleteCard(item.i)">#</button>
+            <button @click="deleteCard(item.i)">
+              <iconTrash class="icon mini" color="white" />
+            </button>
           </div>
         </GridItem>
       </GridLayout>
@@ -422,7 +425,7 @@ const newCardText = () => {
       width: 28px;
       height: 28px;
 
-      &.mini-square {
+      &.mini {
         width: 17px;
         height: 17px;
         margin: 6px 0;
