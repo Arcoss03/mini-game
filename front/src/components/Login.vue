@@ -3,6 +3,7 @@ import { onMounted, ref, type Ref} from 'vue';
 import {type logIn} from '@/interfaces/user';
 import apiHelper from '@/helpers/apiHelper';
 import { useUtilsStore } from '@/stores/utilsStore';
+import router from '@/router';
 
 const showToast = useUtilsStore().showToast;
 
@@ -22,6 +23,7 @@ async function Login() {
     } else {
         localStorage.setItem('token', res.data.token as string);
         showToast('Connexion réussie', true);
+        router.push('/profil');
     }
 }
 

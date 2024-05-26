@@ -5,6 +5,10 @@ import type { LayoutProfil } from '@/interfaces/profil';
 import { useUserStore } from '@/stores/userStore';
 import type { UserDetails } from '@/interfaces/user';
 import { useUtilsStore } from '@/stores/utilsStore';
+import iconRectangleH from './icons/icon-rectangleH.vue';
+import iconRectangleV from './icons/icon-rectangleV.vue';
+import iconBigSquare from './icons/icon-bigSquare.vue';
+import iconMiniSquare from './icons/icons-miniSquare.vue';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
@@ -189,10 +193,18 @@ const newCardText = () => {
           <textarea type="text" placeholder="Type text ..." v-if="item.text !== undefined"
             v-model="item.text"></textarea>
           <div class="popup" v-show="visiblePopup === item.i">
-            <button @click="changeCardDimentions(item.i, 1, 1)">A</button>
-            <button @click="changeCardDimentions(item.i, 2, 1)">B</button>
-            <button @click="changeCardDimentions(item.i, 1, 2)">C</button>
-            <button @click="changeCardDimentions(item.i, 2, 2)">D</button>
+            <button @click="changeCardDimentions(item.i, 1, 1)">
+              <iconMiniSquare class="icon mini-square" color="white" />
+            </button>
+            <button @click="changeCardDimentions(item.i, 2, 1)">
+              <iconRectangleH class="icon" color="white" />
+            </button>
+            <button @click="changeCardDimentions(item.i, 1, 2)">
+              <iconRectangleV class="icon" color="white" />
+            </button>
+            <button @click="changeCardDimentions(item.i, 2, 2)">
+              <iconBigSquare class="icon" color="white" />
+            </button>
             <button @click="deleteCard(item.i)">#</button>
           </div>
         </GridItem>
@@ -396,14 +408,26 @@ const newCardText = () => {
   transform: translateY(15px); // Décale la popup vers le bas de 10px pour créer un espace
   margin: 0 20px;
 
-
-
   button {
     color: white;
     flex-grow: 1;
     width: 100%;
     height: 100%;
     border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+      width: 28px;
+      height: 28px;
+
+      &.mini-square {
+        width: 17px;
+        height: 17px;
+        margin: 6px 0;
+      }
+    }
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
