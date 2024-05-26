@@ -1,9 +1,6 @@
 import { createRouter, createWebHistory, type NavigationGuardNext, type RouteLocationNormalized } from 'vue-router';
-import HomeView from '../views/TestView.vue';
-import SignUpView from '@/views/SignUpView.vue';
-import LogInView from '@/views/LogInView.vue';
+import HomeView from '../views/HomeView.vue';
 import { useUserStore } from '@/stores/userStore';
-import path from 'path';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,8 +37,8 @@ const router = createRouter({
       component: () => import('../views/TuPreferesView.vue')
     },
     {
-      path: '/profile',
-      name: 'profile',
+      path: '/profil',
+      name: 'profil',
       component: () => import('../views/ProfileView.vue')
     },
     {
@@ -54,7 +51,7 @@ const router = createRouter({
 })
 
 //list of protected routes by token
-const routesRequiringAuth = ['profile'];
+const routesRequiringAuth = ['profil'];
 
 router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   if(!useUserStore().isLogedIn) {
