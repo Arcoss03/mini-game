@@ -15,8 +15,8 @@ async function registerRoutes(fastify: FastifyInstance) {
 
         try {
             await fastify.db.query(
-                'INSERT INTO users (pseudo, email, password, salt, creation_date) VALUES (?, ?, ?, ?, ?)',
-                [pseudo, email, hashedPassword, salt, new Date()]
+                'INSERT INTO users (pseudo, email, password, salt, creation_date, profil) VALUES (?, ?, ?, ?, ?, ?)',
+                [pseudo, email, hashedPassword, salt, new Date(), JSON.stringify({})]
             );
             reply.send({message: "User created successfully" });
         } catch (error: any) {
