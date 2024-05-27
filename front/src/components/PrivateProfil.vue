@@ -123,7 +123,6 @@ watch(layout, () => {
     clearTimeout(debounceTimeout);
   }
   debounceTimeout = setTimeout(async () => {
-    console.log("youuuuhou", layoutIsInitialized.value);
     user.value!.profil.layout = layout;
     
     const res = await userStore.updateUserProfile(user.value!, localStorage.getItem('token') || '');
