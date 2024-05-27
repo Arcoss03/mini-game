@@ -1,16 +1,24 @@
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
+import { ref, reactive, watch, onMounted, onUnmounted, type Ref } from 'vue';
 import { GridLayout, GridItem, type Layout } from 'grid-layout-plus';
-import type { LayoutProfile } from '@/interfaces/profile';
+import type { LayoutProfil } from '@/interfaces/profil';
 import { useUserStore } from '@/stores/userStore';
+import type { UserDetails } from '@/interfaces/user';
+import { useUtilsStore } from '@/stores/utilsStore';
+import iconRectangleH from './icons/icon-rectangleH.vue';
+import iconRectangleV from './icons/icon-rectangleV.vue';
+import iconBigSquare from './icons/icon-bigSquare.vue';
+import iconMiniSquare from './icons/icons-miniSquare.vue';
+import iconTrash from './icons/icon-trash.vue';
 
+const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
+let user: Ref<UserDetails | undefined> = ref(undefined);
 
-// Define the layout with images
-let layout = reactive<LayoutProfile[]>([]);
+let layout = reactive<LayoutProfil[]>([]);
 const layoutIsInitialized = ref(false);
 
-const getProfile = (): Promise<LayoutProfile[]> => {
+const getProfilee = (): Promise<LayoutProfil[]> => {
   //fake une fonction d'une api
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -22,6 +30,8 @@ const getProfile = (): Promise<LayoutProfile[]> => {
     }, 1000);
   });
 }
+
+
 
 const eventLogs = reactive<string[]>([]);
 
@@ -38,22 +48,15 @@ const updateColNum = () => {
 
 onMounted(async () => {
   window.addEventListener('resize', updateColNum);
-  let test = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
-  console.log(test);
-  layout.push(...await getProfile());
+  user.value = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
+  layout.push(...user.value?.profil.layout || []);
   updateColNum();
-  console.log(layout);
-
   //pour eviter que le watch du layout s'active a l'init (oui c'es moche :( )
   setTimeout(() => {
     eventLogs.push('Layout is initialized');
     layoutIsInitialized.value = true;
   }, 1000);
 
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateColNum);
 });
 
 const changeCardDimentions = (id: string, w: number, h: number) => {
@@ -90,7 +93,7 @@ const resolveCollisions = () => {
 const rearrangeLayout = () => {
   let nextX = 0;
   let nextY = 0;
-  const newLayout: LayoutProfile[] = [];
+  const newLayout: LayoutProfil[] = [];
 
   // Triez les éléments par leur position Y, puis X pour conserver un ordre de haut en bas et de gauche à droite
   const sortedLayout = [...layout].sort((a, b) => a.y - b.y || a.x - b.x);
@@ -119,8 +122,15 @@ watch(layout, () => {
   if (debounceTimeout) {
     clearTimeout(debounceTimeout);
   }
-  debounceTimeout = setTimeout(() => {
-    console.log("youuuuhou", layoutIsInitialized.value);
+  debounceTimeout = setTimeout(async () => {
+    user.value!.profil.layout = layout;
+    
+    const res = await userStore.updateUserProfile(user.value!, localStorage.getItem('token') || '');
+    if (res) {
+      showToast('Profile updated', true);
+    } else {
+      showToast('Profile update failed', false);
+    }
   }, 3000);
 });
 
@@ -175,7 +185,7 @@ const newCardText = () => {
     </div>
 
     <div class="grid-container">
-      <GridLayout v-model:layout="layout" :col-num="colNum" :row-height="200" :vertical-compact="true" :auto-size="true"
+      <GridLayout class="grid" v-model:layout="layout" :col-num="colNum" :row-height="200" :vertical-compact="true" :auto-size="true"
         :margin="[20, 20]" :is-resizable="false">
         <GridItem v-for="item in layout" :key="item.i" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
           @mouseenter="showPopup(item.i)" @mouseleave="hidePopup(item.i)">
@@ -183,11 +193,21 @@ const newCardText = () => {
           <textarea type="text" placeholder="Type text ..." v-if="item.text !== undefined"
             v-model="item.text"></textarea>
           <div class="popup" v-show="visiblePopup === item.i">
-            <button @click="changeCardDimentions(item.i, 1, 1)">A</button>
-            <button @click="changeCardDimentions(item.i, 2, 1)">B</button>
-            <button @click="changeCardDimentions(item.i, 1, 2)">C</button>
-            <button @click="changeCardDimentions(item.i, 2, 2)">D</button>
-            <button @click="deleteCard(item.i)">#</button>
+            <button @click="changeCardDimentions(item.i, 1, 1)">
+              <iconMiniSquare class="icon mini" color="white" />
+            </button>
+            <button @click="changeCardDimentions(item.i, 2, 1)">
+              <iconRectangleH class="icon" color="white" />
+            </button>
+            <button @click="changeCardDimentions(item.i, 1, 2)">
+              <iconRectangleV class="icon" color="white" />
+            </button>
+            <button @click="changeCardDimentions(item.i, 2, 2)">
+              <iconBigSquare class="icon" color="white" />
+            </button>
+            <button @click="deleteCard(item.i)">
+              <iconTrash class="icon mini" color="white" />
+            </button>
           </div>
         </GridItem>
       </GridLayout>
@@ -306,9 +326,9 @@ const newCardText = () => {
 .container {
   width: 100%;
   padding: 20px 0px;
-  justify-content: space-between;
-  height: 100vw;
-
+  justify-content: space-around;
+  height: 100vh;
+  
   .user {
     display: flex;
     flex-direction: column;
@@ -341,9 +361,14 @@ const newCardText = () => {
   }
 
   .grid-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .grid {
     width: 380px;
     min-width: 380px;
-    height: 100%;
+    height: auto;
   }
 
   //media querie pour screen > 1278px
@@ -358,7 +383,7 @@ const newCardText = () => {
 
     ;
 
-    .grid-container {
+    .grid {
       width: 900px;
       min-width: 900px;
     }
@@ -385,14 +410,26 @@ const newCardText = () => {
   transform: translateY(15px); // Décale la popup vers le bas de 10px pour créer un espace
   margin: 0 20px;
 
-
-
   button {
     color: white;
     flex-grow: 1;
     width: 100%;
     height: 100%;
     border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+      width: 28px;
+      height: 28px;
+
+      &.mini {
+        width: 17px;
+        height: 17px;
+        margin: 6px 0;
+      }
+    }
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);

@@ -1,7 +1,7 @@
 import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import  apiHelper from '../helpers/apiHelper';
-import type { User } from '../interfaces/user';
+import type { User, UserDetails } from '../interfaces/user';
 
 export const useUserStore = defineStore('userStore', () => {
     const isLogedIn = ref(false); // This is a reactive variable that will be used to check if the user is logged in or not
@@ -24,13 +24,21 @@ export const useUserStore = defineStore('userStore', () => {
         if(!id) {
             return;
         }
-        const response = await apiHelper.kyGet(`user/${id}`);
+        const response = await apiHelper.kyGet(`profil/${id}`);
         if(response.success) {
-            return response.data as unknown as User;
+            return response.data.user as unknown as UserDetails;
         }
+    }
+
+    const updateUserProfile = async (user:UserDetails, token:string) => {
+        const response = await apiHelper.kyPut('profil', user, token);
+        if(response.success) {
+            currentUser.value = response.data.user as User;
+        }
+        return response.success;
     }
 
     
 
-return { isLogedIn, tokenLogin, getUserDetailsById, currentUser}
+return { isLogedIn, tokenLogin, getUserDetailsById, currentUser, updateUserProfile}
 })

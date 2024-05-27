@@ -4,12 +4,6 @@ import { hashPassword,generateRandomSalt } from '../../utils/hash.utils';
 import {ModifPassword} from "../../interfaces/user";
 import {userSchema} from '../../schemas/userSchema';
 
-
-
-
-
-
-
 async function putProfilRoutes(fastify: FastifyInstance) {
     fastify.addHook('preHandler', async (request, reply) => {
         try {

@@ -1,14 +1,15 @@
 
 <script setup lang="ts">
+import PrivateProfil from '@/components/PrivateProfil.vue';
+
 const logout = () => {
     localStorage.removeItem('token');
     window.location.href = '/';
 }
 </script>
+
 <template>
-    <h2>
-        hello you got a token !!!! noice :)
-    </h2>
+     <PrivateProfil />
     <button @click="logout">logout :(</button>
 </template>
 
