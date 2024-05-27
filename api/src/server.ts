@@ -4,6 +4,7 @@ import jwt, { FastifyJWT } from '@fastify/jwt';
 import db from './db';
 import dotenv from 'dotenv';
 import cors from '@fastify/cors'
+import setupSocket from './chat';
 
 dotenv.config(); // Load environment variables
 
@@ -35,6 +36,8 @@ fastify.register(jwt, {
       expiresIn: '30d'  // 30 days validity
   }
 });
+
+setupSocket(fastify);
 
 fastify.register(routes, { prefix: '/' });
 fastify.register(db);
