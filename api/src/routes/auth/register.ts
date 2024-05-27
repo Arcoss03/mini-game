@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { generateRandomSalt, hashPassword } from '../../utils/hash.utils';
 import { User } from '../../interfaces/user';
 import {userSchema} from '../../schemas/userSchema';
+import generateProfilPicture from '../../utils/generateProfilPicture.utils';
 
 async function registerRoutes(fastify: FastifyInstance) {
     fastify.post('/register', {
@@ -15,8 +16,8 @@ async function registerRoutes(fastify: FastifyInstance) {
 
         try {
             await fastify.db.query(
-                'INSERT INTO users (pseudo, email, password, salt, creation_date, profil) VALUES (?, ?, ?, ?, ?, ?)',
-                [pseudo, email, hashedPassword, salt, new Date(), JSON.stringify({})]
+                'INSERT INTO users (pseudo, email, password, salt, creation_date, profil, profil_picture) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                [pseudo, email, hashedPassword, salt, new Date(), JSON.stringify({}), generateProfilPicture()]
             );
             reply.send({message: "User created successfully" });
         } catch (error: any) {

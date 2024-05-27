@@ -18,7 +18,7 @@ async function loginRoutes(fastify: FastifyInstance) {
         }
         const token = fastify.jwt.sign({ id: user.id });
         //return token and user info
-        reply.send({ token, user: { id: user.id, pseudo: user.pseudo, email: user.email } });
+        reply.send({ token, user: { id: user.id, pseudo: user.pseudo, email: user.email, profil_picture: user.profil_picture } });
     });
 }
 
