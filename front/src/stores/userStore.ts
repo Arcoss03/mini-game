@@ -20,14 +20,15 @@ export const useUserStore = defineStore('userStore', () => {
         }
     }
 
-    const getUserDetailsById = async (id?:number) => {
+    const getUserDetailsById = async (id?:number):Promise<UserDetails | null> => {
         if(!id) {
-            return;
+            return null;
         }
         const response = await apiHelper.kyGet(`profil/${id}`);
         if(response.success) {
             return response.data.user as unknown as UserDetails;
         }
+        return null;
     }
 
     const updateUserProfile = async (user:UserDetails, token:string) => {
