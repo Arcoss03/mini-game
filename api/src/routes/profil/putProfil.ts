@@ -100,13 +100,13 @@ async function putProfilRoutes(fastify: FastifyInstance) {
         }
     
         try {
-            const data = request.body as {profil : JSON} ;
+            const data = request.body as { profil: JSON, pseudo: string, profil_picture: string, description: string};
             await fastify.db.query(
-                "UPDATE users SET profil = ? WHERE id = ?",
-                    [JSON.stringify(data.profil), payload.id]
-              );
-              reply.status(200);
-              return;
+                "UPDATE users SET profil = ?, pseudo = ?, profil_picture = ?, description = ? WHERE id = ?",
+                [JSON.stringify(data.profil), data.pseudo, data.profil_picture, data.description, payload.id]
+            );
+            reply.status(200);
+            return;
             
             
             

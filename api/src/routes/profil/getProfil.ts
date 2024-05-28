@@ -10,7 +10,7 @@ async function getProfilRoutes(fastify: FastifyInstance) {
         
         try {
             const id = request.params.id 
-            const [rows]: any = await fastify.db.query('SELECT id, pseudo, email, profil, creation_date FROM users WHERE id = ?', [id]);
+            const [rows]: any = await fastify.db.query('SELECT id, pseudo, email, profil, creation_date, profil_picture, description FROM users WHERE id = ?', [id]);
             if (rows.length === 0) {
                 reply.status(404).send({ error: 'User not found' });
                 return;
