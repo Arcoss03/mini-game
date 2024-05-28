@@ -11,7 +11,7 @@ async function tokenRoutes(fastify: FastifyInstance) {
                 reply.status(401).send({ error: 'Invalid token' });
                 return;
             }
-            const [rows]: any = await fastify.db.query('SELECT id, pseudo, email FROM users WHERE id = ?', [payload.id]);
+            const [rows]: any = await fastify.db.query('SELECT id, pseudo, email, profil_picture FROM users WHERE id = ?', [payload.id]);
             if (rows.length === 0) {
                 reply.status(404).send({ error: 'User not found' });
                 return;

@@ -14,6 +14,7 @@ export interface User {
   id?: number;
   pseudo: string;
   email: string;
+  profil_picture?: string;
   password?: string;
 }
 
@@ -21,7 +22,9 @@ export interface UserDetails {
   id?: number;
   pseudo: string;
   email: string;
+  profil_picture:string;
   password?: string;
   profil: {layout: LayoutProfil[];}
   creation_date: Date;
+  description?: string;
 }
