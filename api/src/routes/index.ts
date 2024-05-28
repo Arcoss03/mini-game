@@ -8,6 +8,7 @@ import putRoutes from './tpf/putRoutes'
 import getProfilRoutes from './profil/getProfil'
 import putProfilRoutes from './profil/putProfil'
 
+
 //used to register all routes
 async function routes(fastify: FastifyInstance) {
     fastify.register(loginRoutes, { prefix: '/auth' });
