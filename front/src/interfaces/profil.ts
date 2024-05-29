@@ -7,4 +7,6 @@ export interface LayoutProfil {
     text?: string,
     static: false,
     img?: string,
+    badge_img?: string,
+    badge_text?: string,
 }

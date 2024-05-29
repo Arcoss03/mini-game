@@ -93,4 +93,15 @@ const kyPutWithoutToken = async (url: string, data: any): Promise<ApiResponse> =
     }
 }
 
-export default { kyPost, kyPut, kyDelete, kyGet, kyPostWithoutToken,kyPutWithoutToken }
+//function to get cat from the cat api
+const getCat = async (): Promise<string> => {
+    try {
+        const response = await ky.get('https://api.thecatapi.com/v1/images/search').json() as Array<{ url: string }>;
+        return response[0].url;
+    } catch (error) {
+        console.error(error);
+        return '';
+    }
+}
+
+export default { kyPost, kyPut, kyDelete, kyGet, kyPostWithoutToken,kyPutWithoutToken, getCat }
