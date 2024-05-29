@@ -9,29 +9,16 @@ import iconRectangleH from './icons/icon-rectangleH.vue';
 import iconRectangleV from './icons/icon-rectangleV.vue';
 import iconBigSquare from './icons/icon-bigSquare.vue';
 import iconMiniSquare from './icons/icons-miniSquare.vue';
+import iconChange from './icons/icon-change.vue';
+import { v4 as uuidv4 } from 'uuid';
 import iconTrash from './icons/icon-trash.vue';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
-let user: Ref<UserDetails | undefined> = ref(undefined);
+let user: Ref<UserDetails | null> = ref(null);
 
 let layout = reactive<LayoutProfil[]>([]);
 const layoutIsInitialized = ref(false);
-
-const getProfilee = (): Promise<LayoutProfil[]> => {
-  //fake une fonction d'une api
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        { x: 0, y: 0, w: 1, h: 1, i: '0', img: 'https://cdn2.thecatapi.com/images/8lc.png', static: false },
-        { x: 1, y: 0, w: 1, h: 1, i: '1', img: 'https://cdn2.thecatapi.com/images/8lc.png', static: false },
-        { x: 2, y: 0, w: 1, h: 1, i: '2', img: 'https://cdn2.thecatapi.com/images/8lc.png', static: false },
-        { x: 3, y: 0, w: 1, h: 1, i: '3', img: 'https://cdn2.thecatapi.com/images/8lc.png', static: false },]);
-    }, 1000);
-  });
-}
-
-
 
 const eventLogs = reactive<string[]>([]);
 
@@ -49,6 +36,7 @@ const updateColNum = () => {
 onMounted(async () => {
   window.addEventListener('resize', updateColNum);
   user.value = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
+  console.log(user.value);
   layout.push(...user.value?.profil.layout || []);
   updateColNum();
   //pour eviter que le watch du layout s'active a l'init (oui c'es moche :( )
@@ -58,6 +46,10 @@ onMounted(async () => {
   }, 1000);
 
 });
+
+const changeProfilPicture = () => {
+  user.value!.profil_picture = "https://api.dicebear.com/8.x/bottts-neutral/svg?seed=" + uuidv4();
+};
 
 const changeCardDimentions = (id: string, w: number, h: number) => {
   const item = layout.find((item) => item.i === id);
@@ -134,6 +126,25 @@ watch(layout, () => {
   }, 3000);
 });
 
+watch(() => [user.value?.profil_picture, user.value?.pseudo, user.value?.description], () => {
+  if (!layoutIsInitialized.value) {
+    return;
+  }
+  if (debounceTimeout) {
+    clearTimeout(debounceTimeout);
+  }
+  debounceTimeout = setTimeout(async () => {
+    user.value!.profil.layout = layout;
+    
+    const res = await userStore.updateUserProfile(user.value!, localStorage.getItem('token') || '');
+    if (res) {
+      showToast('Profile updated', true);
+    } else {
+      showToast('Profile update failed', false);
+    }
+  }, 3000);
+});
+
 watch(
   () => eventLogs.length,
   () => {
@@ -172,16 +183,19 @@ const newCardText = () => {
 
 <template>
   <div class="container">
-    <div class="user">
+    <div class="user" v-if="user">
       <div class="pp">
-        <img src="https://cdn2.thecatapi.com/images/8lc.png" alt="avatar">
+        <img :src="user.profil_picture" alt="avatar">
+        <button @click="changeProfilPicture" class="btn-pp"><iconChange color="white"/></button>
       </div>
-      <h1>
-        Belino Matio
-      </h1>
-      <p>
-        sqdhqsdqsdisqgdsqgdujqsvdsjqdvsqddfbsdfbsdjlfbjsdlbfjdsbfjlsdbf
-      </p>
+      <!-- <h1>
+        {{ user?.pseudo }}
+      </h1> -->
+      <!-- <p>
+        {{ user?.description ?? ""}}
+      </p> -->
+      <input v-model="user.pseudo" type="text">
+      <textarea class="descrition" name="description" v-model="user.description"  id="description" placeholder="description"></textarea>
     </div>
 
     <div class="grid-container">
@@ -334,29 +348,57 @@ const newCardText = () => {
     flex-direction: column;
 
     .pp {
-      width: 190px;
-      height: 190px;
-      border-radius: 999px;
       overflow: hidden;
       margin: 20px 0;
 
       img {
-        width: 100%;
-        height: 100%;
+        width: 190px;
+        height: 190px;
         object-fit: cover;
+        border-radius: 999px;
       }
-    }
+      .btn-pp {
+        background: #7D50DD;
+        position: absolute;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin-left: 140px;
+        margin-top: -40px;
 
-    h1 {
+        &:active {
+                transform: rotate(-180deg);
+                transition: transform 0.2s ease-in-out;
+            }
+        
+      }
+      
+    }
+    input {
       font-size: 44px;
       font-weight: 700;
       color: white;
+      background: transparent;
+      border: none;
+      outline: none;
     }
-
-    p {
+    .descrition {
+      color: white;
       word-break: break-all;
       font-size: 20px;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      padding: 10px;
+      height: 225px;
+    
     }
+
+
 
   }
 
