@@ -13,6 +13,8 @@ import iconChange from './icons/icon-change.vue';
 import { v4 as uuidv4 } from 'uuid';
 import iconTrash from './icons/icon-trash.vue';
 import apiHelper from '@/helpers/apiHelper';
+import iconAddImg from './icons/icon-add-img.vue';
+import iconAddText from './icons/icon-add-text.vue';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
@@ -260,8 +262,12 @@ const newCardImg = async() => {
   </div>
   <div class="add-popup">
     <div class="plus-sign">+</div>
-    <button @click="newCardText" class="extra-btn">1</button>
-    <button @click="newCardImg" class="extra-btn">2</button>
+    <button @click="newCardText" class="extra-btn">
+      <iconAddText class="icon" color="white" />
+    </button>
+    <button @click="newCardImg" class="extra-btn">
+      <iconAddImg class="icon" color="white" />
+    </button>
     <button class="extra-btn">3</button>
   </div>
 </template>
@@ -294,6 +300,12 @@ const newCardImg = async() => {
     gap: 10px;
     padding: 10px 0;
     color: #fff;
+
+    .icon {
+      width: 24px;
+      height: 24px;
+    
+    }
 
   }
 
