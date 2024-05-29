@@ -1,44 +1,29 @@
 <script setup lang="ts">
   import { reactive } from 'vue';
-  import { io} from 'socket.io-client';
-  import { ref } from 'vue';
+  import socketClient from '../helpers/chatHelper';  // Importer le module créé
 
 
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const apiKey = import.meta.env.VITE_API_KEY;
-  
   const state = reactive({
     messages: [] as { pseudo: string; content: string; class:string } [], 
     newMessage: ''
   });
-  
-  
-  const socket = io(apiUrl, {
-  auth: {
-    apiKey: apiKey
-  }
-}); 
 
-  
-  socket.emit('joinRoom',{user:localStorage.getItem('token'),id:1})
 
-  const sendMessage = () => {
+  socketClient.joinRoom(localStorage.getItem('token') as string, 1);
+
+
+const sendMessage = () => {
     if (state.newMessage.trim() !== '') {
-      const data={
-        pseudo:localStorage.getItem('token'),
-        content:state.newMessage,
-        roomId:1,
+       const content=state.newMessage
+       socketClient.message(localStorage.getItem('token') as string,content,1);
       }
-      socket.emit('message', data);
       state.newMessage = ''; 
     }
-  };
 
-  socket.on('messageResponse',(message : {pseudo:string,content:string,class:string}) =>{
-      state.messages.push(message)
-  })
+socketClient.messageResponse(state.messages)
+    
   
-  </script>
+</script>
   
 
 <template>

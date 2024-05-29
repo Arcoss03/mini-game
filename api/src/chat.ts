@@ -66,7 +66,6 @@ const setupSocket = (fastify: FastifyInstance) => {
       }
 
       } catch (err) {
-        console.error('Invalid token', err);
         socket.emit('error', { error: 'Invalid token' });
       }
     });
