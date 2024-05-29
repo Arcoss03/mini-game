@@ -107,6 +107,7 @@ async function putProfilRoutes(fastify: FastifyInstance) {
             );
             reply.status(200);
             return;
+
         } catch (error) {
             reply.status(500).send({ error: 'Database error' });
         }
