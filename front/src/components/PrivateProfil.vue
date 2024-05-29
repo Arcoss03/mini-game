@@ -15,6 +15,7 @@ import iconTrash from './icons/icon-trash.vue';
 import apiHelper from '@/helpers/apiHelper';
 import iconAddImg from './icons/icon-add-img.vue';
 import iconAddText from './icons/icon-add-text.vue';
+import iconAddBadge from './icons/icon-add-badge.vue';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
@@ -268,7 +269,9 @@ const newCardImg = async() => {
     <button @click="newCardImg" class="extra-btn">
       <iconAddImg class="icon" color="white" />
     </button>
-    <button class="extra-btn">3</button>
+    <button class="extra-btn">
+      <iconAddBadge class="icon" color="white" />
+    </button>
   </div>
 </template>
 
