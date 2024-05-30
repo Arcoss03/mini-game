@@ -207,7 +207,6 @@ const newCardImg = async() => {
     showToast('Failed to get cat image', false);
     return;
   }
-  console.log(catImg);
 
   layout.push({
     x: 0,
