@@ -12,6 +12,10 @@ import iconMiniSquare from './icons/icons-miniSquare.vue';
 import iconChange from './icons/icon-change.vue';
 import { v4 as uuidv4 } from 'uuid';
 import iconTrash from './icons/icon-trash.vue';
+import apiHelper from '@/helpers/apiHelper';
+import iconAddImg from './icons/icon-add-img.vue';
+import iconAddText from './icons/icon-add-text.vue';
+import iconAddBadge from './icons/icon-add-badge.vue';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
@@ -25,6 +29,14 @@ const eventLogs = reactive<string[]>([]);
 const eventsDiv = ref<HTMLElement>();
 
 const colNum = ref(4); // Nombre initial de colonnes
+
+const getNextId = () => {
+  // Trouvez l'ID le plus élevé parmi les cartes existantes
+  const maxId = layout.length > 0 ? Math.max(...layout.map(card => Number(card.i))) : 0;
+
+  // Utilisez maxId + 1 pour l'ID de la nouvelle carte
+  return (maxId + 1).toString();
+};
 
 let debounceTimeout: number | null = null;
 
@@ -65,6 +77,9 @@ const deleteCard = (id: string) => {
   resolveCollisions();
 };
 
+
+
+
 const resolveCollisions = () => {
   layout.forEach((item, index) => {
     for (let i = index + 1; i < layout.length; i++) {
@@ -103,6 +118,8 @@ const rearrangeLayout = () => {
   layout.splice(0, layout.length, ...newLayout); // Remplacez l'ancien layout par le nouveau
 };
 
+
+// Watchers pour les changements de colonnes et de layout --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 watch(colNum, () => {
   rearrangeLayout();
 }, { immediate: true });
@@ -156,6 +173,8 @@ watch(
   }
 );
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const visiblePopup = ref<string | null>(null);
 
 const showPopup = (id: string) => {
@@ -174,9 +193,29 @@ const newCardText = () => {
     y: 0,
     w: 1,
     h: 1,
-    i: layout.length.toString(),
+    i: getNextId(),
     static: false,
     text: '',
+  });
+};
+
+const newCardImg = async() => {
+  // provisoire !!
+  //appel a cat api pour recuperer une image
+  const catImg = await apiHelper.getCat();
+  if (catImg === '') {
+    showToast('Failed to get cat image', false);
+    return;
+  }
+
+  layout.push({
+    x: 0,
+    y: 0,
+    w: 1,
+    h: 1,
+    i: getNextId(),
+    static: false,
+    img: catImg,
   });
 };
 </script>
@@ -188,12 +227,6 @@ const newCardText = () => {
         <img :src="user.profil_picture" alt="avatar">
         <button @click="changeProfilPicture" class="btn-pp"><iconChange color="white"/></button>
       </div>
-      <!-- <h1>
-        {{ user?.pseudo }}
-      </h1> -->
-      <!-- <p>
-        {{ user?.description ?? ""}}
-      </p> -->
       <input v-model="user.pseudo" type="text">
       <textarea class="descrition" name="description" v-model="user.description"  id="description" placeholder="description"></textarea>
     </div>
@@ -229,9 +262,15 @@ const newCardText = () => {
   </div>
   <div class="add-popup">
     <div class="plus-sign">+</div>
-    <button @click="newCardText" class="extra-btn">1</button>
-    <button class="extra-btn">2</button>
-    <button class="extra-btn">3</button>
+    <button @click="newCardText" class="extra-btn">
+      <iconAddText class="icon" color="white" />
+    </button>
+    <button @click="newCardImg" class="extra-btn">
+      <iconAddImg class="icon" color="white" />
+    </button>
+    <button class="extra-btn">
+      <iconAddBadge class="icon" color="white" />
+    </button>
   </div>
 </template>
 
@@ -254,7 +293,7 @@ const newCardText = () => {
 
   .plus-sign {
     transition: opacity 0.3s;
-    padding: 1px 0 4px 0;
+    padding: 1px 0 6px 0;
   }
 
   .extra-btn {
@@ -263,6 +302,12 @@ const newCardText = () => {
     gap: 10px;
     padding: 10px 0;
     color: #fff;
+
+    .icon {
+      width: 24px;
+      height: 24px;
+    
+    }
 
   }
 
