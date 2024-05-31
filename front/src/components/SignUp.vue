@@ -3,6 +3,7 @@ import apiHelper from '@/helpers/apiHelper';
 import { onMounted, ref, type Ref } from 'vue';
 import { type signUp } from '@/interfaces/user';
 import { useUtilsStore } from '@/stores/utilsStore';
+import router from '@/router';
 
 const showToast = useUtilsStore().showToast;
 
@@ -36,6 +37,7 @@ async function Singup() {
         showToast('email ou pseudo déjà utilisé', false);
     } else {
         showToast('Inscription réussie', true);
+        router.push("/login")
     }
 
 }

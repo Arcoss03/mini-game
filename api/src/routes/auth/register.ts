@@ -15,9 +15,13 @@ async function registerRoutes(fastify: FastifyInstance) {
         const hashedPassword = hashPassword(password, salt);
 
         try {
-            await fastify.db.query(
+           const [result] : any = await fastify.db.query(
                 'INSERT INTO users (pseudo, email, password, salt, creation_date, profil, profil_picture) VALUES (?, ?, ?, ?, ?, ?, ?)',
                 [pseudo, email, hashedPassword, salt, new Date(), JSON.stringify({}), generateProfilPicture()]
+            );
+            await fastify.db.query(
+                'INSERT INTO chat_participant (chat_room_id,user_id) VALUES (?, ?)',
+                [1, result.insertId]
             );
             reply.send({message: "User created successfully" });
         } catch (error: any) {
