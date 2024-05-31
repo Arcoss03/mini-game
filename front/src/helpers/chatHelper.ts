@@ -1,4 +1,5 @@
 import { io} from 'socket.io-client';
+import router from '@/router';
 
 
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -17,8 +18,8 @@ import { io} from 'socket.io-client';
     socket.emit('joinRoom',{user:token,id:roomId})
   }
 
-  const quitRoom=(roomId:number)=>{
-    socket.emit('leaveRoom',roomId)
+  const quitRoom=()=>{
+    socket.emit('leaveRoom')
   }
 
   const message=(token:string,content:string,roomId:number)=>{
@@ -31,8 +32,16 @@ import { io} from 'socket.io-client';
         }
         );
 };  
+const invalidToken = () => {
+  socket.on('error', (errorMessage) => {
+    if (errorMessage.error === 'Invalid token') { 
+      console.log('ne peux pas ecrire')
+      router.push("/login");
+    }
+  });
+};
 
-  export default { joinRoom, message, messageResponse,quitRoom}
+  export default { joinRoom, message, messageResponse,quitRoom,invalidToken}
   
 
   

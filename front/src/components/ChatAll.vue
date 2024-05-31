@@ -11,20 +11,10 @@
     messages: [] as { pseudo: string; content: string; color:string } [], 
     newMessage: ''
   });
-
-
+  state.messages.splice(0, state.messages.length);
+  socketClient.quitRoom()
   socketClient.joinRoom(localStorage.getItem('token') as string, room);
 
-const changeRoom =()=>{
-  state.messages.splice(0, state.messages.length);
-  socketClient.quitRoom(room)
-  if(room==1){
-    room=2;
-  }else{
-    room=1;
-  }
-  socketClient.joinRoom(localStorage.getItem('token') as string, room)
-}
 
 const sendMessage = () => {
     if (state.newMessage.trim() !== '') {
@@ -35,7 +25,7 @@ const sendMessage = () => {
     }
 
 socketClient.messageResponse(state.messages)
-    
+socketClient.invalidToken()
   
 </script>
   
@@ -54,7 +44,6 @@ socketClient.messageResponse(state.messages)
       <input type="text" v-model="state.newMessage" placeholder="Saisissez votre message..." />
       <button type="submit">Envoyer</button>
     </form>
-    <button @click="changeRoom">changer de room</button>
   </div>
 </main>
 </template>
