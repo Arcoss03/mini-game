@@ -30,7 +30,7 @@ const setupSocket = (fastify: FastifyInstance) => {
     for (let i = 0; i < pseudo.length; i++) {
         asciiSum += pseudo.charCodeAt(i);
     }
-      return (asciiSum>0)?colors[asciiSum%colors.length]:colors[(asciiSum%colors.length)*-1]
+      return colors[asciiSum%colors.length]
   }
 
 
@@ -51,7 +51,7 @@ const setupSocket = (fastify: FastifyInstance) => {
         }else{
           socket.join(room.id);}
           const [messages]: any = await fastify.db.query(
-            'SELECT users.pseudo, message.content FROM message JOIN users ON message.sender_id = users.id WHERE message.chat_room_id = ? ORDER BY message.id DESC LIMIT 20',
+            'SELECT users.pseudo, message.content FROM message JOIN users ON message.sender_id = users.id WHERE message.chat_room_id = ? ORDER BY message.id DESC',
             [room.id]
           );
 
@@ -69,16 +69,16 @@ const setupSocket = (fastify: FastifyInstance) => {
 
     socket.on('message', async (msg) => {
       try {
-        // Vérification de la validité du token
+
         const token = msg.pseudo;
         const decoded = await fastify.jwt.verify(token);
         const { id } = decoded as { id: string };
       
-        // Récupération du pseudo de l'utilisateur à partir de la base de données
+
         const [userRows]: any = await fastify.db.query('SELECT pseudo FROM users WHERE id = ?', [id]);
         const pseudo = userRows[0].pseudo;
       
-        // Vérification de la présence de l'utilisateur dans la salle de chat spécifiée
+       
         const [participantRows]: any = await fastify.db.query(
           'SELECT pseudo FROM users JOIN chat_participant ON chat_participant.user_id = users.id WHERE users.id = ? AND chat_participant.chat_room_id = ?',
           [id, msg.roomId]
@@ -97,7 +97,7 @@ const setupSocket = (fastify: FastifyInstance) => {
     });
 
 
-    // Adding handler to leave all rooms
+
     socket.on("leaveRoom", () => {
       const rooms = Array.from(socket.rooms);
       rooms.forEach(room => {
