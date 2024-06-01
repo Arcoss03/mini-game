@@ -23,7 +23,7 @@ async function Login() {
     } else {
         localStorage.setItem('token', res.data.token as string);
         showToast('Connexion réussie', true);
-        router.push('/profil');
+        window.location.href = '/profil';
     }
 }
 
