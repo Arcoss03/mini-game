@@ -2,7 +2,12 @@
 import { reactive, ref, onUpdated, watch } from 'vue';
 import socketClient from '../helpers/chatHelper';
 
-let room = 1;
+const props = defineProps({
+    roomName: String,
+    roumId: Number,
+  });
+
+let room = props.roumId;
 const state = reactive({
   messages: [] as { pseudo: string; content: string; color: string }[],
   textArea: '',
@@ -30,11 +35,11 @@ const handleScroll = () => {
 
 state.messages.splice(0, state.messages.length);
 socketClient.quitRoom();
-socketClient.joinRoom(localStorage.getItem('token') as string, room);
+socketClient.joinRoom(localStorage.getItem('token') as string, room as number);
 
 const sendMessage = () => {
   const content = state.textArea;
-  socketClient.message(localStorage.getItem('token') as string, content, room);
+  socketClient.message(localStorage.getItem('token') as string, content, room as number);
   state.textArea = '';
   state.taille = 0;
   scroll.value = true;
@@ -63,12 +68,11 @@ const onInput = (event: any) => {
   const radius = y;
 
   event.target.style.borderRadius = `${radius}rem`;
-
   updateChatHeight();
 };
 
 const updateChatHeight = () => {
-  const maxChatHeight = 37 * 16; // 37rem converti en pixels (1rem = 16px)
+  const maxChatHeight = 37 * 16;
   const newChatHeight = maxChatHeight - textAreaHeight.value;
   chatHeight.value = `calc(37rem - ${textAreaHeight.value-14}px)`;
 };
@@ -84,8 +88,8 @@ onUpdated(() => {
 
 <template>
 <main style="height: 100%;">
-  <h1>Titre du chat</h1>
-  <hr> 
+  <h1>{{props.roomName}}</h1>
+  <div class="barre"></div>
   <div class="chat">
     <ul :style="{ height: chatHeight }" ref="messageList" @scroll="handleScroll">
       <li v-for="(message, index) in state.messages" :key="index">
@@ -114,11 +118,12 @@ onUpdated(() => {
 <style scoped lang="scss">
 main {
   background-color: #211D2A;
-  hr{
-    margin-top:1rem;
+  .barre{
     margin-left: 2rem;
+    border-radius: 2rem;
+    height: 0.15rem;
     width: 80%;
-    background-color: linear-gradient(to right, #ff0000, #0000ff);
+    background: linear-gradient(to right, #EC1414 0%, #7D50DD 100%);
   }
   h1 {
     margin-left: 2.2rem;
@@ -134,7 +139,7 @@ main {
       border-radius: 2rem;
       background: white;
       width: 80%;
-      padding-bottom: 0;
+      
     }
     textarea {
       padding: 0.7rem 1rem 0.7rem 2rem;
