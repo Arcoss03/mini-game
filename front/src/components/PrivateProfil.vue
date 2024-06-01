@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted, onUnmounted, type Ref } from 'vue';
+import { ref, reactive, watch, onMounted, type Ref } from 'vue';
 import { GridLayout, GridItem, type Layout } from 'grid-layout-plus';
 import type { LayoutProfil } from '@/interfaces/profil';
 import { useUserStore } from '@/stores/userStore';
@@ -38,7 +38,18 @@ const getNextId = () => {
   return (maxId + 1).toString();
 };
 
-let debounceTimeout: number | null = null;
+let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
+
+const debounce = (func: Function, delay: number) => {
+  return (...args: any[]) => {
+    if (debounceTimeout !== null) {
+      clearTimeout(debounceTimeout);
+    }
+    debounceTimeout = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
 
 const updateColNum = () => {
   const width = window.innerWidth;
@@ -56,7 +67,6 @@ onMounted(async () => {
     eventLogs.push('Layout is initialized');
     layoutIsInitialized.value = true;
   }, 1000);
-
 });
 
 const changeProfilPicture = () => {
@@ -76,9 +86,6 @@ const deleteCard = (id: string) => {
   layout.splice(layout.findIndex((item) => item.i === id), 1);
   resolveCollisions();
 };
-
-
-
 
 const resolveCollisions = () => {
   layout.forEach((item, index) => {
@@ -118,6 +125,18 @@ const rearrangeLayout = () => {
   layout.splice(0, layout.length, ...newLayout); // Remplacez l'ancien layout par le nouveau
 };
 
+const updateUserProfileDebounced = debounce(async () => {
+  if (user.value) {
+    user.value.profil.layout = layout;
+
+    const res = await userStore.updateUserProfile(user.value, localStorage.getItem('token') || '');
+    if (res) {
+      showToast('Profile updated', true);
+    } else {
+      showToast('Profile update failed', false);
+    }
+  }
+}, 3000);
 
 // Watchers pour les changements de colonnes et de layout --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 watch(colNum, () => {
@@ -128,38 +147,14 @@ watch(layout, () => {
   if (!layoutIsInitialized.value) {
     return;
   }
-  if (debounceTimeout) {
-    clearTimeout(debounceTimeout);
-  }
-  debounceTimeout = setTimeout(async () => {
-    user.value!.profil.layout = layout;
-    
-    const res = await userStore.updateUserProfile(user.value!, localStorage.getItem('token') || '');
-    if (res) {
-      showToast('Profile updated', true);
-    } else {
-      showToast('Profile update failed', false);
-    }
-  }, 3000);
+  updateUserProfileDebounced();
 });
 
 watch(() => [user.value?.profil_picture, user.value?.pseudo, user.value?.description], () => {
   if (!layoutIsInitialized.value) {
     return;
   }
-  if (debounceTimeout) {
-    clearTimeout(debounceTimeout);
-  }
-  debounceTimeout = setTimeout(async () => {
-    user.value!.profil.layout = layout;
-    
-    const res = await userStore.updateUserProfile(user.value!, localStorage.getItem('token') || '');
-    if (res) {
-      showToast('Profile updated', true);
-    } else {
-      showToast('Profile update failed', false);
-    }
-  }, 3000);
+  updateUserProfileDebounced();
 });
 
 watch(
@@ -199,7 +194,7 @@ const newCardText = () => {
   });
 };
 
-const newCardImg = async() => {
+const newCardImg = async () => {
   // provisoire !!
   //appel a cat api pour recuperer une image
   const catImg = await apiHelper.getCat();
@@ -219,7 +214,6 @@ const newCardImg = async() => {
   });
 };
 </script>
-
 <template>
   <div class="container">
     <div class="user" v-if="user">

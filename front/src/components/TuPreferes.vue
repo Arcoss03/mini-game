@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Post } from '@/interfaces/post';
-import ky from 'ky';
 import { onMounted, ref, type Ref } from 'vue';
 import apiHelper from '../helpers/apiHelper'
 import { useUtilsStore } from '@/stores/utilsStore';
@@ -13,7 +12,7 @@ let tabPosition: Ref<number> = ref(0);
 
 
 const setImg1 = () => {
-  if(!img1IsActive.value && !img2IsActive.value && postTab.value.length !== 0) {
+  if (!img1IsActive.value && !img2IsActive.value && postTab.value.length !== 0) {
     img1IsActive.value = true;
     img2IsActive.value = false;
     vote(postTab.value[tabPosition.value].id!, 1);
@@ -21,26 +20,26 @@ const setImg1 = () => {
 };
 
 const setImg2 = () => {
-  if(!img1IsActive.value && !img2IsActive.value) {
+  if (!img1IsActive.value && !img2IsActive.value) {
     img1IsActive.value = false;
     img2IsActive.value = true;
-    
+
     vote(postTab.value[tabPosition.value].id!, 2);
   }
 };
 
 async function getAllPosts(): Promise<Post[] | undefined> {
   const res = await apiHelper.kyGet('tpf');
-    if(!res.success) {
-        showToast('Erreur lors du chargement des tu préfères', false);
-    } else {
-        return res.data as unknown as Post[]
-    }
+  if (!res.success) {
+    showToast('Erreur lors du chargement des tu préfères', false);
+  } else {
+    return res.data as unknown as Post[]
+  }
 }
 
 const vote = async (id: number, selectedClick: number) => {
-  const res = await apiHelper.kyPutWithoutToken(`tpf/vote/${id}`, {"selectedClick": selectedClick} );
-  if(!res.success){
+  const res = await apiHelper.kyPutWithoutToken(`tpf/vote/${id}`, { "selectedClick": selectedClick });
+  if (!res.success) {
     showToast('Erreur lors du vote', false);
   }
 };
@@ -72,20 +71,26 @@ const getPercentage = (nbClic1: number, nbClic2: number) => {
 
 <template>
   <main v-if="postTab.length !== 0">
-    <button :class="{hide: !(img1IsActive || img2IsActive) }" class="button-next" @click="nextPost()">Next</button>
-    <button class="img-container fisrt-img">
-      <img @click="setImg1()" :class="{ active: img1IsActive, no_colors: img2IsActive }" :src="postTab[tabPosition].img_url1"
-        alt="">
-      <h2 v-if="img1IsActive || img2IsActive">{{getPercentage(postTab[tabPosition].nb_clic1, postTab[tabPosition].nb_clic2)}}</h2>
-      <h3>{{ postTab[tabPosition].prompt1}}</h3>
-    </button>
+    <button :class="{ hide: !(img1IsActive || img2IsActive) }" class="button-next" @click="nextPost()">Next</button>
+    <div class="container first">
+      <button class="img-container fisrt-img">
+        <img @click="setImg1()" :class="{ active: img1IsActive, no_colors: img2IsActive }"
+          :src="postTab[tabPosition].img_url1" alt="">
+      </button>
+    </div>
+    <h2 v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic1,
+      postTab[tabPosition].nb_clic2)}}</h2>
+    <h3>{{ postTab[tabPosition].prompt1 }}</h3>
     <div class="divide-bar"></div>
-    <button class="img-container second-img">
-      <img @click="setImg2()" :class="{ active: img2IsActive, no_colors: img1IsActive }" :src="postTab[tabPosition].img_url2"
-        alt="">
-      <h2 v-if="img1IsActive || img2IsActive" class="bot">{{ getPercentage(postTab[tabPosition].nb_clic2, postTab[tabPosition].nb_clic1) }}</h2>
-      <h3 class="bot">{{ postTab[tabPosition].prompt2 }}</h3>
-    </button>
+    <div class="container second">
+      <button class="img-container second-img">
+        <img @click="setImg2()" :class="{ active: img2IsActive, no_colors: img1IsActive }"
+          :src="postTab[tabPosition].img_url2" alt="">
+      </button>
+    </div>
+    <h2 v-if="img1IsActive || img2IsActive" class="bot">{{ getPercentage(postTab[tabPosition].nb_clic2,
+      postTab[tabPosition].nb_clic1) }}</h2>
+    <h3 class="bot">{{ postTab[tabPosition].prompt2 }}</h3>
   </main>
 </template>
 
@@ -97,8 +102,6 @@ main {
   align-items: center;
   height: 100%;
   width: 100%;
-  padding: 1rem;
-  background: linear-gradient(180deg, #EC1414 0%, #7D50DD 100%);
   overflow: hidden;
   font-family: "Anton", sans-serif;
   font-weight: 400;
@@ -109,7 +112,7 @@ main {
     top: 50%;
     right: 0;
     transform: translateY(-50%);
-    background-color: #B63176;
+    background-color: #17141D;
     width: 80px;
     height: 100px;
     border: none;
@@ -124,7 +127,13 @@ main {
       transition: transform 0.9s ease-in-out;
       z-index: -1;
     }
+  }
 
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
   }
 
   .divide-bar {
@@ -133,7 +142,7 @@ main {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 32px;
+    height: 77px;
     width: 100vw;
     background-image: url('../assets/dividebar.svg');
   }
@@ -144,11 +153,16 @@ main {
     overflow: hidden;
 
     &.fisrt-img {
-      border-radius: 12px 12px 0 0;
+      border-top: 1rem solid #EC1414;
+      border-left: 1rem solid #EC1414;
+      border-right: 1rem solid #EC1414;
     }
 
     &.second-img {
-      border-radius: 0 0 12px 12px;
+      border-bottom: 1rem solid #7938CB;
+      border-left: 1rem solid #7938CB;
+      border-right: 1rem solid #7938CB;
+
     }
 
     img {
@@ -161,12 +175,14 @@ main {
       &.active {
         transform: scale(1.3);
       }
+
       &.no_colors {
         filter: grayscale(100%);
       }
     }
 
-    h2 {
+  }
+  h2 {
       position: absolute;
       z-index: 999;
       top: 20%;
@@ -196,6 +212,82 @@ main {
         bottom: 40px;
       }
     }
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+
+    .divide-bar {
+      width: 140px;
+      background-image: url('../assets/dividebarV.svg');
+      top: 50%;
+      height: 100%;
+      background-repeat: no-repeat;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      height: 100%;
+      width: 50%;
+      width: 100%;
+      height: 100%;
+      padding-top: 13%;
+      &.first {
+        background-color: #EC1414;
+      }
+      &.second {
+        background-color: #7938CB;
+      }
+
+    }
+
+    .img-container {
+      width: 35vw;
+      height: 35vw;
+      overflow: hidden;
+      border-radius: 40px;
+
+      &.fisrt-img {
+        border: solid 0.5rem #211D2A;
+
+      }
+
+      &.second-img {
+        border: solid 0.5rem #211D2A;
+
+      }
+
+      img {
+        
+        object-fit: cover;
+        border-radius: 30px;
+      }
+
+      
+    }
+    h2 {
+      //center absolute
+      left: 25%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 70px;
+    
+      &.bot {
+        left: 75%;
+        top: 50%;
+      }
+    }
+    
+    h3 {
+      left: 25%;
+      bottom: 3rem;
+    
+      &.bot {
+        left: 75%;
+      }
+    }
+
 
   }
 }
