@@ -4,10 +4,10 @@ import socketClient from '../helpers/chatHelper';
 
 const props = defineProps({
     roomName: String,
-    roumId: Number,
+    roomId: Number,
   });
 
-let room = props.roumId;
+let room = props.roomId;
 const state = reactive({
   messages: [] as { pseudo: string; content: string; color: string }[],
   textArea: '',
@@ -15,8 +15,7 @@ const state = reactive({
 });
 
 const messageList = ref<HTMLElement | null>(null); 
-const textAreaHeight = ref(24);
-const chatHeight = ref('calc(37rem - 24px)'); 
+const chatHeight = ref('calc(100vh - 10rem)'); 
 
 const scroll = ref(true);
 
@@ -43,41 +42,25 @@ const sendMessage = () => {
   state.textArea = '';
   state.taille = 0;
   scroll.value = true;
-  textAreaHeight.value = 38; 
-  updateChatHeight();
 };
 
 socketClient.messageResponse(state.messages);
 socketClient.invalidToken();
 
-const onInput = (event: any) => {
-  event.target.style.height = '2.4rem';
-  event.target.style.height = `${event.target.scrollHeight}px`;
-  textAreaHeight.value = Math.min(event.target.scrollHeight, 100); // Limiter la hauteur à 100px
+const onInput = (event: Event) => {
+  const textarea = event.target as HTMLTextAreaElement;
+  resizeTextarea(textarea);
+};
 
-  if (event.target.scrollHeight >= 100) {
-    event.target.style.overflow = 'auto';
-    event.target.style.paddingRight = "0.7rem";
+const resizeTextarea = (textarea: HTMLTextAreaElement) => {
+  textarea.style.height = 'auto'; // Réinitialiser la hauteur
+  if (textarea.scrollHeight >48) {
+    textarea.style.height = `${textarea.scrollHeight + 16}px`; // Ajuster à la hauteur du contenu
+    chatHeight.value = `calc(100vh - ${textarea.scrollHeight + 32}px - 5rem)`; // 32px is the padding and margin combined
   } else {
-    event.target.style.overflow = 'hidden';
+    chatHeight.value = 'calc(100vh - 10rem)'; 
   }
-
-  const a = 2;
-  const b = 0.7;
-  const y = a * Math.exp(-b * event.target.scrollHeight) + 2;
-  const radius = y;
-
-  event.target.style.borderRadius = `${radius}rem`;
-  updateChatHeight();
 };
-
-const updateChatHeight = () => {
-  const maxChatHeight = 37 * 16;
-  const newChatHeight = maxChatHeight - textAreaHeight.value;
-  chatHeight.value = `calc(37rem - ${textAreaHeight.value-14}px)`;
-};
-
-watch(textAreaHeight, updateChatHeight);
 
 onUpdated(() => {
   if (scroll.value) {
@@ -99,18 +82,15 @@ onUpdated(() => {
         </p>
       </li>
     </ul>
-    <form>
       <div class="textarea-container">
         <textarea
-          v-model="state.textArea"
-          style="height: 2.4rem;"
-          @input="onInput"
-          type="text"
-          placeholder="Saisissez votre message..."
-          @keydown.enter.prevent="sendMessage"
-        ></textarea>
+            v-model="state.textArea"
+            @input="onInput"
+            type="text"
+            placeholder="Saisissez votre message..."
+            @keydown.enter.prevent="sendMessage">
+          </textarea>
       </div>
-    </form>
   </div>
 </main>
 </template>
@@ -131,30 +111,29 @@ main {
   ul {
     list-style-type: none;
   }
-  form {
-    margin-top: 1%;
     .textarea-container {
-      margin-left: 1rem;
-      padding-right: 1.5rem;
-      border-radius: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
       background: white;
       width: 80%;
-      
+      margin: 1rem 0 0 1rem;
+      padding: 0 1rem 0 1rem;
     }
     textarea {
-      padding: 0.7rem 1rem 0.7rem 2rem;
       width: 100%;
       resize: none;
       overflow: hidden;
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 14px;
-      line-height: 1rem;
-      max-height: 100px;
       background: none;
       border: none;
+      padding: 0;
+      line-height: 1rem;
+      padding-top: 1rem;
+      font-size: 1rem;
       &::placeholder {
-        line-height: 1rem;
-        font-size: 14px;
+        font-size: 1rem;
       }
       &::-webkit-scrollbar {
         width: 6px;
@@ -177,7 +156,7 @@ main {
         outline: none;
       }
     }
-  }
+  
   .pseudo {
     font-weight: 490;
   }
