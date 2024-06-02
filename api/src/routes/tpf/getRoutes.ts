@@ -6,19 +6,30 @@ async function getRoutes(fastify: FastifyInstance) {
 
     //get all tu_preferes
     fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
-        const [rows] = await fastify.db.query('SELECT * FROM tu_preferes');
+        const [rows] = await fastify.db.query('SELECT * FROM tu_preferes ORDER BY RAND()');
         reply.send(rows);
     });
 
-    //get one tu_preferes by id
     fastify.get<{ Params: RouteParams }>('/:id', async (request: FastifyRequest<{ Params: RouteParams }>, reply: FastifyReply) => {
-        const [rows]: any = await fastify.db.query('SELECT * FROM tu_preferes WHERE id = ?', [request.params.id]);
-        if (rows.length === 0) {
-            reply.status(404).send({ error: 'Post not found' });
-        } else {
-            reply.send(rows[0]);
+        const userId = request.params.id // Extraire l'ID utilisateur du JWT
+        console.log(userId);
+        try {
+          // Requête SQL pour sélectionner les tu_preferes non votés par l'utilisateur
+          const [rows] = await fastify.db.query(
+            `SELECT tp.*
+            FROM tu_preferes tp
+            LEFT JOIN play_tpf pt ON tp.id = pt.tu_preferes_id AND pt.user_id = ?
+            WHERE pt.tu_preferes_id IS NULL;`,
+            [userId]
+          );
+    
+          reply.send(rows);
+        } catch (error) {
+          request.log.error(error);
+          reply.status(500).send({ error: 'An error occurred while fetching the records' });
         }
-    });
+      });
+
 }
 
 export default getRoutes;
