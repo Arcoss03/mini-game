@@ -17,6 +17,7 @@ import iconAddImg from './icons/icon-add-img.vue';
 import iconAddText from './icons/icon-add-text.vue';
 import iconAddBadge from './icons/icon-add-badge.vue';
 import BadgesPopupList from './BadgesPopupList.vue';
+import type { BadgeTypes } from '@/interfaces/badge';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
@@ -35,7 +36,22 @@ const badges = ref([]);
 
 const badgePopupVisible = ref(false);
 
-const togglePopup = () => {
+
+onMounted(async () => {
+  window.addEventListener('resize', updateColNum);
+  user.value = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
+  console.log(user.value);
+  layout.push(...user.value?.profil.layout || []);
+  updateColNum();
+  //pour eviter que le watch du layout s'active a l'init (oui c'es moche :( )
+  badges.value = await getBadgesTypesList();
+  setTimeout(() => {
+    eventLogs.push('Layout is initialized');
+    layoutIsInitialized.value = true;
+  }, 1000);
+});
+
+const toggleBadgePopup = () => {
   badgePopupVisible.value = !badgePopupVisible.value;
 };
 
@@ -64,20 +80,6 @@ const updateColNum = () => {
   const width = window.innerWidth;
   colNum.value = width > 1278 ? 4 : 2;
 };
-
-onMounted(async () => {
-  await getBadgesTypesList();
-  window.addEventListener('resize', updateColNum);
-  user.value = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
-  console.log(user.value);
-  layout.push(...user.value?.profil.layout || []);
-  updateColNum();
-  //pour eviter que le watch du layout s'active a l'init (oui c'es moche :( )
-  setTimeout(() => {
-    eventLogs.push('Layout is initialized');
-    layoutIsInitialized.value = true;
-  }, 1000);
-});
 
 const changeProfilPicture = () => {
   user.value!.profil_picture = "https://api.dicebear.com/8.x/bottts-neutral/svg?seed=" + uuidv4();
@@ -225,13 +227,13 @@ const newCardImg = async () => {
 };
 
 const setNewCardBadge = () => {
+  console.log('setNewCardBadge');
   // TODO
 };
 
 const getBadgesTypesList = async() => {
   const res = await apiHelper.kyGet('badges/types');
-  console.log("types badges list: ",res);
-  
+  return res.data.badges as BadgeTypes[];
 };
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -276,7 +278,7 @@ const getBadgesTypesList = async() => {
       </GridLayout>
     </div>
   </div>
-  <BadgesPopupList :badges="badges" :addBadgeToLayout="setNewCardBadge" :isVisible="badgePopupVisible" :closePopup="togglePopup" />
+  <BadgesPopupList v-if="!badgePopupVisible" :badges="badges" :addBadgeToLayout="setNewCardBadge" :isVisible="badgePopupVisible" :closePopup="toggleBadgePopup" />
   <div class="add-popup">
     <div class="plus-sign">+</div>
     <button @click="newCardText" class="extra-btn">
@@ -286,7 +288,7 @@ const getBadgesTypesList = async() => {
       <iconAddImg class="icon" color="white" />
     </button>
     <button class="extra-btn">
-      <iconAddBadge class="icon" color="white" />
+      <iconAddBadge @click="toggleBadgePopup()" class="icon" color="white" />
     </button>
   </div>
 </template>
