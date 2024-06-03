@@ -16,6 +16,7 @@ import apiHelper from '@/helpers/apiHelper';
 import iconAddImg from './icons/icon-add-img.vue';
 import iconAddText from './icons/icon-add-text.vue';
 import iconAddBadge from './icons/icon-add-badge.vue';
+import BadgesPopupList from './BadgesPopupList.vue';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
@@ -29,6 +30,14 @@ const eventLogs = reactive<string[]>([]);
 const eventsDiv = ref<HTMLElement>();
 
 const colNum = ref(4); // Nombre initial de colonnes
+
+const badges = ref([]);
+
+const badgePopupVisible = ref(false);
+
+const togglePopup = () => {
+  badgePopupVisible.value = !badgePopupVisible.value;
+};
 
 const getNextId = () => {
   // Trouvez l'ID le plus élevé parmi les cartes existantes
@@ -57,6 +66,7 @@ const updateColNum = () => {
 };
 
 onMounted(async () => {
+  await getBadgesTypesList();
   window.addEventListener('resize', updateColNum);
   user.value = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
   console.log(user.value);
@@ -213,6 +223,18 @@ const newCardImg = async () => {
     img: catImg,
   });
 };
+
+const setNewCardBadge = () => {
+  // TODO
+};
+
+const getBadgesTypesList = async() => {
+  const res = await apiHelper.kyGet('badges/types');
+  console.log("types badges list: ",res);
+  
+};
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 </script>
 <template>
   <div class="container">
@@ -233,7 +255,7 @@ const newCardImg = async () => {
           <img v-if="item.img" class="img" :src="item.img" alt="">
           <textarea type="text" placeholder="Type text ..." v-if="item.text !== undefined"
             v-model="item.text"></textarea>
-          <div class="popup" v-show="visiblePopup === item.i">
+          <div class="item-popup" v-show="visiblePopup === item.i">
             <button @click="changeCardDimentions(item.i, 1, 1)">
               <iconMiniSquare class="icon mini" color="white" />
             </button>
@@ -254,6 +276,7 @@ const newCardImg = async () => {
       </GridLayout>
     </div>
   </div>
+  <BadgesPopupList :badges="badges" :addBadgeToLayout="setNewCardBadge" :isVisible="badgePopupVisible" :closePopup="togglePopup" />
   <div class="add-popup">
     <div class="plus-sign">+</div>
     <button @click="newCardText" class="extra-btn">
@@ -476,7 +499,7 @@ const newCardImg = async () => {
   position: relative;
 }
 
-.popup {
+.item-popup {
   position: absolute;
   z-index: 999;
   bottom: 0;
