@@ -17,13 +17,14 @@ import iconAddImg from './icons/icon-add-img.vue';
 import iconAddText from './icons/icon-add-text.vue';
 import iconAddBadge from './icons/icon-add-badge.vue';
 import BadgesPopupList from './BadgesPopupList.vue';
-import type { BadgeTypes } from '@/interfaces/badge';
+import type { BadgeTypes } from '@/interfaces/badges';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
 let user: Ref<UserDetails | null> = ref(null);
 
 let layout = reactive<LayoutProfil[]>([]);
+
 const layoutIsInitialized = ref(false);
 
 const eventLogs = reactive<string[]>([]);
@@ -32,7 +33,7 @@ const eventsDiv = ref<HTMLElement>();
 
 const colNum = ref(4); // Nombre initial de colonnes
 
-const badges = ref([]);
+const badges:Ref<BadgeTypes[]> = ref([]);
 
 const badgePopupVisible = ref(false);
 
@@ -203,6 +204,7 @@ const newCardText = () => {
     i: getNextId(),
     static: false,
     text: '',
+    type: 'text',
   });
 };
 
@@ -223,6 +225,7 @@ const newCardImg = async () => {
     i: getNextId(),
     static: false,
     img: catImg,
+    type: 'img',
   });
 };
 
@@ -256,7 +259,11 @@ const getBadgesTypesList = async() => {
           @mouseenter="showPopup(item.i)" @mouseleave="hidePopup(item.i)">
           <img v-if="item.img" class="img" :src="item.img" alt="">
           <textarea type="text" placeholder="Type text ..." v-if="item.text !== undefined"
-            v-model="item.text"></textarea>
+            v-model="item.text">
+          </textarea>
+          <div class="badge">
+
+          </div>
           <div class="item-popup" v-show="visiblePopup === item.i">
             <button @click="changeCardDimentions(item.i, 1, 1)">
               <iconMiniSquare class="icon mini" color="white" />
@@ -278,7 +285,7 @@ const getBadgesTypesList = async() => {
       </GridLayout>
     </div>
   </div>
-  <BadgesPopupList v-if="!badgePopupVisible" :badges="badges" :addBadgeToLayout="setNewCardBadge" :isVisible="badgePopupVisible" :closePopup="toggleBadgePopup" />
+  <BadgesPopupList v-if="badgePopupVisible" :badges="badges" :addBadgeToLayout="setNewCardBadge" :isVisible="badgePopupVisible" :closePopup="toggleBadgePopup" />
   <div class="add-popup">
     <div class="plus-sign">+</div>
     <button @click="newCardText" class="extra-btn">
