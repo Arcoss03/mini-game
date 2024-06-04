@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps, onMounted } from 'vue'
+import type { BadgeTypes } from '@/interfaces/badges';
+import { on } from 'events';
 
 const props = defineProps({
-    badges: Array as () => Badge[],
+    badges: Array as () => BadgeTypes[],
     addBadgeToLayout: Function,
     isVisible: Boolean,
     closePopup: Function
 })
+
 </script>
 
 <template>
     <div class="badge-popup" @click.self="closePopup!">
         <div class="badge-container">
-            <div class="badge-list" v-for="badge in badges" :key="badge.id" @click.stop="addBadgeToLayout!(badge)">
+            <div class="badge-list" v-for="badge in badges" :key="badge.id" @click.stop="addBadgeToLayout!(badge.id)">
                 {{ badge.name }}
             </div>
         </div>

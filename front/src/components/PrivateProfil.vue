@@ -18,6 +18,7 @@ import iconAddText from './icons/icon-add-text.vue';
 import iconAddBadge from './icons/icon-add-badge.vue';
 import BadgesPopupList from './BadgesPopupList.vue';
 import type { BadgeTypes } from '@/interfaces/badges';
+import badgeItem  from '@/components/BadgeItem.vue';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
@@ -229,9 +230,18 @@ const newCardImg = async () => {
   });
 };
 
-const setNewCardBadge = () => {
+const setNewCardBadge = (type_badge_id: number) => {
   console.log('setNewCardBadge');
-  // TODO
+  layout.push({
+    x: 0,
+    y: 0,
+    w: 1,
+    h: 1,
+    i: getNextId(),
+    static: false,
+    type: 'badge',
+    type_badge_id: type_badge_id,
+  });
 };
 
 const getBadgesTypesList = async() => {
@@ -261,6 +271,7 @@ const getBadgesTypesList = async() => {
           <textarea type="text" placeholder="Type text ..." v-if="item.text !== undefined"
             v-model="item.text">
           </textarea>
+          <badgeItem v-if="item.type === 'badge'" :type_badge_id="item.type_badge_id!" :user_id="user!.id!" class="badge-item"/>
           <div class="badge">
 
           </div>
@@ -371,6 +382,12 @@ const getBadgesTypesList = async() => {
 
   img {
     border-radius: 8px;
+  }
+  .badge-item {
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    padding: 0;
   }
 
   textarea {
