@@ -5,6 +5,7 @@ import db from './db';
 import dotenv from 'dotenv';
 import cors from '@fastify/cors'
 import setupSocket from './chat';
+import setupSocketGF from './lobbyGF';
 
 dotenv.config(); // Load environment variables
 
@@ -12,6 +13,8 @@ dotenv.config(); // Load environment variables
 const fastify = Fastify({
     logger: true
   });
+
+  
 
   // allow cors errors
   fastify.register(cors, {
@@ -38,6 +41,7 @@ fastify.register(jwt, {
 });
 
 setupSocket(fastify);
+setupSocketGF(fastify);
 
 fastify.register(routes, { prefix: '/' });
 fastify.register(db);
