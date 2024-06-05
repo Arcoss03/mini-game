@@ -35,7 +35,6 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
             const { type_badge_id, user_id } = request.params;
             let query:string = '';
             if(type_badge_id === '3'){
-                console.log('type_badge_id', type_badge_id);
                 query = `
                 WITH level_calc AS (
                     SELECT 

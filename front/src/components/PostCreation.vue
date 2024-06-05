@@ -42,8 +42,6 @@ async function SendPost() {
       author_id: userId,
     };
 
-    console.log(postData);
-
     const res = await apiHelper.kyPost('tpf', postData, token);
 
     if (res.success) {

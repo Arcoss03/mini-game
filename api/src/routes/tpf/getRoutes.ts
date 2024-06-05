@@ -12,7 +12,6 @@ async function getRoutes(fastify: FastifyInstance) {
 
     fastify.get<{ Params: RouteParams }>('/:id', async (request: FastifyRequest<{ Params: RouteParams }>, reply: FastifyReply) => {
         const userId = request.params.id // Extraire l'ID utilisateur du JWT
-        console.log(userId);
         try {
           // Requête SQL pour sélectionner les tu_preferes non votés par l'utilisateur
           const [rows] = await fastify.db.query(
