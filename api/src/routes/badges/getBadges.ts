@@ -42,8 +42,8 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
                         COUNT(*) AS post_count,
                         CASE
                             WHEN COUNT(*) = 0 THEN 0
-                            WHEN COUNT(*) BETWEEN 1 AND 5 THEN 1
-                            WHEN COUNT(*) BETWEEN 6 AND 25 THEN 2
+                            WHEN COUNT(*) BETWEEN 1 AND 15 THEN 1
+                            WHEN COUNT(*) BETWEEN 16 AND 35 THEN 2
                             ELSE 3
                         END AS level
                     FROM tu_preferes
