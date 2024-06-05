@@ -16,12 +16,16 @@ import apiHelper from '@/helpers/apiHelper';
 import iconAddImg from './icons/icon-add-img.vue';
 import iconAddText from './icons/icon-add-text.vue';
 import iconAddBadge from './icons/icon-add-badge.vue';
+import BadgesPopupList from './BadgesPopupList.vue';
+import type { BadgeTypes } from '@/interfaces/badges';
+import badgeItem  from '@/components/BadgeItem.vue';
 
 const showToast = useUtilsStore().showToast;
 const userStore = useUserStore();
 let user: Ref<UserDetails | null> = ref(null);
 
 let layout = reactive<LayoutProfil[]>([]);
+
 const layoutIsInitialized = ref(false);
 
 const eventLogs = reactive<string[]>([]);
@@ -29,6 +33,28 @@ const eventLogs = reactive<string[]>([]);
 const eventsDiv = ref<HTMLElement>();
 
 const colNum = ref(4); // Nombre initial de colonnes
+
+const badges:Ref<BadgeTypes[]> = ref([]);
+
+const badgePopupVisible = ref(false);
+
+
+onMounted(async () => {
+  window.addEventListener('resize', updateColNum);
+  user.value = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
+  layout.push(...user.value?.profil.layout || []);
+  updateColNum();
+  //pour eviter que le watch du layout s'active a l'init (oui c'es moche :( )
+  badges.value = await getBadgesTypesList();
+  setTimeout(() => {
+    eventLogs.push('Layout is initialized');
+    layoutIsInitialized.value = true;
+  }, 1000);
+});
+
+const toggleBadgePopup = () => {
+  badgePopupVisible.value = !badgePopupVisible.value;
+};
 
 const getNextId = () => {
   // Trouvez l'ID le plus élevé parmi les cartes existantes
@@ -56,19 +82,6 @@ const updateColNum = () => {
   colNum.value = width > 1278 ? 4 : 2;
 };
 
-onMounted(async () => {
-  window.addEventListener('resize', updateColNum);
-  user.value = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
-  console.log(user.value);
-  layout.push(...user.value?.profil.layout || []);
-  updateColNum();
-  //pour eviter que le watch du layout s'active a l'init (oui c'es moche :( )
-  setTimeout(() => {
-    eventLogs.push('Layout is initialized');
-    layoutIsInitialized.value = true;
-  }, 1000);
-});
-
 const changeProfilPicture = () => {
   user.value!.profil_picture = "https://api.dicebear.com/8.x/bottts-neutral/svg?seed=" + uuidv4();
 };
@@ -85,6 +98,7 @@ const changeCardDimentions = (id: string, w: number, h: number) => {
 const deleteCard = (id: string) => {
   layout.splice(layout.findIndex((item) => item.i === id), 1);
   resolveCollisions();
+  badges.value = isBadgeInLayout(badges.value);
 };
 
 const resolveCollisions = () => {
@@ -191,6 +205,7 @@ const newCardText = () => {
     i: getNextId(),
     static: false,
     text: '',
+    type: 'text',
   });
 };
 
@@ -211,8 +226,42 @@ const newCardImg = async () => {
     i: getNextId(),
     static: false,
     img: catImg,
+    type: 'img',
   });
 };
+
+const setNewCardBadge = (type_badge_id: number) => {
+  layout.push({
+    x: 0,
+    y: 0,
+    w: 1,
+    h: 1,
+    i: getNextId(),
+    static: false,
+    type: 'badge',
+    type_badge_id: type_badge_id,
+  });
+  badges.value = isBadgeInLayout(badges.value);
+};
+
+const getBadgesTypesList = async() => {
+  const res = await apiHelper.kyGet('badges/types');
+  const badges = res.data.badges as BadgeTypes[];
+  //ajouter un boolen pour savoir si le badge est deja dans le layout
+  badges.forEach(badge => {
+    badge.inLayout = layout.some(item => item.type_badge_id === badge.id);
+  });
+  return badges;
+};
+
+const isBadgeInLayout = (badges: BadgeTypes[]) => {
+  badges.forEach(badge => {
+    badge.inLayout = layout.some(item => item.type_badge_id === badge.id);
+  });
+  return badges;
+};
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 </script>
 <template>
   <div class="container">
@@ -232,8 +281,13 @@ const newCardImg = async () => {
           @mouseenter="showPopup(item.i)" @mouseleave="hidePopup(item.i)">
           <img v-if="item.img" class="img" :src="item.img" alt="">
           <textarea type="text" placeholder="Type text ..." v-if="item.text !== undefined"
-            v-model="item.text"></textarea>
-          <div class="popup" v-show="visiblePopup === item.i">
+            v-model="item.text">
+          </textarea>
+          <badgeItem v-if="item.type === 'badge'" :type_badge_id="item.type_badge_id!" :user_id="user!.id!" class="badge-item"/>
+          <div class="badge">
+
+          </div>
+          <div class="item-popup" :class="{ badge: item.type === 'badge' }" v-show="visiblePopup === item.i">
             <button @click="changeCardDimentions(item.i, 1, 1)">
               <iconMiniSquare class="icon mini" color="white" />
             </button>
@@ -246,7 +300,7 @@ const newCardImg = async () => {
             <button @click="changeCardDimentions(item.i, 2, 2)">
               <iconBigSquare class="icon" color="white" />
             </button>
-            <button @click="deleteCard(item.i)">
+            <button class="trash" @click="deleteCard(item.i)">
               <iconTrash class="icon mini" color="white" />
             </button>
           </div>
@@ -254,6 +308,7 @@ const newCardImg = async () => {
       </GridLayout>
     </div>
   </div>
+  <BadgesPopupList v-if="badgePopupVisible" :badges="badges" :addBadgeToLayout="setNewCardBadge" :isVisible="badgePopupVisible" :closePopup="toggleBadgePopup" />
   <div class="add-popup">
     <div class="plus-sign">+</div>
     <button @click="newCardText" class="extra-btn">
@@ -263,7 +318,7 @@ const newCardImg = async () => {
       <iconAddImg class="icon" color="white" />
     </button>
     <button class="extra-btn">
-      <iconAddBadge class="icon" color="white" />
+      <iconAddBadge @click="toggleBadgePopup()" class="icon" color="white" />
     </button>
   </div>
 </template>
@@ -339,6 +394,12 @@ const newCardImg = async () => {
 
   img {
     border-radius: 8px;
+  }
+  .badge-item {
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    padding: 0;
   }
 
   textarea {
@@ -476,7 +537,7 @@ const newCardImg = async () => {
   position: relative;
 }
 
-.popup {
+.item-popup {
   position: absolute;
   z-index: 999;
   bottom: 0;
@@ -486,6 +547,7 @@ const newCardImg = async () => {
   padding: 5px;
   border-radius: 5px;
   text-align: center;
+  height: 2.4rem;
   display: flex;
   justify-content: space-between;
   transform: translateY(15px); // Décale la popup vers le bas de 10px pour créer un espace
@@ -515,6 +577,16 @@ const newCardImg = async () => {
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
+  }
+
+  &.badge {
+    button {
+        display: none;
+
+        &.trash {
+          display: block;
+        }
+      }
   }
 }
 

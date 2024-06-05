@@ -9,4 +9,7 @@ export interface LayoutProfil {
     img?: string,
     badge_img?: string,
     badge_text?: string,
+    type: 'img' | 'badge' | 'text',
+    type_badge_id?: number,
+
 }

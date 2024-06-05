@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import ky from 'ky';
-import Toast from './Toast.vue';
 import {type Post} from '@/interfaces/post';
 import { useUtilsStore } from '@/stores/utilsStore';
 import { onMounted, ref, type Ref } from 'vue';
+import apiHelper from '../helpers/apiHelper';
+import router from '@/router';
+import { useUserStore } from '@/stores/userStore';
+const currentUser = useUserStore().currentUser;
 
 const showToast = useUtilsStore().showToast;
 
@@ -15,9 +18,14 @@ let isToastVisible = ref(false);
 
 
 async function SendPost() {
-  try {
     // Utiliser ky pour obtenir les données des images
     const data:any = await ky.get('https://api.thecatapi.com/v1/images/search?limit=2').json();
+    const token = localStorage.getItem('token');
+    const userId = currentUser?.id;
+    if (!token || !userId) {
+      router.push('/login');
+      return;
+    }
 
     if (text1.value === '' || text2.value === '') {
       showToast('Please fill in both prompts', false);
@@ -31,25 +39,19 @@ async function SendPost() {
       prompt2: text2.value,
       img_url2: data[1].url,
       nb_clic2: 0,
-      author_id: 1,
+      author_id: userId,
     };
 
-    console.log(postData);
+    const res = await apiHelper.kyPost('tpf', postData, token);
 
-    // Utiliser ky pour envoyer les données
-    await ky.post('/api/posts', {
-      json: postData
-    });
-
-    showToast('Post created', true);
-    text1.value = '';
-    text2.value = '';
-  } catch (error) {
-    // Avec ky, une erreur est lancée automatiquement si la réponse n'est pas ok
-    showToast('Failed to create post', false);
-    console.error('Erreur lors de la requête :', error);
+    if (res.success) {
+      showToast('Post created', true);
+      text1.value = '';
+      text2.value = '';
+    } else {
+      showToast('Failed to create post', false);
+    }
   }
-}
 
 </script>
 

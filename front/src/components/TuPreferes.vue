@@ -3,12 +3,15 @@ import type { Post } from '@/interfaces/post';
 import { onMounted, ref, type Ref } from 'vue';
 import apiHelper from '../helpers/apiHelper'
 import { useUtilsStore } from '@/stores/utilsStore';
+import { useUserStore } from '@/stores/userStore';
 
 const showToast = useUtilsStore().showToast;
 let img1IsActive = ref(false);
 let img2IsActive = ref(false);
 let postTab: Ref<Post[]> = ref([]);
 let tabPosition: Ref<number> = ref(0);
+
+const currentUser = useUserStore().currentUser;
 
 
 const setImg1 = () => {
@@ -29,7 +32,12 @@ const setImg2 = () => {
 };
 
 async function getAllPosts(): Promise<Post[] | undefined> {
-  const res = await apiHelper.kyGet('tpf');
+  let res;
+  if (currentUser?.id) {
+    res = await apiHelper.kyGet(`tpf/${currentUser.id}`); 
+  } else {
+    res = await apiHelper.kyGet('tpf');
+  }
   if (!res.success) {
     showToast('Erreur lors du chargement des tu préfères', false);
   } else {
@@ -38,7 +46,7 @@ async function getAllPosts(): Promise<Post[] | undefined> {
 }
 
 const vote = async (id: number, selectedClick: number) => {
-  const res = await apiHelper.kyPutWithoutToken(`tpf/vote/${id}`, { "selectedClick": selectedClick });
+  const res = await apiHelper.kyPutWithoutToken(`tpf/vote/${id}`, { "selectedClick": selectedClick, "userId": currentUser?.id });
   if (!res.success) {
     showToast('Erreur lors du vote', false);
   }
@@ -64,8 +72,6 @@ const getPercentage = (nbClic1: number, nbClic2: number) => {
   }
   return `${Math.round((nbClic1 / total) * 100)}%`;
 };
-
-
 
 </script>
 
