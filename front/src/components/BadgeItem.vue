@@ -21,6 +21,7 @@ const props = defineProps<{
 
 onMounted(async () => {
     const res = await apiHelper.kyGet(`badges/stats/${props.type_badge_id}/${props.user_id}`);
+    console.log(res);
     if (res.success) {
         badge.value = res.data as unknown as Badge;
     } else {
@@ -36,13 +37,13 @@ const badge: Ref<Badge | null> = ref(null);
 
 <template>
     <div class="container">
-        <div v-if="badge?.statistic" class="badge">
+        <div v-if="badge?.statistic !==undefined" class="badge">
             <img :src="badge.img_url" alt="badge_img" class="background-image">
             <div class="stat">{{ badge.statistic }}</div>
             <div class="stat-description">{{ badge.stat_description }}</div>
             <div class="title">{{ badge.title }}</div>
         </div>
-        <div v-if="!badge?.statistic" class="loader"></div>
+        <div v-if="badge?.statistic === undefined" class="loader"></div>
     </div>
 </template>
 
