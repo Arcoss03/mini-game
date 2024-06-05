@@ -56,15 +56,16 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', async() => {
     const disconnectedToken = socketTokens[socket.id];
+    const roomId=parseInt(socketRoom[socket.id])-11111;
     try{
       const [userRows]: any = await fastify.db.query('SELECT pseudo FROM users WHERE id = ?', [disconnectedToken]);
       if(pseudosInRoom[socketRoom[socket.id]].includes(userRows[0].pseudo)){
         pseudosInRoom[socketRoom[socket.id]] = pseudosInRoom[socketRoom[socket.id]].filter(pseudo => pseudo !== userRows[0].pseudo);
       }
-      /*const [delParticipant]:any= await fastify.db.query(
-        REQUETE SQL
-        [socketRoom[socket.id], disconnectedToken]
-    );  */  
+      const [delParticipant]:any= await fastify.db.query(
+        'DELETE FROM guess_prompt_participant WHERE room_GP_id=? and user_id=?',
+        [roomId, disconnectedToken]
+    );
       io.to(socketRoom[socket.id]).emit('joinedRoom', { pseudos: pseudosInRoom[socketRoom[socket.id]]});  
     }catch (err) {
       socket.to(socketRoom[socket.id]).emit('error', { error: 'Invalid token' });

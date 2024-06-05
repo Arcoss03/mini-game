@@ -17,7 +17,6 @@ async function getGPRoutes(fastify: FastifyInstance) {
             reply.status(401).send({ error: 'Invalid token' });
             return;
         }
-    
         try {
             const roomId = parseInt(request.params.id, 10);
             const adjustedId = roomId - 11111;
@@ -26,7 +25,7 @@ async function getGPRoutes(fastify: FastifyInstance) {
                 [adjustedId, payload.id]
             );
             if (existingParticipant.length === 0) {
-                reply.status(400).send({ error: 'User already in the room' });
+                reply.status(400).send({ error: 'User not exist in the room' });
                 return;
             }
             const [roomInfo]: any = await fastify.db.query(

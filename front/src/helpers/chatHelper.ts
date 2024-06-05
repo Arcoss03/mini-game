@@ -35,7 +35,6 @@ import router from '@/router';
 const invalidToken = () => {
   socket.on('error', (errorMessage) => {
     if (errorMessage.error === 'Invalid token') { 
-      console.log('ne peux pas ecrire')
       router.push("/login");
     }
   });

@@ -37,9 +37,15 @@ const router = createRouter({
       component: () => import('../views/ProfileView.vue')
     },
     {
-      path: '/lobby',
+      path: '/lobby/:lobbyId',
       name: 'lobby',
-      component: () => import('../views/LobbyGFView.vue')
+      component: () => import('../views/LobbyGFView.vue'),
+      props: true
+    },
+    {
+      path: '/joinGF',
+      name: 'joinGF',
+      component: () => import('../views/LobbyGFcreation-joinView.vue')
     },
     {
       path: '/:catchAll(.*)',
