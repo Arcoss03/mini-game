@@ -1,4 +1,5 @@
 export interface BadgeTypes {
     id: number,
-    name: string
+    name: string,
+    inLayout: boolean
 }

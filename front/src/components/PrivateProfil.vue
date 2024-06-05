@@ -42,7 +42,6 @@ const badgePopupVisible = ref(false);
 onMounted(async () => {
   window.addEventListener('resize', updateColNum);
   user.value = await userStore.getUserDetailsById(useUserStore().currentUser?.id);
-  console.log(user.value);
   layout.push(...user.value?.profil.layout || []);
   updateColNum();
   //pour eviter que le watch du layout s'active a l'init (oui c'es moche :( )
@@ -99,6 +98,7 @@ const changeCardDimentions = (id: string, w: number, h: number) => {
 const deleteCard = (id: string) => {
   layout.splice(layout.findIndex((item) => item.i === id), 1);
   resolveCollisions();
+  badges.value = isBadgeInLayout(badges.value);
 };
 
 const resolveCollisions = () => {
@@ -231,7 +231,6 @@ const newCardImg = async () => {
 };
 
 const setNewCardBadge = (type_badge_id: number) => {
-  console.log('setNewCardBadge');
   layout.push({
     x: 0,
     y: 0,
@@ -242,11 +241,24 @@ const setNewCardBadge = (type_badge_id: number) => {
     type: 'badge',
     type_badge_id: type_badge_id,
   });
+  badges.value = isBadgeInLayout(badges.value);
 };
 
 const getBadgesTypesList = async() => {
   const res = await apiHelper.kyGet('badges/types');
-  return res.data.badges as BadgeTypes[];
+  const badges = res.data.badges as BadgeTypes[];
+  //ajouter un boolen pour savoir si le badge est deja dans le layout
+  badges.forEach(badge => {
+    badge.inLayout = layout.some(item => item.type_badge_id === badge.id);
+  });
+  return badges;
+};
+
+const isBadgeInLayout = (badges: BadgeTypes[]) => {
+  badges.forEach(badge => {
+    badge.inLayout = layout.some(item => item.type_badge_id === badge.id);
+  });
+  return badges;
 };
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -275,7 +287,7 @@ const getBadgesTypesList = async() => {
           <div class="badge">
 
           </div>
-          <div class="item-popup" v-show="visiblePopup === item.i">
+          <div class="item-popup" :class="{ badge: item.type === 'badge' }" v-show="visiblePopup === item.i">
             <button @click="changeCardDimentions(item.i, 1, 1)">
               <iconMiniSquare class="icon mini" color="white" />
             </button>
@@ -288,7 +300,7 @@ const getBadgesTypesList = async() => {
             <button @click="changeCardDimentions(item.i, 2, 2)">
               <iconBigSquare class="icon" color="white" />
             </button>
-            <button @click="deleteCard(item.i)">
+            <button class="trash" @click="deleteCard(item.i)">
               <iconTrash class="icon mini" color="white" />
             </button>
           </div>
@@ -535,6 +547,7 @@ const getBadgesTypesList = async() => {
   padding: 5px;
   border-radius: 5px;
   text-align: center;
+  height: 2.4rem;
   display: flex;
   justify-content: space-between;
   transform: translateY(15px); // Décale la popup vers le bas de 10px pour créer un espace
@@ -564,6 +577,16 @@ const getBadgesTypesList = async() => {
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
+  }
+
+  &.badge {
+    button {
+        display: none;
+
+        &.trash {
+          display: block;
+        }
+      }
   }
 }
 

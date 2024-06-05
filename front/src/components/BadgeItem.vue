@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
 import apiHelper from '@/helpers/apiHelper';
@@ -20,12 +19,10 @@ const props = defineProps<{
     user_id: number;
 }>()
 
-onMounted(async() => {
+onMounted(async () => {
     const res = await apiHelper.kyGet(`badges/stats/${props.type_badge_id}/${props.user_id}`);
     if (res.success) {
         badge.value = res.data as unknown as Badge;
-        console.log(badge.value);
-        badge.value.img_url = "https://cdn2.thecatapi.com/images/y61B6bFCh.jpg"
     } else {
         showToast('Erreur lors du chargement des badges', false);
     }
@@ -39,34 +36,67 @@ const badge: Ref<Badge | null> = ref(null);
 
 <template>
     <div class="container">
-        <div :style="{ backgroundImage: `url(${badge?.img_url})` }" v-if="badge?.statistic" class="badge">
+        <div v-if="badge?.statistic" class="badge">
+            <img :src="badge.img_url" alt="badge_img" class="background-image">
             <div class="stat">{{ badge.statistic }}</div>
-
+            <div class="stat-description">{{ badge.stat_description }}</div>
+            <div class="title">{{ badge.title }}</div>
         </div>
-
         <div v-if="!badge?.statistic" class="loader"></div>
     </div>
 </template>
 
 <style scoped lang="scss">
-    .container {
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #17141D;
+
+    .badge {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #17141D;
-        width: 100%;
-        height: 100%;
 
-        .badge {
-            background-image: url("{{ badge?.img_url }}");
-            width: 100%;
-            height: 100%;
-            border-radius: 8px;
+        .background-image {
+            height: 65%;
+            object-fit: contain;
         }
 
-        .loader {
-            margin-top: 10%;
+        .title {
+            color: white;
+            font-size: 1.5rem;
+            height: 1.5rem;
+        }
+
+
+        .stat {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 3rem;
+        }
+        .stat-description {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
         }
     }
+
+    .loader {
+        margin-top: 10%;
+    }
+}
 </style>

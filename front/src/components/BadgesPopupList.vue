@@ -10,12 +10,20 @@ const props = defineProps({
     closePopup: Function
 })
 
+function addbadge(badge: BadgeTypes) {
+    if (badge.inLayout) {
+        return
+    }
+    props.addBadgeToLayout!(badge.id)
+    props.closePopup!()
+}
+
 </script>
 
 <template>
     <div class="badge-popup" @click.self="closePopup!">
         <div class="badge-container">
-            <div class="badge-list" v-for="badge in badges" :key="badge.id" @click.stop="addBadgeToLayout!(badge.id)">
+            <div class="badge-list" :class="{isUsed: badge.inLayout}" v-for="badge in badges" :key="badge.id" @click.stop="addbadge(badge)">
                 {{ badge.name }}
             </div>
         </div>
@@ -47,6 +55,7 @@ const props = defineProps({
         max-height: 50%;
         max-width: 50%;
         padding: 4rem;
+
         .badge-list {
             padding: 0 1rem;
             border-radius: 10px;
@@ -56,6 +65,12 @@ const props = defineProps({
             text-align: center;
             font-size: 1.5rem;
             background-color: #7938CB;
+
+            &.isUsed {
+                background-color: #0000003b;
+                border-right: #393939 5px solid;
+                border-bottom: #393939 5px solid;
+            }
 
             &:hover {
                 cursor: pointer;
