@@ -11,7 +11,7 @@
 
         <RouterLink class="Rte" to="/create"><img class="img" src="../assets/AddIcon.svg" alt="">Add</RouterLink>
 
-        <RouterLink class="Rte" to="/"><img class="img" src="../assets/Set.svg" alt="">Settings</RouterLink>
+        <RouterLink class="Rte" to="/"><img class="img" src="../assets/set.svg" alt="">Settings</RouterLink>
 
         <RouterLink class="Rte" id="log" to="/login">Se connecter</RouterLink>
 
