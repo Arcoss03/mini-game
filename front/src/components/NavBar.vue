@@ -4,11 +4,17 @@
 
 <template>
     <div class="navbar">
-        <a href="/"><img class="logo" src="../assets/logoMG.svg" alt=""></a>
-        <a href="/tpf"><img src="../assets/TPF.svg" alt=""></a>
-        <a href="/create"><img src="../assets/AddIcon.svg" alt="ADD"></a>
-        <a href="/"><img src="../assets/Set.svg" alt=""></a>
-        <a class="log" href="/login">Se connecter</a>
+        
+        <RouterLink class="Rte" to="/"><img class="logo" src="../assets/logoMG.svg" alt=""></RouterLink>
+
+        <RouterLink class="Rte" to="/tpf"><img class="img" src="../assets/TPF.svg" alt="">TuPreferes</RouterLink>
+
+        <RouterLink class="Rte" to="/create"><img class="img" src="../assets/AddIcon.svg" alt="">Add</RouterLink>
+
+        <RouterLink class="Rte" to="/"><img class="img" src="../assets/Set.svg" alt="">Settings</RouterLink>
+
+        <RouterLink class="Rte" id="log" to="/login">Se connecter</RouterLink>
+
     </div>
 </template>
 
@@ -50,11 +56,11 @@
 
         .logo {
             display: block;
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             margin-bottom: 20px;
         }
-        .log {
+        #log {
             position: fixed;
             bottom: 0;
         }
@@ -62,7 +68,21 @@
             margin: 10px 0;
         }
     }
+    .Rte {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .img {
+        width: 20px;
+        height: 20px;
+    }
+
     
 
 }
+* {
+    list-style: none;
+}
+
 </style>
