@@ -28,7 +28,7 @@
     bottom: 0;
     left: 0;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
     align-items: center;
     background-color: #17141D;
     padding: 10px;
@@ -50,7 +50,10 @@
     }
     //les classes pour le desktop
     @media (min-width: 769px) {
+        display: flex;
         flex-direction: column;
+        justify-content: start;
+        align-items: center;
         width: 110px;
         height: 100vh;
 
