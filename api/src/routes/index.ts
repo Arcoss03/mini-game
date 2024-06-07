@@ -8,6 +8,7 @@ import putRoutes from './tpf/putRoutes'
 import getProfilRoutes from './profil/getProfil'
 import putProfilRoutes from './profil/putProfil'
 import getBadgesRoutes from './badges/getBadges'
+import generateImageRoute from './generate/postGenerate';
 
 
 //used to register all routes
@@ -20,7 +21,8 @@ async function routes(fastify: FastifyInstance) {
     fastify.register(getRoutes, { prefix: '/tpf' });
     fastify.register(getProfilRoutes, {prefix: '/profil' });
     fastify.register(putProfilRoutes, {prefix: '/profil' });
-    fastify.register(getBadgesRoutes, { prefix: '/badges' })
+    fastify.register(getBadgesRoutes, { prefix: '/badges' });
+    fastify.register(generateImageRoute, { prefix: '/generate' });
 }
 
 export default routes;
