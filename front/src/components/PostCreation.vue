@@ -7,6 +7,7 @@ import apiHelper from '../helpers/apiHelper';
 import router from '@/router';
 import { useUserStore } from '@/stores/userStore';
 const currentUser = useUserStore().currentUser;
+import NavBar from './NavBar.vue';
 
 const showToast = useUtilsStore().showToast;
 
@@ -56,8 +57,15 @@ async function SendPost() {
 </script>
 
 <template>
+  <NavBar />
   <main>
-    <img src="../assets/logo.svg" alt="logo">
+    
+
+    <!-- <img src="../assets/logoMG.svg" alt="logo"> -->
+    <div class="desc-create">
+      <h2>Créé ton propre "Tu-préfères?" !</h2>
+      <p>Ajoute 2 propositions et l'intelligence supérieure artificielle se charge de te créer de superbes images !</p>
+    </div>
     <form @submit.prevent="SendPost()">
       <div class='prompt-input'>
         <label for="prompt1">First Prompt</label>
@@ -77,10 +85,10 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
   height: 100%;
   width: 100%;
-  background: linear-gradient(180deg, #EC1414 0%, #7D50DD 100%);
+  background-color: #211D2A ;
   overflow: hidden;
   font-family: "Anton", sans-serif;
   font-weight: 400;
@@ -125,6 +133,20 @@ main {
     border: solid #fff;
     border-radius: 20px;
     color: #fff;
+  }
+  .desc-create {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5em;
+    font-weight: 300;
+    font-style: normal;
+  }
+  img {
+    width: 250px;
+    height: 250px;
   }
 
 
