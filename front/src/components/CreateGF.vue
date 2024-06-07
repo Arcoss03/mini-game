@@ -10,7 +10,7 @@ const showToast = useUtilsStore().showToast;
 interface CreationRoomResponse {
   success: boolean;
   data: {
-    id: string; 
+    id: string;
   };
 }
 const createRoom = async() => {

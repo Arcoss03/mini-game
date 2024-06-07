@@ -5,10 +5,10 @@ import apiHelper from '@/helpers/apiHelper';
 import router from '@/router';
 
 const state = reactive({
-  messages: [] as [],
+  messages: [] as Array<[string, string, string]>,
   name: '',
-  date:Date,
-
+  date: new Date(),
+  isChef: false,
 });
 
 const apiUrl = import.meta.env.VITE_API_URL as string;
@@ -21,9 +21,9 @@ onMounted(async () => {
   if (!res.success) {
     router.push('/joinGF');
   } else {
-    let room:any=res.data.room
+    let room: any = res.data.room;
     state.name = room.name;
-    state.date = room.creation_date;
+    state.date = new Date(room.creation_date);
     const socket = io(apiUrl, {
       auth: {
         apiKey: apiKey
@@ -35,8 +35,19 @@ onMounted(async () => {
     socket.on("joinedRoom", (data) => {
       state.messages = data.pseudos;
     });
+
+    socket.on("chef", (data) => {
+      state.isChef = data.isChef;
+    });
   }
 });
+
+const startGame = async () => {
+  const res = await apiHelper.kyPost(`garticPhone/play`, { id: props.lobbyId }, localStorage.getItem('token') as string);
+  if (!res.success) {
+    console.log('error');
+  }
+};
 </script>
 
 <template>
@@ -46,12 +57,13 @@ onMounted(async () => {
     <ul>
       <li v-for="(message, index) in state.messages" :key="index">
         <p>
+          <p>{{ message[2] }}</p>
           <img style="width: 15px;" :src="message[1]" alt="" />
           <strong>{{ message[0] }}</strong>
         </p>
       </li>
     </ul>
-    <button>Play</button>
+    <button v-if="state.isChef" @click="startGame">Play</button>
     <p>{{ state.date }}</p>
   </main>
 </template>

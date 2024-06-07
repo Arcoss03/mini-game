@@ -35,7 +35,17 @@ io.on('connection', (socket) => {
         'SELECT * FROM guess_prompt_participant WHERE user_id = ? AND room_GP_id = ?',
         [id, roomId]
       );
+      const[owner]:any=await fastify.db.query(
+        'SELECT creator_id FROM room_GP WHERE id = ?',
+        [roomId]
+      );
 
+      let chef=""
+
+      if(owner[0].creator_id==id){
+        chef="courone"
+        socket.emit("chef",{isChef:true});
+      }
       if (participantRows.length > 0) {
         socket.join(room.roomId);
 
@@ -44,7 +54,7 @@ io.on('connection', (socket) => {
         }
 
         if (!pseudosInRoom[room.roomId].includes(userPseudo)) {
-          pseudosInRoom[room.roomId].push([userPseudo, userRows[0].profil_picture]);
+          pseudosInRoom[room.roomId].push([userPseudo, userRows[0].profil_picture,chef]);
         }
         io.to(room.roomId).emit('joinedRoom', { pseudos: pseudosInRoom[room.roomId]});
       } else {
@@ -59,10 +69,15 @@ io.on('connection', (socket) => {
     const disconnectedToken = socketTokens[socket.id];
     const roomId=parseInt(socketRoom[socket.id])-11111;
     try{
+
       const [userRows]: any = await fastify.db.query('SELECT pseudo FROM users WHERE id = ?', [disconnectedToken]);
       if (pseudosInRoom[socketRoom[socket.id]].some(tuple => tuple[0] ===userRows[0].pseudo)) {
         pseudosInRoom[socketRoom[socket.id]] = pseudosInRoom[socketRoom[socket.id]].filter(tuple => tuple[0] !== userRows[0].pseudo);
     }
+    const [room]:any=await fastify.db.query('SELECT type FROM room_GP WHERE id = ?', [roomId]);
+      if(room[0].type!=="lobby"){
+        return;
+      }
 
     const delay = 5000;
 
