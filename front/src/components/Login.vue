@@ -4,6 +4,7 @@ import {type logIn} from '@/interfaces/user';
 import apiHelper from '@/helpers/apiHelper';
 import { useUtilsStore } from '@/stores/utilsStore';
 import router from '@/router';
+import NavBar from './NavBar.vue';
 
 const showToast = useUtilsStore().showToast;
 
@@ -31,6 +32,7 @@ async function Login() {
 </script>
 
 <template>
+    <NavBar />
   <main>
     <div class="blush" >
         <img src="../assets/logo.svg" alt="logo">
@@ -58,7 +60,7 @@ async function Login() {
 <style scoped lang="scss">
 main {
     min-height: 100vh;
-    background: #17141D;
+    background: #211D2A;
     border: solid #17141D;
 
     .blush {
