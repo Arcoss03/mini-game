@@ -1,31 +1,10 @@
-version: '3.7'
+version: '3.8'
 services:
-  db:
-    image: mysql:latest
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mini_game_db # Crée automatiquement une base de données
-    volumes:
-      - './data:/var/lib/mysql'
-      - './database/init.sql:/docker-entrypoint-initdb.d/init.sql'
-    ports:
-      - '3306:3306' # Port par défaut pour MySQL
-    networks:
-      - my_network
-
-  adminer:
-    image: adminer
-    restart: always
-    environment:
-      - ADMINER_DESIGN=dracula
-    networks:
-      - my_network
-
   frontend:
     build: 
       context: ./front
       dockerfile: Dockerfile
+      
     networks:
       - my_network
   
@@ -34,8 +13,6 @@ services:
       context: ./api
       dockerfile: Dockerfile
     
-    ports:
-      - '3000:3000'
     env_file:
       - ./api/.env
     networks:

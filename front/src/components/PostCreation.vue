@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import ky from 'ky';
-import Toast from './Toast.vue';
 import {type Post} from '@/interfaces/post';
 import { useUtilsStore } from '@/stores/utilsStore';
 import { onMounted, ref, type Ref } from 'vue';
+import apiHelper from '../helpers/apiHelper';
+import router from '@/router';
+import { useUserStore } from '@/stores/userStore';
+const currentUser = useUserStore().currentUser;
+import NavBar from './NavBar.vue';
 
 const showToast = useUtilsStore().showToast;
 
@@ -15,9 +19,14 @@ let isToastVisible = ref(false);
 
 
 async function SendPost() {
-  try {
     // Utiliser ky pour obtenir les données des images
     const data:any = await ky.get('https://api.thecatapi.com/v1/images/search?limit=2').json();
+    const token = localStorage.getItem('token');
+    const userId = currentUser?.id;
+    if (!token || !userId) {
+      router.push('/login');
+      return;
+    }
 
     if (text1.value === '' || text2.value === '') {
       showToast('Please fill in both prompts', false);
@@ -31,31 +40,32 @@ async function SendPost() {
       prompt2: text2.value,
       img_url2: data[1].url,
       nb_clic2: 0,
-      author_id: 1,
+      author_id: userId,
     };
 
-    console.log(postData);
+    const res = await apiHelper.kyPost('tpf', postData, token);
 
-    // Utiliser ky pour envoyer les données
-    await ky.post('/api/posts', {
-      json: postData
-    });
-
-    showToast('Post created', true);
-    text1.value = '';
-    text2.value = '';
-  } catch (error) {
-    // Avec ky, une erreur est lancée automatiquement si la réponse n'est pas ok
-    showToast('Failed to create post', false);
-    console.error('Erreur lors de la requête :', error);
+    if (res.success) {
+      showToast('Post created', true);
+      text1.value = '';
+      text2.value = '';
+    } else {
+      showToast('Failed to create post', false);
+    }
   }
-}
 
 </script>
 
 <template>
+  <NavBar />
   <main>
-    <img src="../assets/logo.svg" alt="logo">
+    
+
+    <!-- <img src="../assets/logoMG.svg" alt="logo"> -->
+    <div class="desc-create">
+      <h2>Créé ton propre "Tu-préfères?" !</h2>
+      <p>Ajoute 2 propositions et l'intelligence supérieure artificielle se charge de te créer de superbes images !</p>
+    </div>
     <form @submit.prevent="SendPost()">
       <div class='prompt-input'>
         <label for="prompt1">First Prompt</label>
@@ -75,10 +85,10 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
   height: 100%;
   width: 100%;
-  background: linear-gradient(180deg, #EC1414 0%, #7D50DD 100%);
+  background-color: #211D2A ;
   overflow: hidden;
   font-family: "Anton", sans-serif;
   font-weight: 400;
@@ -123,6 +133,20 @@ main {
     border: solid #fff;
     border-radius: 20px;
     color: #fff;
+  }
+  .desc-create {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5em;
+    font-weight: 300;
+    font-style: normal;
+  }
+  img {
+    width: 250px;
+    height: 250px;
   }
 
 
