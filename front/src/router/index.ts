@@ -37,6 +37,7 @@ const router = createRouter({
       component: () => import('../views/ProfileView.vue')
     },
     {
+
       path: '/lobby/:lobbyId',
       name: 'lobby',
       component: () => import('../views/LobbyGFView.vue'),
@@ -46,6 +47,11 @@ const router = createRouter({
       path: '/joinGF',
       name: 'joinGF',
       component: () => import('../views/LobbyGFcreation-joinView.vue')
+
+      path: '/chat',
+      name: 'chat',
+      component: () => import('../views/ChatGView.vue')
+
     },
     {
       path: '/:catchAll(.*)',
