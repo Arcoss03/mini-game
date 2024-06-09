@@ -41,20 +41,25 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
                         COUNT(*) AS post_count,
                         CASE
                             WHEN COUNT(*) = 0 THEN 0
-                            WHEN COUNT(*) BETWEEN 1 AND 15 THEN 1
+                            WHEN COUNT(*) BETWEEN 6 AND 15 THEN 1
                             WHEN COUNT(*) BETWEEN 16 AND 35 THEN 2
                             ELSE 3
                         END AS level
                     FROM tu_preferes
                     WHERE author_id = ?
                     GROUP BY author_id
+                    UNION ALL
+                    SELECT 
+                        0 AS post_count,
+                        0 AS level
+                    WHERE NOT EXISTS (SELECT 1 FROM tu_preferes WHERE author_id = ?)
                 )
-                
+                                
                 SELECT 
                     b.img_url,
                     b.title,
                     b.stat_description,
-                    lc.post_count AS statistic
+                    COALESCE(lc.post_count, 0) AS statistic
                 FROM badge b
                 JOIN level_calc lc ON b.level = lc.level
                 WHERE b.type_badge_id = ?;
@@ -65,7 +70,7 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
             }
 
 
-            const [rows]: any = await fastify.db.query(query, [user_id,type_badge_id]);
+            const [rows]: any = await fastify.db.query(query, [user_id,user_id, type_badge_id]);
             if (rows.length === 0) {
                 reply.status(404).send({ error: 'Badge not found' });
                 return;
