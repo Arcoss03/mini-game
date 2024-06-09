@@ -3,6 +3,7 @@ import { io } from 'socket.io-client';
 import { reactive, onMounted } from 'vue';
 import apiHelper from '@/helpers/apiHelper';
 import router from '@/router';
+import socketClient from '../helpers/socketHelper'
 
 const state = reactive({
   messages: [] as Array<[string, string, string]>,
@@ -11,8 +12,6 @@ const state = reactive({
   isChef: false,
 });
 
-const apiUrl = import.meta.env.VITE_API_URL as string;
-const apiKey = import.meta.env.VITE_API_KEY as string;
 
 const props = defineProps<{ lobbyId: string }>();
 
@@ -24,21 +23,10 @@ onMounted(async () => {
     let room: any = res.data.room;
     state.name = room.name;
     state.date = new Date(room.creation_date);
-    const socket = io(apiUrl, {
-      auth: {
-        apiKey: apiKey
-      }
-    });
-
-    socket.emit('joinGF', { pseudo: localStorage.getItem('token'), roomId: props.lobbyId });
-
-    socket.on("joinedRoom", (data) => {
-      state.messages = data.pseudos;
-    });
-
-    socket.on("chef", (data) => {
-      state.isChef = data.isChef;
-    });
+  
+    socketClient.joinLobby(localStorage.getItem('token') as any,props.lobbyId);
+    socketClient.handleJoinedRoom(state)
+    socketClient.handleChef(state)
   }
 });
 

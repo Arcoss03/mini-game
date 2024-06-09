@@ -7,6 +7,7 @@ import cors from '@fastify/cors'
 import setupSocket from './chat';
 import setupSocketGF from './lobbyGF';
 
+
 dotenv.config(); // Load environment variables
 
 // create fastify instance
@@ -39,6 +40,8 @@ fastify.register(jwt, {
       expiresIn: '30d'  // 30 days validity
   }
 });
+
+
 
 setupSocket(fastify);
 setupSocketGF(fastify);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref, onUpdated, watch } from 'vue';
-import socketClient from '../helpers/chatHelper';
+import socketClient from '../helpers/socketHelper';
 
 const props = defineProps({
     roomName: String,
