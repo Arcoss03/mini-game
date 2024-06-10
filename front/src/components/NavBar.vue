@@ -11,9 +11,9 @@
 
         <RouterLink class="Rte" to="/create"><img class="img" src="../assets/AddIcon.svg" alt="">Add</RouterLink>
 
-        <RouterLink class="Rte" to="/"><img class="img" src="../assets/set.svg" alt="">Settings</RouterLink>
+        <RouterLink class="Rte" to="/settings"><img class="img" src="../assets/set.svg" alt="">Settings</RouterLink>
 
-        <RouterLink class="Rte" id="log" to="/login">Se connecter</RouterLink>
+        <RouterLink class="Rte" id="log" to="/login"><img src="../assets/login_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="">Se connecter</RouterLink>
 
     </div>
 </template>
