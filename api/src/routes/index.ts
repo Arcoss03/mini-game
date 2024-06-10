@@ -10,6 +10,7 @@ import putProfilRoutes from './profil/putProfil'
 import postGPRoutes from './garticPhone/postGarticPhone';
 import getGPRoutes from './garticPhone/getGarticPhone';
 import getBadgesRoutes from './badges/getBadges'
+import generateImageRoute from './generate/postGenerate';
 
 
 
@@ -23,9 +24,10 @@ async function routes(fastify: FastifyInstance) {
     fastify.register(getRoutes, { prefix: '/tpf' });
     fastify.register(getProfilRoutes, {prefix: '/profil' });
     fastify.register(putProfilRoutes, {prefix: '/profil' });
+    fastify.register(getBadgesRoutes, { prefix: '/badges' });
+    fastify.register(generateImageRoute, { prefix: '/generate' });
     fastify.register(postGPRoutes,{prefix: '/garticPhone' })
     fastify.register(getGPRoutes,{prefix: '/garticPhone' })
-    fastify.register(getBadgesRoutes, { prefix: '/badges' })
 }
 
 export default routes;

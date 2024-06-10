@@ -15,15 +15,18 @@
   "devDependencies": {
     "@types/node": "^20.11.30",
     "@types/socket.io": "^3.0.2",
+    "@types/uuid": "^9.0.8",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.3"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
     "@fastify/jwt": "^8.0.0",
+    "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
     "mysql2": "^3.9.4",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "uuid": "^9.0.1"
   }
 }

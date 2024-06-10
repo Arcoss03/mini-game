@@ -15,6 +15,7 @@ services:
     
     env_file:
       - ./api/.env
+      - ./uploads:/uploads
     networks:
       - my_network
   
