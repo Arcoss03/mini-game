@@ -65,7 +65,7 @@ const generateImageRoute = async (fastify: FastifyInstance) => {
       reply.send({ success: true, path: imagePath });
     } catch (error) {
       fastify.log.error(error);
-      reply.status(500).send({ error: 'Failed to generate image'+ API_KEY });
+      reply.status(500).send({ error: 'Failed to generate image'});
     }
   });
 };

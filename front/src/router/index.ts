@@ -46,7 +46,9 @@ const router = createRouter({
     {
       path: '/joinGF',
       name: 'joinGF',
-      component: () => import('../views/LobbyGFcreation-joinView.vue')
+      component: () => import('../views/LobbyGFcreation-joinView.vue'),
+    },
+    {
 
       path: '/chat',
       name: 'chat',
