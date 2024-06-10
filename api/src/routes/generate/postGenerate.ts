@@ -2,8 +2,12 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import dotenv from 'dotenv';
 
-const API_KEY = 'sk-proj-K39HInp9hDoUETRKXe5dT3BlbkFJ8D6Jpqy2JX1yY8oLxvhy';
+dotenv.config();
+
+const API_KEY = process.env.DALLE_API_KEY;
 const API_URL = 'https://api.openai.com/v1/images/generations';
 
 interface GenerateImageRequestBody {
@@ -15,6 +19,7 @@ interface GenerateImageRequest extends FastifyRequest {
 }
 
 const generateImageRoute = async (fastify: FastifyInstance) => {
+  console.log('generateImageRoute', API_KEY, API_URL);
   fastify.post<{ Body: GenerateImageRequestBody }>('/', async (request, reply) => {
     const { prompt } = request.body;
 
@@ -48,7 +53,7 @@ const generateImageRoute = async (fastify: FastifyInstance) => {
 
       const imageBuffer = Buffer.from(imageResponse.data, 'binary');
       const uploadsDir = path.join(process.cwd(), 'uploads');
-      const imagePath = path.join(uploadsDir, `test.png`);
+      const imagePath = path.join(uploadsDir, `${uuidv4()}.png`);
 
       // Assurez-vous que le répertoire d'uploads existe
       if (!fs.existsSync(uploadsDir)) {
@@ -60,7 +65,7 @@ const generateImageRoute = async (fastify: FastifyInstance) => {
       reply.send({ success: true, path: imagePath });
     } catch (error) {
       fastify.log.error(error);
-      reply.status(500).send({ error: 'Failed to generate image' });
+      reply.status(500).send({ error: 'Failed to generate image'+ API_KEY });
     }
   });
 };

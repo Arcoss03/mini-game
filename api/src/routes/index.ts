@@ -28,7 +28,6 @@ async function routes(fastify: FastifyInstance) {
     fastify.register(generateImageRoute, { prefix: '/generate' });
     fastify.register(postGPRoutes,{prefix: '/garticPhone' })
     fastify.register(getGPRoutes,{prefix: '/garticPhone' })
-    fastify.register(getBadgesRoutes, { prefix: '/badges' })
 }
 
 export default routes;
