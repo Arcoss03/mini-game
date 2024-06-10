@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - feat/github-action  # Remplacez par votre branche de test
+      - main  # Déclencher le déploiement uniquement sur la branche main
 
 jobs:
   deploy:
