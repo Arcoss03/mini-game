@@ -4,8 +4,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+export let io: SocketIOServer;
+
 const setupSocket = (fastify: FastifyInstance) => {
-  const io = new SocketIOServer(fastify.server, {
+  io = new SocketIOServer(fastify.server, {
     cors: {
       origin: "*",
       methods: ["GET", "POST"],

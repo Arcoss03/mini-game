@@ -71,6 +71,19 @@ const kyGet = async (url: string): Promise<ApiResponse> => {
         return { success: false, data: {} } as ApiResponse;
     }
 }
+const kyGetWithToken = async (url: string, token:string): Promise<ApiResponse> => {
+    try {
+        const response:Record<string, unknown> = await api.get(url, { 
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).json();
+        return { success: true, data: response} as ApiResponse;
+    } catch (error) {
+        console.error(error);
+        return { success: false, data: {} } as ApiResponse;
+    }
+}
 
 //function to make a post request without token
 const kyPostWithoutToken = async (url: string, data: any): Promise<ApiResponse> => {
@@ -104,4 +117,4 @@ const getCat = async (): Promise<string> => {
     }
 }
 
-export default { kyPost, kyPut, kyDelete, kyGet, kyPostWithoutToken,kyPutWithoutToken, getCat }
+export default { kyPost, kyPut, kyDelete, kyGet, kyPostWithoutToken,kyPutWithoutToken, getCat,kyGetWithToken}
