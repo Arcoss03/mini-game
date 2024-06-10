@@ -19,6 +19,17 @@ services:
       - ./uploads:/app/uploads
     networks:
       - my_network
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./uploads:/usr/share/nginx/html/uploads
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - my_network
   
 networks:
   my_network:
