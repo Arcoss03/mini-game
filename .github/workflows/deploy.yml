@@ -1,0 +1,28 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - feat/github-action
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SERVKEY }}
+
+    - name: Deploy to VPS
+      run: |
+        ssh -o StrictHostKeyChecking=no -l root -p22 173.249.8.29'
+          cd /home/mini-game &&
+          git pull origin main &&
+          docker-compose -f docker-compose.prod.yml down &&
+          docker-compose -f docker-compose.prod.yml up -d
+        '
