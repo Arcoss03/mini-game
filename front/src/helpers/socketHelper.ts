@@ -32,16 +32,34 @@ import router from '@/router';
         }
         );
 };  
+
+
+const joinLobby=(token:string,roomId:string)=>{
+  socket.emit('joinGF', { pseudo: token, roomId: roomId});
+}
+const handleJoinedRoom = (state: any) => {
+socket.on("joinedRoom", (data) => {
+  state.messages = data.pseudos;
+})
+};
+
+const handleChef = (state: any) => {
+socket.on("chef", (data) => {
+  state.isChef = data.isChef;
+})
+};
+
+
 const invalidToken = () => {
   socket.on('error', (errorMessage) => {
     if (errorMessage.error === 'Invalid token') { 
-      console.log('ne peux pas ecrire')
+      console.error('Ne peux pas ecrire')
       router.push("/login");
     }
   });
 };
 
-  export default { joinRoom, message, messageResponse,quitRoom,invalidToken}
+  export default { joinRoom, message, messageResponse,quitRoom,invalidToken,joinLobby,handleJoinedRoom,handleChef}
   
 
   
