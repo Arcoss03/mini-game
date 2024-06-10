@@ -1,6 +1,7 @@
 import { Server as SocketIOServer } from 'socket.io';
 import { FastifyInstance } from 'fastify';
 import dotenv from 'dotenv';
+import { hashChat } from './utils/hash.utils';
 
 dotenv.config();
 
@@ -29,9 +30,12 @@ const setupSocket = (fastify: FastifyInstance) => {
 
   function generateColor(pseudo:string){
     let asciiSum = 0;
+    pseudo=hashChat(pseudo);
+    console.log(pseudo)
     for (let i = 0; i < pseudo.length; i++) {
         asciiSum += pseudo.charCodeAt(i);
     }
+    console.log(asciiSum)
       return colors[asciiSum%colors.length]
   }
 
