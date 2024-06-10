@@ -16,7 +16,7 @@ import NavBar from './NavBar.vue';
         <div class="content">
             <li>
                 <label for="theme">Theme</label>
-                <select name="theme" id="theme">
+                <select name="theme" class="theme">
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
                 </select>
@@ -58,7 +58,7 @@ main {
         text-decoration: none;
         margin-bottom: 20px;
     }
-    #theme {
+    .theme {
         width: 100px;
         height: 30px;
         border-radius: 5px;
