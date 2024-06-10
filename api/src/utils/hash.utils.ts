@@ -15,11 +15,20 @@ function hashPassword(password: string, salt: Buffer): string {
     return hasher.digest('hex');
 }
 
+
+function hashChat(pseudo: string): string {
+    // Create a SHA-256 hasher
+    const hasher = crypto.createHash('sha256');
+    hasher.update(pseudo + pseudo + pseudo + hasher + pseudo );
+    // Get the hash in hexadecimal format
+    return hasher.digest('hex');
+}
+
 //function to verify password
 function verifyPassword(password: string, salt: Buffer, hash: string): boolean {
     return hash === hashPassword(password, salt);
 }
 
-export { generateRandomSalt, hashPassword, verifyPassword };
+export { generateRandomSalt, hashPassword, verifyPassword,hashChat };
 
 
