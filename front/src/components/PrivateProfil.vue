@@ -246,7 +246,7 @@ const setNewCardBadge = (type_badge_id: number) => {
 
 const getBadgesTypesList = async() => {
   const res = await apiHelper.kyGet('badges/types');
-  const badges = res.data.badges as BadgeTypes[];
+  const badges = res.data as unknown as BadgeTypes[];
   //ajouter un boolen pour savoir si le badge est deja dans le layout
   badges.forEach(badge => {
     badge.inLayout = layout.some(item => item.type_badge_id === badge.id);

@@ -1,4 +1,6 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { getBadgeById, getBadgesListId } from '../../utils/badges.utils';
+import { stat } from 'fs';
 
 async function getBadgesRoutes(fastify: FastifyInstance) {
     
@@ -19,12 +21,7 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
 
     // Route to get all badge types
     fastify.get('/types', async (request: FastifyRequest, reply: FastifyReply) => {
-        try {
-            const [rows]: any = await fastify.db.query('SELECT id, name FROM badge_type');
-            reply.send({ badges: rows });
-        } catch (error) {
-            reply.status(500).send({ error: 'Database error' });
-        }
+        reply.send(getBadgesListId());
     });
 
     // Route to get user stats for a badge type and user ID
@@ -36,34 +33,24 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
             switch (type_badge_id) {
                 case '3':
                     query = `
-                    WITH level_calc AS (
-                        SELECT 
-                            COUNT(*) AS post_count,
-                            CASE
-                                WHEN COUNT(*) = 0 THEN 0
-                                WHEN COUNT(*) BETWEEN 6 AND 15 THEN 1
-                                WHEN COUNT(*) BETWEEN 16 AND 35 THEN 2
-                                ELSE 3
-                            END AS level
+                        SELECT COUNT(*) AS count
                         FROM tu_preferes
                         WHERE author_id = ?
-                        GROUP BY author_id
-                        UNION ALL
-                        SELECT 
-                            0 AS post_count,
-                            0 AS level
-                        WHERE NOT EXISTS (SELECT 1 FROM tu_preferes WHERE author_id = ?)
-                    )
-                                    
-                    SELECT 
-                        b.img_url,
-                        b.title,
-                        b.stat_description,
-                        COALESCE(lc.post_count, 0) AS statistic
-                    FROM badge b
-                    JOIN level_calc lc ON b.level = lc.level
-                    WHERE b.type_badge_id = ?;
                     `;
+                    const [rows]: any = await fastify.db.query(query, [user_id]);
+                    const count = rows[0].count;
+                    let level;
+                    //si count est entre 0 et 10
+                    if (count >= 0 && count <= 5) {
+                        level = 0;
+                    } else if (count > 5 && count <= 15) {
+                        level = 1;
+                    } else if (count > 20 && count <= 30) {
+                        level = 2;
+                    } else {
+                        level = 3;
+                    }
+                    reply.send(getBadgeById(3, level, count));
                     break;
 
                 default:
@@ -71,13 +58,6 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
                     reply.status(404).send({ error: 'Badge not found' });
                     return;
             }
-
-            const [rows]: any = await fastify.db.query(query, [user_id, user_id, type_badge_id]);
-            if (rows.length === 0) {
-                reply.status(404).send({ error: 'Badge not found' });
-                return;
-            }
-            reply.send(rows[0]);
         } catch (error) {
             reply.status(500).send({ error: 'Database error' });
         }

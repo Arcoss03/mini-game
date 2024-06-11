@@ -21,7 +21,6 @@ const props = defineProps<{
 
 onMounted(async () => {
     const res = await apiHelper.kyGet(`badges/stats/${props.type_badge_id}/${props.user_id}`);
-    console.log(res);
     if (res.success) {
         badge.value = res.data as unknown as Badge;
     } else {
@@ -66,13 +65,13 @@ const badge: Ref<Badge | null> = ref(null);
         justify-content: center;
 
         .background-image {
-            height: 62%;
+            height: 65%;
             object-fit: contain;
         }
 
         .title {
             color: white;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             height: 1.5rem;
         }
 
