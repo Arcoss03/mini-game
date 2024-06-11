@@ -4,7 +4,7 @@ import { type logIn } from '@/interfaces/user';
 import apiHelper from '@/helpers/apiHelper';
 import { useUtilsStore } from '@/stores/utilsStore';
 import router from '@/router';
-import NavBar from './NavBar.vue';
+
 
 const showToast = useUtilsStore().showToast;
 
@@ -45,7 +45,6 @@ async function Login() {
 </script>
 
 <template>
-    <NavBar />
     <main>
         <div class="blush">
             <div class="imgContainer">
@@ -99,8 +98,8 @@ main {
 
 
             &::before {
-                width: 11rem;
-                height: 11rem;
+                width: 10rem;
+                height: 10rem;
                 content: '';
                 position: absolute;
                 background: radial-gradient(ellipse at top left, #EC1414 15%, #7D50DD 100%);

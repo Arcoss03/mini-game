@@ -131,8 +131,8 @@ main {
 
 
             &::before {
-                width: 11rem;
-                height: 11rem;
+                width: 10rem;
+                height: 10rem;
                 content: '';
                 position: absolute;
                 background: radial-gradient(ellipse at top left, #EC1414 15%, #7D50DD 100%);
@@ -153,7 +153,7 @@ main {
     }
 
     form {
-        margin: 4.9rem 2rem 0 2rem;
+        margin: 3rem 2rem 0 2rem;
         max-width: 30rem;
         min-width: 8rem;
         width: 80%;
@@ -196,7 +196,7 @@ main {
         }
 
         div {
-            margin-top: 0.5rem;
+            margin-top: 0.2rem;
         }
 
         a {
@@ -211,7 +211,7 @@ main {
         }
 
         button {
-            margin-top: 1.5rem;
+            margin-top: 0.5rem;
             border: solid #BEBEBE;
             border-radius: 12px;
             padding-top: 0.25rem;
