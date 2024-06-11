@@ -36,8 +36,8 @@ async function putRoutes(fastify: FastifyInstance) {
       if (data.userId) {
         // Insérer une nouvelle entrée dans play_tpf
         await fastify.db.query(
-          "INSERT INTO play_tpf (user_id, tu_preferes_id, tpf_choice, date_view) VALUES (?, ?, ?, NOW())",
-          [data.userId, request.params.id, data.selectedClick]
+          "INSERT INTO play_tpf (user_id, tu_preferes_id, tpf_choice, vote_majority, date_view) VALUES (?, ?, ?, ?, NOW())",
+          [data.userId, request.params.id, data.selectedClick, data.voteMajority]
         );
       }
 
