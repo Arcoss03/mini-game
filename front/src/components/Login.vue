@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref} from 'vue';
-import {type logIn} from '@/interfaces/user';
+import { ref, type Ref } from 'vue';
+import { type logIn } from '@/interfaces/user';
 import apiHelper from '@/helpers/apiHelper';
 import { useUtilsStore } from '@/stores/utilsStore';
 import router from '@/router';
@@ -11,20 +11,33 @@ const showToast = useUtilsStore().showToast;
 let username: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 
+let passwordFieldType: Ref<string> = ref('password');
+
+let eyeIconSrc = ref('/src/assets/les-yeux-croises.png');
+
+function ViewPassword() {
+    if (passwordFieldType.value === 'password') {
+        passwordFieldType.value = 'text';
+        eyeIconSrc.value= '/src/assets/oeil.png'; 
+    } else {
+        passwordFieldType.value = 'password';
+        eyeIconSrc.value = '/src/assets/les-yeux-croises.png'; 
+    }
+}
 async function Login() {
     const postData: logIn = {
-      "username": username.value,
-      "password": password.value,
-      
+        "username": username.value,
+        "password": password.value,
+
     };
     // Utiliser ky pour envoyer les données
     const res = await apiHelper.kyPostWithoutToken('auth/login', postData);
-    if(!res.success) {
+    if (!res.success) {
         showToast('email, pseudo ou mot de passe incorrect', false);
     } else {
         localStorage.setItem('token', res.data.token as string);
         showToast('Connexion réussie', true);
-        window.location.href = '/profil';
+        return router.push('/profil')
     }
 }
 
@@ -33,164 +46,153 @@ async function Login() {
 
 <template>
     <NavBar />
-  <main>
-    <div class="blush" >
-        <img src="../assets/logo.svg" alt="logo">
-    </div>
-    
-    <form @submit.prevent="Login()">
-      <div>
-        <label for="username"></label>
-        <input v-model="username" placeholder="username" required>
-      </div>
+    <main>
+        <div class="blush">
+            <div class="imgContainer">
+                <img src="../assets/logo.svg" alt="logo">
+            </div>
 
-      <div>
-        <label for="password"></label>
-        <input v-model="password" placeholder="Password"  type="password" required>
-        <a href="/signup">Sign in</a>
-      </div>
-      
-      <button type=submit>Log In</button>
-    </form>
-    
+        </div>
 
-  </main>
+        <form @submit.prevent="Login()">
+            <div>
+                <label for="username"></label>
+                <input v-model="username" placeholder="username" required>
+            </div>
+
+            <div class="password_container">
+                <label for="password"></label>
+                <input :type="passwordFieldType" v-model="password" placeholder="Password"  required>
+                <img @click="ViewPassword" :src="eyeIconSrc" alt="oeil" class="icon">
+            </div>
+            <a href="/signup">Sign in</a>
+            <button type=submit>Log In</button>
+        </form>
+
+
+    </main>
 </template>
 
 <style scoped lang="scss">
 main {
     min-height: 100vh;
     background: #211D2A;
-    border: solid #17141D;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 
     .blush {
-        margin-top: 6rem;
-        margin-left: auto;
-        margin-right: auto;
-        position: relative;
-        width: 12%;
+        margin-top: 5rem;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
-        &::before {
-            content: ''; 
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at top left, #EC1414 15%, #7D50DD 100%);
-            border-radius: 35%;
-            filter: blur(30px);
+
+        .imgContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+
+            &::before {
+                width: 11rem;
+                height: 11rem;
+                content: '';
+                position: absolute;
+                background: radial-gradient(ellipse at top left, #EC1414 15%, #7D50DD 100%);
+                border-radius: 999px;
+                filter: blur(30px);
+            }
         }
+
 
         img {
-            width: 100%;
+            width: 11rem;
             padding: 2.5rem;
             margin-left: center;
-            position: relative; 
-            z-index: 1; 
-        } 
-        @media screen and (max-width: 1250px) {
-            width: 15%; 
+            position: relative;
+            z-index: 1;
         }
-        @media screen and (max-width: 1000px) {
-            width: 20%; 
-        }
-        @media screen and (max-width: 900px) {
-            width: 30%; 
-        }
-        @media screen and (max-width: 500px) {
-            width: 40%; 
-        }
-        @media screen and (max-width: 400px) {
-            width: 50%; 
-            margin-top: 4rem;
-        }
-        @media screen and (max-width: 300px) {
-            width: 60%; 
-        }
+
     }
-    form{
-        margin-left: auto;
-        margin-top: 4.9rem;
-        margin-right: auto;
-        width: 45%;
-        
-        input{
+
+    form {
+        margin: 4.9rem 2rem 0 2rem;
+        max-width: 30rem;
+        min-width: 8rem;
+        width: 80%;
+
+
+        input {
             padding-top: 0.75rem;
             padding-bottom: 0.75rem;
             border-radius: 12px;
             font-size: 16px;
             font-family: Arial, Helvetica, sans-serif;
             padding-left: 2rem;
-            width: 100%; 
+            padding-right:4rem;
+            width: 100%;
             margin-bottom: 1rem;
 
-            &::placeholder{
-                color :#BEBEBE;
+            &::-ms-reveal {
+                display: none;
+            }
+
+            &::placeholder {
+                color: #BEBEBE;
                 font-size: 16px;
-                font-family:Arial, Helvetica, sans-serif;
+                font-family: Arial, Helvetica, sans-serif;
             }
         }
-        div{
-            margin-bottom: 0.5rem;
+
+        .password_container {
+            position: relative;
+
+            .icon {
+                position: absolute;
+                transform: translateY(-50%);
+                width: 20px;
+                height: 20px;
+                right:20px;
+                top: 22px;
+                cursor: pointer;
+            }
         }
-        a{
-        text-decoration: none;
-        color:#BEBEBE;
-        font-size: 16px;
-        font-family:Arial, Helvetica, sans-serif;
-        margin-left: 92%;
-        @media screen and (max-width: 1300px) {
-            margin-left: 90%; 
+
+        div {
+            margin-top: 0.5rem;
         }
-    
-        @media screen and (max-width: 750) {
-            margin-left: 50%; 
+
+        a {
+            display: block;
+            text-decoration: none;
+            color: #BEBEBE;
+            font-size: 16px;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: right;
+            width: 100%;
+            padding-right: 1rem;
         }
-        
-        @media screen and (max-width: 500px) {
-            margin-left: 80%; 
-        }
-        @media screen and (max-width: 400px) {
-            margin-left: 80%;
-        }
-        @media screen and (max-width: 300px) {
-            margin-left: 70%; 
-        }
-        }    
-        button{
+
+        button {
             margin-top: 1.5rem;
-            border:solid #BEBEBE;
+            border: solid #BEBEBE;
             border-radius: 12px;
             padding-top: 0.25rem;
             padding-bottom: 0.25rem;
             width: 30%;
             margin-left: auto;
-            margin-right:auto;
-            color:#BEBEBE;
+            margin-right: auto;
+            color: #BEBEBE;
             font-size: 16px;
-            font-family:Arial, Helvetica, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
         }
-        @media screen and (max-width: 1250px) {
-            width: 70%; 
-        }
-        @media screen and (max-width: 1000px) {
-            width: 70%; 
-        }
-        @media screen and (max-width: 900px) {
-            width: 80%; 
-        }
-        @media screen and (max-width: 500px) {
-            width: 80%; 
-        }
-        @media screen and (max-width: 400px) {
-            width: 80%; 
-            margin-top: 4rem;
-        }
-        @media screen and (max-width: 300px) {
-            width: 80%; 
-        }
-        
-    }
-    
-}
 
+    }
+
+}
 </style>
