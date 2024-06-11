@@ -66,13 +66,13 @@ const badge: Ref<Badge | null> = ref(null);
         justify-content: center;
 
         .background-image {
-            height: 65%;
+            height: 62%;
             object-fit: contain;
         }
 
         .title {
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             height: 1.5rem;
         }
 
@@ -83,7 +83,7 @@ const badge: Ref<Badge | null> = ref(null);
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 3rem;
+            font-size: 2.5rem;
         }
         .stat-description {
             position: absolute;

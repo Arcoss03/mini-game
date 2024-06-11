@@ -79,7 +79,7 @@ const debounce = (func: Function, delay: number) => {
 
 const updateColNum = () => {
   const width = window.innerWidth;
-  colNum.value = width > 1278 ? 4 : 2;
+  colNum.value = width > 1250 ? 4 : 2;
 };
 
 const changeProfilPicture = () => {
@@ -275,7 +275,7 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
     </div>
 
     <div class="grid-container">
-      <GridLayout class="grid" v-model:layout="layout" :col-num="colNum" :row-height="200" :vertical-compact="true" :auto-size="true"
+      <GridLayout class="grid" v-model:layout="layout" :col-num="colNum" :row-height="178" :vertical-compact="true" :auto-size="true"
         :margin="[20, 20]" :is-resizable="false">
         <GridItem v-for="item in layout" :key="item.i" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
           @mouseenter="showPopup(item.i)" @mouseleave="hidePopup(item.i)">
@@ -514,7 +514,7 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
   }
 
   //media querie pour screen > 1278px
-  @media (min-width: 1278px) {
+  @media (min-width: 1250px) {
     padding: 20px 30px 20px 50px;
     display: flex;
 
@@ -526,8 +526,7 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
     ;
 
     .grid {
-      width: 900px;
-      min-width: 900px;
+      width: 810px;
     }
   }
 
