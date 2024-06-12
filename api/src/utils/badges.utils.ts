@@ -4,7 +4,7 @@ const badges = [
     type: "carbon-counter",
     name: "Conteur de carbone",
     msg: ["Éco-Héros", "Défenseur Vert", "ça consomme ici", "Polueur"],
-    stat_description:"CO2"
+    stat_description:"kg de CO2"
   },
   {
     id: 2,

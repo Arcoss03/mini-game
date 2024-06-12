@@ -31,13 +31,26 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
             let query: string = '';
 
             switch (type_badge_id) {
+                case '1': // CO2 badge
+                    query = `
+                    SELECT 
+                        (SELECT COUNT(*) FROM tu_preferes WHERE author_id = ?) AS created_count,
+                        (SELECT COUNT(*) FROM play_tpf WHERE user_id = ?) AS played_count;
+                    `;
+                    const [rows1]: any = await fastify.db.query(query, [user_id, user_id]);
+                    const res1 = rows1[0];
+                    const counter = res1.created_count*99 + res1.played_count;
+                    const level1 = getLevel(counter, [1000, 5000, 15000]);
+                    reply.send(getBadgeById(1, level1, `${counter/1000}`));
+
+                    break;
                 case '2': // Conformity badge
-                    const [rows1]: any = await fastify.db.query(`
+                    const [rows2]: any = await fastify.db.query(`
                         SELECT ROUND((SUM(vote_majority = 1) / COUNT(*)) * 100) AS percentage
                         FROM play_tpf
                         WHERE user_id = ?;
                         `, [user_id]);
-                    let percentage = rows1[0].percentage;
+                    let percentage = rows2[0].percentage;
                     if (percentage === null) {
                         percentage = 0;
                     }

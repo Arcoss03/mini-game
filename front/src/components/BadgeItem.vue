@@ -126,6 +126,14 @@ const badge: Ref<Badge | null> = ref(null);
             }
         }
 
+        &.carbon-counter {
+            .background-image {
+                width: 100%;
+                height: 75%;
+                margin-bottom: 15%;
+            }
+        }
+
 
     }
 
