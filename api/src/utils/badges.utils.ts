@@ -11,7 +11,7 @@ const badges = [
     type: "conformity",
     name: "t'es plus dans la norme ou ?",
     msg: ["divergant", "pas comme toi", "la norme quoi", "comme toi"],
-    stat_description:"%"
+    stat_description:"dans la norme"
   },
   {
     id: 3,
@@ -34,6 +34,7 @@ function getBadgeById(badgeId: number, level: number, stat: string) {
   }
   return {
     name: badge.name,
+    type: badge.type,
     title: badge.msg[level],
     img_url:`https://uploads.ia-game.online/${badge.type}${level}.svg`,
     stat_description: badge.stat_description,
@@ -52,4 +53,14 @@ function getBadgesListId() {
     });
 }
 
-export { getBadgeById, getBadgesListId };
+function getLevel(stat: number, levels: number[]) {
+    let level = 0;
+    for (let i = 0; i < levels.length; i++) {
+        if (stat > levels[i]) {
+            level = i + 1;
+        }
+    }
+    return level;
+}
+
+export { getBadgeById, getBadgesListId, getLevel };

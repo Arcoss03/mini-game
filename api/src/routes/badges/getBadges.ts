@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { getBadgeById, getBadgesListId } from '../../utils/badges.utils';
+import { getBadgeById, getBadgesListId, getLevel } from '../../utils/badges.utils';
 import { stat } from 'fs';
 
 async function getBadgesRoutes(fastify: FastifyInstance) {
@@ -31,26 +31,31 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
             let query: string = '';
 
             switch (type_badge_id) {
-                case '3':
+                case '2': // Conformity badge
+                    const [rows1]: any = await fastify.db.query(`
+                        SELECT ROUND((SUM(vote_majority = 1) / COUNT(*)) * 100) AS percentage
+                        FROM play_tpf
+                        WHERE user_id = ?;
+                        `, [user_id]);
+                    let percentage = rows1[0].percentage;
+                    if (percentage === null) {
+                        percentage = 0;
+                    }
+                    const level2 = getLevel(percentage, [25, 50, 75]);
+                    reply.send(getBadgeById(2, level2, percentage+'%'));
+                    break;
+
+                case '3': // Number of posts badge
                     query = `
                         SELECT COUNT(*) AS count
                         FROM tu_preferes
                         WHERE author_id = ?
                     `;
-                    const [rows]: any = await fastify.db.query(query, [user_id]);
-                    const count = rows[0].count;
-                    let level;
-                    //si count est entre 0 et 10
-                    if (count >= 0 && count <= 5) {
-                        level = 0;
-                    } else if (count > 5 && count <= 15) {
-                        level = 1;
-                    } else if (count > 20 && count <= 30) {
-                        level = 2;
-                    } else {
-                        level = 3;
-                    }
-                    reply.send(getBadgeById(3, level, count));
+                    const [rows3]: any = await fastify.db.query(query, [user_id]);
+                    const count3 = rows3[0].count;
+
+                    let level = getLevel(count3, [5, 15, 30]);
+                    reply.send(getBadgeById(3, level, count3));
                     break;
 
                 default:
