@@ -12,19 +12,19 @@ let pseudo: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 let confirmPassword: Ref<string> = ref('');
 
-let passwordFieldType: Ref<string> = ref('Password');
-let ConfirmPasswordFieldType: Ref<string> = ref('Password');
+let passwordFieldType: Ref<string> = ref('password');
+let ConfirmPasswordFieldType: Ref<string> = ref('password');
 
-let eyeIconSrc = ref('/src/assets/les-yeux-croises.png');
-let eyeIconSrcConfirmPassword=ref('/src/assets/les-yeux-croises.png');
+let eyeIconSrc = ref('/src/assets/oeilFerme.svg');
+let eyeIconSrcConfirmPassword=ref('/src/assets/oeilFerme.svg');
 
 function togglePasswordVisibility(fieldType:Ref<string>, iconSrc:Ref<string>) {
     if (fieldType.value === 'password') {
         fieldType.value = 'text';
-        iconSrc.value = '/src/assets/oeil.png'; 
+        iconSrc.value = '/src/assets/oeil.svg'; 
     } else {
         fieldType.value = 'password';
-        iconSrc.value = '/src/assets/les-yeux-croises.png'; 
+        iconSrc.value = '/src/assets/oeilFerme.svg'; 
     }
 }
 

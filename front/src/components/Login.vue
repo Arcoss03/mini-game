@@ -13,15 +13,15 @@ let password: Ref<string> = ref('');
 
 let passwordFieldType: Ref<string> = ref('password');
 
-let eyeIconSrc = ref('/src/assets/les-yeux-croises.png');
+let eyeIconSrc = ref('/src/assets/oeilFerme.svg');
 
 function ViewPassword() {
     if (passwordFieldType.value === 'password') {
         passwordFieldType.value = 'text';
-        eyeIconSrc.value= '/src/assets/oeil.png'; 
+        eyeIconSrc.value= '/src/assets/oeil.svg'; 
     } else {
         passwordFieldType.value = 'password';
-        eyeIconSrc.value = '/src/assets/les-yeux-croises.png'; 
+        eyeIconSrc.value = '/src/assets/oeilFerme.svg'; 
     }
 }
 async function Login() {
