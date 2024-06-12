@@ -40,13 +40,23 @@ const router = createRouter({
 
       path: '/lobby/:lobbyId',
       name: 'lobby',
-      component: () => import('../views/LobbyGFView.vue'),
+      component: () => import('../views/LobbyGPView.vue'),
       props: true
     },
     {
-      path: '/joinGF',
-      name: 'joinGF',
-      component: () => import('../views/LobbyGFcreation-joinView.vue'),
+      path: '/join_createGP',
+      name: 'join_createGP',
+      component: () => import('../views/LobbyGPcreation-joinView.vue'),
+    },
+    {
+      path: '/joinGP',
+      name: 'joinGP',
+      component: () => import('../views/LobbyGPjoinView.vue'),
+    },
+    {
+      path: '/createGP',
+      name: 'createGP',
+      component: () => import('../views/LobbyGPcreateView.vue'),
     },
     {
 
