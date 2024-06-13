@@ -18,10 +18,10 @@ let eyeIconSrc = ref('/src/assets/oeilFerme.svg');
 function ViewPassword() {
     if (passwordFieldType.value === 'password') {
         passwordFieldType.value = 'text';
-        eyeIconSrc.value= '/src/assets/oeil.svg'; 
+        eyeIconSrc.value= '../assets/oeil.svg'; 
     } else {
         passwordFieldType.value = 'password';
-        eyeIconSrc.value = '/src/assets/oeilFerme.svg'; 
+        eyeIconSrc.value = '../assets/oeilFerme.svg'; 
     }
 }
 async function Login() {
