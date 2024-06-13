@@ -13,6 +13,9 @@ let tabPosition: Ref<number> = ref(0);
 
 const currentUser = useUserStore().currentUser;
 
+onMounted(async () => {
+  postTab.value = await getAllPosts() ?? [];
+});
 
 const setImg1 = () => {
   if (!img1IsActive.value && !img2IsActive.value && postTab.value.length !== 0) {
@@ -44,9 +47,28 @@ async function getAllPosts(): Promise<Post[] | undefined> {
     return res.data as unknown as Post[]
   }
 }
+const getPercentage = (nbClic1: number, nbClic2: number) => {
+  const total = nbClic1 + nbClic2;
+  if (total === 0) {
+    return '50%';
+  }
+  return `${Math.round((nbClic1 / total) * 100)}%`;
+};
+
+const isVoteMajority = (selectedClick: number) => {
+  if (selectedClick === 1) {
+    return postTab.value[tabPosition.value].nb_clic1 > postTab.value[tabPosition.value].nb_clic2;
+  } else {
+    return postTab.value[tabPosition.value].nb_clic2 > postTab.value[tabPosition.value].nb_clic1;
+  }
+};
 
 const vote = async (id: number, selectedClick: number) => {
-  const res = await apiHelper.kyPutWithoutToken(`tpf/vote/${id}`, { "selectedClick": selectedClick, "userId": currentUser?.id });
+  const res = await apiHelper.kyPutWithoutToken(`tpf/vote/${id}`, { 
+    "selectedClick": selectedClick,
+    "userId": currentUser?.id,
+    "voteMajority":  isVoteMajority(selectedClick) 
+  });
   if (!res.success) {
     showToast('Erreur lors du vote', false);
   }
@@ -61,17 +83,7 @@ const nextPost = () => {
   img2IsActive.value = false;
 };
 
-onMounted(async () => {
-  postTab.value = await getAllPosts() ?? [];
-});
 
-const getPercentage = (nbClic1: number, nbClic2: number) => {
-  const total = nbClic1 + nbClic2;
-  if (total === 0) {
-    return '50%';
-  }
-  return `${Math.round((nbClic1 / total) * 100)}%`;
-};
 
 </script>
 
