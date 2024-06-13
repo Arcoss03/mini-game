@@ -22,8 +22,8 @@ const router = createRouter({
     },
     
     {
-      path: '/create',
-      name: 'create',
+      path: '/create/tpf',
+      name: 'createTpf',
       component: () => import('../views/PostCreationView.vue')
     },
     {
@@ -44,18 +44,18 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/join_createGP',
-      name: 'join_createGP',
+      path: '/choice-gmp',
+      name: 'choiceGmp',
       component: () => import('../views/LobbyGPcreation-joinView.vue'),
     },
     {
-      path: '/joinGP',
-      name: 'joinGP',
+      path: '/join/gmp',
+      name: 'joinGmp',
       component: () => import('../views/LobbyGPjoinView.vue'),
     },
     {
-      path: '/createGP',
-      name: 'createGP',
+      path: '/create/gmp',
+      name: 'createGmp',
       component: () => import('../views/LobbyGPcreateView.vue'),
     },
     {

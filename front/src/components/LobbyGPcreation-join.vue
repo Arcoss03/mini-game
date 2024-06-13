@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import Create from './CreateGP.vue';
-import Join from './JoinGP.vue';
+import { ref } from 'vue';;
 import NavBar from './NavBar.vue';
 import router from '@/router';
 
@@ -9,12 +7,12 @@ const currentComponent = ref<string | null>(null);
 
 const navigateToCreate = () => {
   currentComponent.value = 'Create';
-  router.push('/createGP');
+  router.push('/create/gmp');
 };
 
 const navigateToJoin = () => {
   currentComponent.value = 'Join';
-  router.push('/joinGP');
+  router.push('/join/gmp');
 };
 </script>
 

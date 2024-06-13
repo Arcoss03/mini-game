@@ -18,7 +18,7 @@ const props = defineProps<{ lobbyId: string }>();
 onMounted(async () => {
   const res = await apiHelper.kyGetWithToken(`garticPhone/${props.lobbyId}`, localStorage.getItem('token') as string);
   if (!res.success) {
-    router.push('/joinGF');
+    router.push('/choice-gmp');
   } else {
     let room: any = res.data.room;
     state.name = room.name;
@@ -33,7 +33,7 @@ onMounted(async () => {
 const startGame = async () => {
   const res = await apiHelper.kyPost(`garticPhone/play`, { id: props.lobbyId }, localStorage.getItem('token') as string);
   if (!res.success) {
-    console.log('error');
+    router.push('/login');
   }
 };
 </script>

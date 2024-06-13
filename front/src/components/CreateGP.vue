@@ -32,7 +32,7 @@ const createRoom = async() => {
       <div class="container">
         <h1>Guess My Prompt</h1>
       <form @submit.prevent="createRoom">
-          <input id="room-name" v-model="roomName" type="text" required>
+          <input id="room-name" v-model="roomName" type="text" placeholder="Room Name" required>
           <div>
           <button class="create" type="submit">CREATE</button>
         </div>
@@ -73,7 +73,7 @@ form{
     padding: 0 2rem;
     border-radius: 15px;
     height: 40px;
-    width: 11rem;
+    width: 12rem;
     font-size: 20px;
     font-weight: bold;
     font-family:Arial, Helvetica, sans-serif;
