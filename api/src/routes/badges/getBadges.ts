@@ -39,7 +39,7 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
                     `;
                     const [rows1]: any = await fastify.db.query(query, [user_id, user_id]);
                     const res1 = rows1[0];
-                    const counter = res1.created_count*99 + res1.played_count;
+                    const counter = res1.created_count*199 + res1.played_count;
                     const level1 = getLevel(counter, [1000, 5000, 15000]);
                     reply.send(getBadgeById(1, level1, `${counter/1000}`));
 
