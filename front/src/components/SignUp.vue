@@ -15,15 +15,24 @@ let confirmPassword: Ref<string> = ref('');
 let passwordFieldType: Ref<string> = ref('password');
 let ConfirmPasswordFieldType: Ref<string> = ref('password');
 
-let eyeIconBool = ref(false);
+let eyeIconBool1 = ref(false);
+let eyeIconBool2 = ref(false);
 
 const toogleEyeIcon = (numFielf: 1 | 2) => {
-    eyeIconBool.value = !eyeIconBool.value;
-    const FieldType = numFielf === 1 ? passwordFieldType : ConfirmPasswordFieldType;
-    if (eyeIconBool.value) {
-        FieldType.value = 'text';
+    if (numFielf === 1) {
+        eyeIconBool1.value = !eyeIconBool1.value;
+        if (eyeIconBool1.value) {
+            passwordFieldType.value = 'text';
+        } else {
+            passwordFieldType.value = 'password';
+        }
     } else {
-        FieldType.value = 'password';
+        eyeIconBool2.value = !eyeIconBool2.value;
+        if (eyeIconBool2.value) {
+            ConfirmPasswordFieldType.value = 'text';
+        } else {
+            ConfirmPasswordFieldType.value = 'password';
+        }
     }
 }
 
@@ -79,15 +88,15 @@ async function Singup() {
             <div class="password_container">
                 <label for="password"></label>
                 <input v-model="password" :type="passwordFieldType"  placeholder="Password" required>
-                <img @click="toogleEyeIcon(1)" src="../assets/oeil.svg" alt="oeil" class="icon">
-                <img @click="toogleEyeIcon(1)" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
+                <img v-if="eyeIconBool1" @click="toogleEyeIcon(1)" src="../assets/oeil.svg" alt="oeil" class="icon">
+                <img v-if="!eyeIconBool1"@click="toogleEyeIcon(1)" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
             </div>
 
             <div class="password_container">
                 <label for="confirmPassword"></label>
                 <input v-model="confirmPassword" :type="ConfirmPasswordFieldType" placeholder="Confirm Password" required>
-                <img @click="toogleEyeIcon(2)" src="../assets/oeil.svg" alt="oeil" class="icon">
-                <img @click="toogleEyeIcon(2)" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
+                <img v-if="eyeIconBool2" @click="toogleEyeIcon(2)" src="../assets/oeil.svg" alt="oeil" class="icon">
+                <img v-if="!eyeIconBool2"@click="toogleEyeIcon(2)" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
             </div>
             <a href="/login">Already an account ?</a>
             <button type=submit>Sign up</button>
