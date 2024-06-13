@@ -15,27 +15,26 @@ let confirmPassword: Ref<string> = ref('');
 let passwordFieldType: Ref<string> = ref('password');
 let ConfirmPasswordFieldType: Ref<string> = ref('password');
 
-let eyeIconSrc = ref('/src/assets/oeilFerme.svg');
-let eyeIconSrcConfirmPassword=ref('/src/assets/oeilFerme.svg');
+let eyeIconBool1 = ref(false);
+let eyeIconBool2 = ref(false);
 
-function togglePasswordVisibility(fieldType:Ref<string>, iconSrc:Ref<string>) {
-    if (fieldType.value === 'password') {
-        fieldType.value = 'text';
-        iconSrc.value = '/src/assets/oeil.svg'; 
+const toogleEyeIcon = (numFielf: 1 | 2) => {
+    if (numFielf === 1) {
+        eyeIconBool1.value = !eyeIconBool1.value;
+        if (eyeIconBool1.value) {
+            passwordFieldType.value = 'text';
+        } else {
+            passwordFieldType.value = 'password';
+        }
     } else {
-        fieldType.value = 'password';
-        iconSrc.value = '/src/assets/oeilFerme.svg'; 
+        eyeIconBool2.value = !eyeIconBool2.value;
+        if (eyeIconBool2.value) {
+            ConfirmPasswordFieldType.value = 'text';
+        } else {
+            ConfirmPasswordFieldType.value = 'password';
+        }
     }
 }
-
-function ViewPassword() {
-    togglePasswordVisibility(passwordFieldType, eyeIconSrc);
-}
-
-function ViewConfirmPassword() {
-    togglePasswordVisibility(ConfirmPasswordFieldType, eyeIconSrcConfirmPassword);
-}
-
 
 function compare(): boolean {
     return (password.value === confirmPassword.value);
@@ -89,13 +88,15 @@ async function Singup() {
             <div class="password_container">
                 <label for="password"></label>
                 <input v-model="password" :type="passwordFieldType"  placeholder="Password" required>
-                <img @click="ViewPassword" :src="eyeIconSrc" alt="oeil" class="icon">
+                <img v-if="eyeIconBool1" @click="toogleEyeIcon(1)" src="../assets/oeil.svg" alt="oeil" class="icon">
+                <img v-if="!eyeIconBool1"@click="toogleEyeIcon(1)" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
             </div>
 
             <div class="password_container">
                 <label for="confirmPassword"></label>
                 <input v-model="confirmPassword" :type="ConfirmPasswordFieldType" placeholder="Confirm Password" required>
-                <img @click="ViewConfirmPassword" :src="eyeIconSrcConfirmPassword" alt="oeil" class="icon">
+                <img v-if="eyeIconBool2" @click="toogleEyeIcon(2)" src="../assets/oeil.svg" alt="oeil" class="icon">
+                <img v-if="!eyeIconBool2"@click="toogleEyeIcon(2)" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
             </div>
             <a href="/login">Already an account ?</a>
             <button type=submit>Sign up</button>
