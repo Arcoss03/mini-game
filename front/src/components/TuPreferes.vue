@@ -83,13 +83,20 @@ const nextPost = () => {
   img2IsActive.value = false;
 };
 
+const getCenterBtnTxt = () => {
+  if (img1IsActive.value || img2IsActive.value) {
+    return 'Next';
+  }
+  return 'OR';
+};
+
 
 
 </script>
 
 <template>
   <main v-if="postTab.length !== 0">
-    <button :class="{ hide: !(img1IsActive || img2IsActive) }" class="button-next" @click="nextPost()">OU</button>
+    <button :class="{ hide: !(img1IsActive || img2IsActive) }" class="button-next" @click="nextPost()">{{getCenterBtnTxt()}}</button>
 
     <div class="container first">
       <button class="img-container fisrt-img">
