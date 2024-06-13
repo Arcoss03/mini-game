@@ -13,17 +13,17 @@ let password: Ref<string> = ref('');
 
 let passwordFieldType: Ref<string> = ref('password');
 
-let eyeIconSrc = ref('/src/assets/oeilFerme.svg');
+let eyeIconBool = ref(false);
 
-function ViewPassword() {
-    if (passwordFieldType.value === 'password') {
+const toogleEyeIcon = () => {
+    eyeIconBool.value = !eyeIconBool.value;
+    if (eyeIconBool.value) {
         passwordFieldType.value = 'text';
-        eyeIconSrc.value= '../assets/oeil.svg'; 
     } else {
         passwordFieldType.value = 'password';
-        eyeIconSrc.value = '../assets/oeilFerme.svg'; 
     }
 }
+
 async function Login() {
     const postData: logIn = {
         "username": username.value,
@@ -62,7 +62,8 @@ async function Login() {
             <div class="password_container">
                 <label for="password"></label>
                 <input :type="passwordFieldType" v-model="password" placeholder="Password"  required>
-                <img @click="ViewPassword" :src="eyeIconSrc" alt="oeil" class="icon">
+                <img v-if="eyeIconBool" @click="toogleEyeIcon" src="../assets/oeil.svg" alt="oeil" class="icon">
+                <img v-if="!eyeIconBool" @click="toogleEyeIcon" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
             </div>
             <a href="/signup">Sign in</a>
             <button type=submit>Log In</button>
