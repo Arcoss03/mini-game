@@ -1,5 +1,6 @@
 
 <script setup lang="ts">
+import { useUtilsStore } from '@/stores/utilsStore';
 </script>
 
 <template>
@@ -13,6 +14,8 @@
 
         <RouterLink class="Rte" to="/settings"><img class="img" src="../assets/set.svg" alt="">Settings</RouterLink>
 
+        <button @click="useUtilsStore().toogleNavBar()" class="hide">click</button>
+
         <RouterLink class="Rte" id="log" to="/login"><img src="../assets/login_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="">Se connecter</RouterLink>
 
     </div>
@@ -22,7 +25,6 @@
 <style scoped lang="scss">
 
 .navbar {
-
     //les classes pour le mobile
     position: fixed;
     bottom: 0;
@@ -30,7 +32,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #17141D;
+    background-color: var(--bg-color-elements);
     padding: 10px;
     width: 100vw;
 
@@ -79,6 +81,10 @@
     .img {
         width: 20px;
         height: 20px;
+    }
+
+    .hide {
+        color: red;
     }
 
     

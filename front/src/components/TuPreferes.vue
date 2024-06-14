@@ -6,10 +6,15 @@ import { useUtilsStore } from '@/stores/utilsStore';
 import { useUserStore } from '@/stores/userStore';
 
 const showToast = useUtilsStore().showToast;
+const utilsStore = useUtilsStore();
 let img1IsActive = ref(false);
 let img2IsActive = ref(false);
 let postTab: Ref<Post[]> = ref([]);
 let tabPosition: Ref<number> = ref(0);
+
+const checkNavBar = () => {
+  return utilsStore.hideNavBar === 'show';
+};
 
 const currentUser = useUserStore().currentUser;
 
@@ -90,32 +95,32 @@ const getCenterBtnTxt = () => {
   return 'OR';
 };
 
-
-
 </script>
 
 <template>
   <main v-if="postTab.length !== 0">
-    <button :class="{ hide: !(img1IsActive || img2IsActive) }" class="button-next" @click="nextPost()">{{getCenterBtnTxt()}}</button>
+    <button :class="{ hide: !(img1IsActive || img2IsActive), navopen: checkNavBar()}" class="button-next"
+      @click="nextPost()">{{ getCenterBtnTxt() }}
+    </button>
 
     <div class="container first">
       <button class="img-container fisrt-img">
         <img @click="setImg1()" :class="{ active: img1IsActive, no_colors: img2IsActive }"
           :src="postTab[tabPosition].img_url1" alt="">
       </button>
-      <h2 class="first" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic1,
+      <h2 :class="{ navopen: checkNavBar() }" class="first" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic1,
         postTab[tabPosition].nb_clic2) }}</h2>
-      <h3 class="first">{{ postTab[tabPosition].prompt1 }}</h3>
+      <h3 :class="{ navopen: checkNavBar() }" class="first">{{ postTab[tabPosition].prompt1 }}</h3>
     </div>
-    <div class="divide-bar"></div>
+    <div :class="{ navopen: checkNavBar() }" class="divide-bar"></div>
     <div class="container second">
       <button class="img-container second-img">
         <img @click="setImg2()" :class="{ active: img2IsActive, no_colors: img1IsActive }"
           :src="postTab[tabPosition].img_url2" alt="">
       </button>
-      <h2 class="second" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic2,
+      <h2 :class="{ navopen: checkNavBar() }" class="second" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic2,
         postTab[tabPosition].nb_clic1) }}</h2>
-      <h3 class="second">{{ postTab[tabPosition].prompt2 }}</h3>
+      <h3 :class="{ navopen: checkNavBar() }" class="second">{{ postTab[tabPosition].prompt2 }}</h3>
     </div>
   </main>
 </template>
@@ -127,10 +132,11 @@ main {
   align-items: center;
   width: 100%;
   overflow: hidden;
+  padding-bottom: 90px;
 
   .container {
     width: 100%;
-    height: 50vh;
+    height: calc(50vh - 45px);
     overflow: hidden;
     padding: 0 1rem;
 
@@ -169,39 +175,48 @@ main {
     }
 
     //media query pour desktop
-    }
-    
-    @media (min-width: 1024px) {
-      flex-direction: row;
+  }
 
-      .container {
-        width: 50%;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    padding-bottom: 0;
+
+    .container {
+      width: 50%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+
+      &.first, &.second {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      &.img-container {
+        border: 10px solid #17141D;
+        border-radius: 12px;
+      }
+
+      button {
+        width: 50vh;
+        height: 50vh;
         border: 10px solid #17141D;
         border-radius: 12px;
         overflow: hidden;
 
-        button {
-          width: 50vh;
-          height: 50vh;
-          border: 10px solid #17141D;
-          border-radius: 12px;
-          overflow: hidden;
 
-          
-        }
       }
-      }
+    }
+  }
 }
 
 .button-next {
   position: absolute;
-  top: 50%;
   right: 50%;
+  top: calc(50% - 45px);
   transform: translate(50%, -50%);
   z-index: 10;
   background-color: #17141D;
@@ -212,17 +227,23 @@ main {
   height: 5rem;
   margin-top: -5px;
   border-radius: 9999px;
+
   @media (min-width: 1024px) {
     width: 6rem;
     height: 6rem;
-    
+
+    &.navopen {
+      left: calc(50% - 43px);
+      top: 50%;
+    }
+
   }
 }
 
 .divide-bar {
   position: absolute;
   z-index: 9;
-  top: 50%;
+  top: calc(50% - 45px);
   right: 50%;
   transform: translate(50%, -50%);
   width: 100%;
@@ -235,6 +256,11 @@ main {
     background-image: url('../assets/dividebarV.svg');
     background-repeat: no-repeat;
     height: 100%;
+    top: calc(50%);
+
+    &.navopen {
+      margin-right: -54px;
+    }
   }
 }
 
@@ -255,19 +281,29 @@ h2 {
       top: 50%;
       left: 25%;
       transform: translate(-50%, -50%);
+
+      &.navopen {
+        left: calc(25% + 80px);
+      }
     }
+
 
   }
 
   &.second {
     position: absolute;
-    top: 75%;
+    top: calc(75% - 45px);
     left: 50%;
     transform: translate(-50%, -50%);
+
     @media (min-width: 1024px) {
       top: 50%;
       left: 75%;
       transform: translate(-50%, -50%);
+
+      &.navopen {
+        left: calc(75% + 53px);
+      }
     }
   }
 
@@ -275,7 +311,7 @@ h2 {
 }
 
 h3 {
-  width: 100%;
+  width: 50%;
   text-align: center;
   font-size: 1.5rem;
   text-shadow: 2px 2px 4px #000;
@@ -283,26 +319,39 @@ h3 {
 
   &.first {
     position: absolute;
-    top: 40%;
+    top: 37%;
     left: 50%;
     transform: translate(-50%, -50%);
+
     @media (min-width: 1024px) {
       top: auto;
       left: 25%;
       bottom: 1rem;
       font-size: 2rem;
+
+      &.navopen {
+        width: calc(50% - 107px);
+        margin-left: 54px;
+      }
     }
   }
 
   &.second {
     position: absolute;
-    bottom: 1rem;
+    bottom: 96px;
     left: 50%;
     transform: translate(-50%, -50%);
+
     @media (min-width: 1024px) {
       top: auto;
       left: 75%;
       font-size: 2rem;
+      bottom: 1rem;
+
+      &.navopen {
+        width: calc(50% - 107px);
+        margin-left: 41px;
+      }
     }
   }
 }
