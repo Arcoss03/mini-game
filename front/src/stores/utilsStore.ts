@@ -64,8 +64,12 @@ export const useUtilsStore = defineStore('utils', () => {
       document.body.classList.add('nav-open');
     } else {
       document.body.classList.remove('nav-open');
-    }
+    } 
   }
 
-  return { toast, showToast, setTokenUser, fetchTokenUser, toggleTheme, initializeTheme, checkNavBar, toogleNavBar, hideNavBar}
+  const isNavbarOpen = () => {
+    return (hideNavBar.value === 'show');
+  }
+
+  return { toast, showToast, setTokenUser, fetchTokenUser, toggleTheme, initializeTheme, checkNavBar, toogleNavBar, isNavbarOpen}
 })

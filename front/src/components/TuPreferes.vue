@@ -11,10 +11,7 @@ let img1IsActive = ref(false);
 let img2IsActive = ref(false);
 let postTab: Ref<Post[]> = ref([]);
 let tabPosition: Ref<number> = ref(0);
-
-const checkNavBar = () => {
-  return utilsStore.hideNavBar === 'show';
-};
+const isNavOpen = useUtilsStore().isNavbarOpen;
 
 const currentUser = useUserStore().currentUser;
 
@@ -99,7 +96,7 @@ const getCenterBtnTxt = () => {
 
 <template>
   <main v-if="postTab.length !== 0">
-    <button :class="{ hide: !(img1IsActive || img2IsActive), navopen: checkNavBar()}" class="button-next"
+    <button :class="{ hide: !(img1IsActive || img2IsActive), navopen: isNavOpen()}" class="button-next"
       @click="nextPost()">{{ getCenterBtnTxt() }}
     </button>
 
@@ -108,19 +105,19 @@ const getCenterBtnTxt = () => {
         <img @click="setImg1()" :class="{ active: img1IsActive, no_colors: img2IsActive }"
           :src="postTab[tabPosition].img_url1" alt="">
       </button>
-      <h2 :class="{ navopen: checkNavBar() }" class="first" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic1,
+      <h2 :class="{ navopen: isNavOpen() }" class="first" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic1,
         postTab[tabPosition].nb_clic2) }}</h2>
-      <h3 :class="{ navopen: checkNavBar() }" class="first">{{ postTab[tabPosition].prompt1 }}</h3>
+      <h3 :class="{ navopen: isNavOpen() }" class="first">{{ postTab[tabPosition].prompt1 }}</h3>
     </div>
-    <div :class="{ navopen: checkNavBar() }" class="divide-bar"></div>
+    <div :class="{ navopen: isNavOpen() }" class="divide-bar"></div>
     <div class="container second">
       <button class="img-container second-img">
         <img @click="setImg2()" :class="{ active: img2IsActive, no_colors: img1IsActive }"
           :src="postTab[tabPosition].img_url2" alt="">
       </button>
-      <h2 :class="{ navopen: checkNavBar() }" class="second" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic2,
+      <h2 :class="{ navopen: isNavOpen() }" class="second" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic2,
         postTab[tabPosition].nb_clic1) }}</h2>
-      <h3 :class="{ navopen: checkNavBar() }" class="second">{{ postTab[tabPosition].prompt2 }}</h3>
+      <h3 :class="{ navopen: isNavOpen() }" class="second">{{ postTab[tabPosition].prompt2 }}</h3>
     </div>
   </main>
 </template>
@@ -231,10 +228,10 @@ main {
   @media (min-width: 1024px) {
     width: 6rem;
     height: 6rem;
+    top: 50%;
 
     &.navopen {
       left: calc(50% - 43px);
-      top: 50%;
     }
 
   }
