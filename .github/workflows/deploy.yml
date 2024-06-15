@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main  # Déclencher le déploiement uniquement sur la branche main
+      - release  # Déclencher le déploiement uniquement sur la branche release
 
 jobs:
   deploy:
