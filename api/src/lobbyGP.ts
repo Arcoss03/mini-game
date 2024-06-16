@@ -100,6 +100,15 @@ io.on('connection', (socket) => {
         [roomId, disconnectedToken]
       );
 
+     const[chatRoom]:any= await fastify.db.query(
+        'SELECT chat_room_id FROM room_GP WHERE id=?',
+        [roomId]
+      );
+      await fastify.db.query(
+        'DELETE FROM chat_participant WHERE chat_room_id=? and user_id=?',
+        [chatRoom[0].chat_room_id, disconnectedToken]
+      );
+
       if (socketTokens[socket.id] === disconnectedToken) {
         delete socketTokens[socket.id];        
     }

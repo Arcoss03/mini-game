@@ -44,6 +44,7 @@ const handleScroll = () => {
 state.messages.splice(0, state.messages.length);
 socketClient.quitRoom();
 socketClient.joinRoom(localStorage.getItem('token') as string, room as number);
+console.log(room)
 
 const sendMessage = () => {
   const content = state.textArea.slice(0, MAX_CHARACTERS);

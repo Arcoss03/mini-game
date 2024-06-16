@@ -11,6 +11,7 @@ const state = reactive({
   name: '',
   date: new Date(),
   isChef: false,
+  chatRoom:0 as number
 });
 
 const props = defineProps<{ lobbyId: string }>();
@@ -19,6 +20,14 @@ onMounted(async () => {
   if (!res.success) {
     router.push('/choice-gmp');
   } else {
+    const chatRoom=await apiHelper.kyGetWithToken(`garticPhone/room/${props.lobbyId}`, localStorage.getItem('token') as string);
+    if (!chatRoom.success) {
+      //router.push('/choice-gmp');
+  }
+      else{
+       
+        state.chatRoom = chatRoom.data.roomChat as number;
+        
     let room: any = res.data.room;
     state.name = room.name;
     state.date = new Date(room.creation_date);
@@ -26,7 +35,7 @@ onMounted(async () => {
     socketClient.joinLobby(localStorage.getItem('token') as any, props.lobbyId);
     socketClient.handleJoinedRoom(state)
     socketClient.handleChef(state)
-    console.log(state.messages[0])
+     }
   }
 });
 
@@ -36,6 +45,7 @@ const startGame = async () => {
     router.push('/login');
   }
 };
+
 
 // Ensure there are always 8 elements in state.messages
 const filledMessages = () => {
@@ -54,8 +64,8 @@ const filledMessages = () => {
       <NavBar/>
       <div class="container-left">
         <h1>Guess My Prompt</h1>
-        <div class="size-chat">
-          <chat :roomId="1" roomName="" maxHeight="20rem" class="chat" />
+        <div class="size-chat" v-if="state.chatRoom !== 0">
+          <chat :roomId="state.chatRoom" roomName="" maxHeight="20rem" class="chat" />
         </div>
         <p>{{ state.date }}</p>
       </div>
