@@ -35,7 +35,12 @@ const router = createRouter({
     {
       path: '/profil',
       name: 'profil',
-      component: () => import('../views/ProfileView.vue')
+      component: () => import('../views/PrivateProfileView.vue')
+    },
+    {
+      path: '/profil/:pseudo',
+      name: 'profil-public',
+      component: () => import('../views/PublicProfileView.vue')
     },
     {
 
