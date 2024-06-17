@@ -7,7 +7,6 @@ import apiHelper from '../helpers/apiHelper';
 import router from '@/router';
 import { useUserStore } from '@/stores/userStore';
 const currentUser = useUserStore().currentUser;
-import NavBar from './NavBar.vue';
 
 const showToast = useUtilsStore().showToast;
 
@@ -57,10 +56,7 @@ async function SendPost() {
 </script>
 
 <template>
-  <NavBar />
   <main>
-    
-
     <!-- <img src="../assets/logoMG.svg" alt="logo"> -->
     <div class="desc-create">
       <h2>Créé ton propre "Tu-préfères?" !</h2>

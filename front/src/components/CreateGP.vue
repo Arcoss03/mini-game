@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import apiHelper from '@/helpers/apiHelper';
 import { useUtilsStore } from '@/stores/utilsStore';
 import router from '@/router';
-import NavBar from './NavBar.vue';
 
 const roomName = ref('')
 const showToast = useUtilsStore().showToast;
@@ -27,7 +26,6 @@ const createRoom = async() => {
 </script>
 
 <template>
-  <NavBar />
     <main>
       <div class="container">
         <h1>Guess My Prompt</h1>
