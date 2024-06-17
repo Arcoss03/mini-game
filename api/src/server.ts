@@ -5,7 +5,7 @@ import db from './db';
 import dotenv from 'dotenv';
 import cors from '@fastify/cors'
 import setupSocket from './chat';
-import setupSocketGF from './lobbyGF';
+import setupSocketGF from './lobbyGP';
 
 
 dotenv.config(); // Load environment variables

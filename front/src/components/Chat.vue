@@ -8,6 +8,10 @@ import socketClient from '../helpers/socketHelper';
 const props = defineProps({
     roomName: String,
     roomId: Number,
+    maxHeight: {
+    type: String,
+    default: '100rem',
+  },
 });
 
 let room = props.roomId;
@@ -40,6 +44,7 @@ const handleScroll = () => {
 state.messages.splice(0, state.messages.length);
 socketClient.quitRoom();
 socketClient.joinRoom(localStorage.getItem('token') as string, room as number);
+console.log(room)
 
 const sendMessage = () => {
   const content = state.textArea.slice(0, MAX_CHARACTERS);
@@ -87,8 +92,8 @@ onUpdated(() => {
   <main style="height: 100%;">
     <h1>{{props.roomName}}</h1>
     <div class="barre"></div>
-    <div class="chat">
-      <ul :style="{ height: chatHeight }" ref="messageList" @scroll="handleScroll">
+    <div class="chat" >
+      <ul :style="{ height: chatHeight ,'max-height': props.maxHeight }" ref="messageList" @scroll="handleScroll">
         <li v-for="(message, index) in state.messages" :key="index" class="message-item">
           <strong class="pseudo" :style="{ color: message.color }">{{ message.pseudo }}:</strong>
           <span class="content">{{ message.content }}</span>
