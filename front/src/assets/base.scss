@@ -1,10 +1,19 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --bg-color : #393939;
-  --color-text : #ffffff;
-  --icon-color : #ffffff;
-  font-size: 16px;
+  --bg-color : #211D2A;
+  --bg-color-elements : #16141D;
+  --color-text : #E0E0E0;
+  --icon-color : #E0E0E0;
+  --violet: #7938CB;
   
+}
+
+body.light-theme {
+  --bg-color : #E0E0E0;
+  --color-text : #211D2A;
+  --icon-color : #211D2A;
+  --bg-color-elements : #C0C0C0;
+
 }
 
 *,
@@ -28,6 +37,10 @@ button {
 //reset blue outline
 * {
   -webkit-tap-highlight-color: transparent;
+}
+
+svg {
+  fill:inherit
 }
 
 
@@ -55,4 +68,13 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+
+
+  @media (min-width: 1024px) {
+
+  &.nav-open {
+    margin-left: 107px;
+  }
+}
 }

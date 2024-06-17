@@ -1,10 +1,19 @@
 
 <script setup lang="ts">
+import { useUtilsStore } from '@/stores/utilsStore';
+import hideNavBar from '@/components/icons/icon-hide-bar.vue'
+
+const toggleNav = useUtilsStore().toogleNavBar;
+const isNavOpen = useUtilsStore().isNavbarOpen; 
+
 </script>
 
 <template>
-    <div class="navbar">
-        
+    <button @click="toggleNav()" class="toogleNav" :class="{navClose: !isNavOpen()}">
+        <hideNavBar />
+    </button>
+    
+    <div class="navbar" :class="{navClose: !isNavOpen()}">
         <RouterLink class="Rte" to="/"><img class="logo" src="../assets/logoMG.svg" alt=""></RouterLink>
 
         <RouterLink class="Rte" to="/tpf"><img class="img" src="../assets/TPF.svg" alt="">TuPreferes</RouterLink>
@@ -22,7 +31,6 @@
 <style scoped lang="scss">
 
 .navbar {
-
     //les classes pour le mobile
     position: fixed;
     bottom: 0;
@@ -30,9 +38,10 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #17141D;
+    background-color: var(--bg-color-elements);
     padding: 10px;
     width: 100vw;
+    z-index: 999;
 
 
     .logo {
@@ -48,14 +57,34 @@
     .log {
         bottom: 0;
     }
+    
+    .Rte {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .hide {
+        color: red;
+    }
+
     //les classes pour le desktop
-    @media (min-width: 769px) {
+    @media (min-width: 1024px) {
         display: flex;
         flex-direction: column;
         justify-content: start;
         align-items: center;
         width: 110px;
         height: 100vh;
+
+        &.navClose {
+            display: none;
+            width: 0;
+        }
 
         .logo {
             display: block;
@@ -71,19 +100,30 @@
             margin: 10px 0;
         }
     }
-    .Rte {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .img {
-        width: 20px;
-        height: 20px;
-    }
-
-    
 
 }
+.toogleNav {
+        display: none;
+        
+    }
+
+@media (min-width: 1024px) {
+    .toogleNav {
+            display: block;
+            position: absolute;
+            top: 0.5rem;
+            left: 5rem;
+            fill: #fff;
+            z-index: 1000;
+
+            &.navClose {
+                left: 1rem;
+                transform: scaleX(-1);
+            }
+
+        }
+}
+
 * {
     list-style: none;
 }

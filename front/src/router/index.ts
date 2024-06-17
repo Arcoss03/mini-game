@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type NavigationGuardNext, type RouteLocationNormalized } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import { useUserStore } from '@/stores/userStore';
+import { useUtilsStore } from '@/stores/utilsStore';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -78,6 +79,7 @@ router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormali
   if(!useUserStore().isLogedIn) {
     await useUserStore().tokenLogin();
   }
+  useUtilsStore().initializeTheme();
   if (routesRequiringAuth.includes(to.name as string) && !useUserStore().isLogedIn) {
     next({ name: 'login' }); // Redirige vers la page de login
   } else {
