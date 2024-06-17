@@ -1,15 +1,8 @@
 <script setup lang="ts">
 
-import { onMounted, ref, type Ref } from 'vue';
-import { useUtilsStore } from '@/stores/utilsStore';
-import NavBar from './NavBar.vue';
-
-
 </script>
 
-
 <template>
-    <NavBar />
     <main class="settings">
         <h1>Settings</h1>
         <div class="content">

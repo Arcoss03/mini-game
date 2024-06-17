@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';;
-import NavBar from './NavBar.vue';
 import router from '@/router';
 
 const currentComponent = ref<string | null>(null);
@@ -17,7 +16,6 @@ const navigateToJoin = () => {
 </script>
 
 <template>
-  <NavBar />
   <main>
     <div class="container">
       <h1>Guess My Prompt</h1>

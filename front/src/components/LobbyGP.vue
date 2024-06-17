@@ -4,7 +4,6 @@ import apiHelper from '@/helpers/apiHelper';
 import router from '@/router';
 import socketClient from '../helpers/socketHelper'
 import Chat from './Chat.vue';
-import NavBar from './NavBar.vue';
 
 const state = reactive({
   messages: [] as Array<[string, string, string]>,
@@ -22,7 +21,7 @@ onMounted(async () => {
   } else {
     const chatRoom=await apiHelper.kyGetWithToken(`garticPhone/room/${props.lobbyId}`, localStorage.getItem('token') as string);
     if (!chatRoom.success) {
-      //router.push('/choice-gmp');
+      router.push('/choice-gmp');
   }
       else{
        
@@ -61,7 +60,6 @@ const filledMessages = () => {
 <template>
   <main>
     <div class="container">
-      <NavBar/>
       <div class="container-left">
         <h1>Guess My Prompt</h1>
         <div class="size-chat" v-if="state.chatRoom !== 0">

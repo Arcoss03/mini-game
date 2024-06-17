@@ -14,11 +14,11 @@ const isNavOpen = useUtilsStore().isNavbarOpen;
     </button>
     
     <div class="navbar" :class="{navClose: !isNavOpen()}">
-        <RouterLink class="Rte" to="/"><img class="logo" src="../assets/logoMG.svg" alt=""></RouterLink>
+        <RouterLink class="Rte logo" to="/"><img src="../assets/logoMG.svg" alt=""></RouterLink>
 
         <RouterLink class="Rte" to="/tpf"><img class="img" src="../assets/TPF.svg" alt="">TuPreferes</RouterLink>
 
-        <RouterLink class="Rte" to="/create"><img class="img" src="../assets/AddIcon.svg" alt="">Add</RouterLink>
+        <RouterLink class="Rte" to="/create/tpf"><img class="img" src="../assets/AddIcon.svg" alt="">Add</RouterLink>
 
         <RouterLink class="Rte" to="/settings"><img class="img" src="../assets/set.svg" alt="">Settings</RouterLink>
 
@@ -46,6 +46,9 @@ const isNavOpen = useUtilsStore().isNavbarOpen;
 
     .logo {
         display: none;
+        img {
+            display: none;
+        }
     }
 
     a {
@@ -88,9 +91,12 @@ const isNavOpen = useUtilsStore().isNavbarOpen;
 
         .logo {
             display: block;
-            width: 100px;
-            height: 100px;
-            margin-bottom: 20px;
+            img {
+                display: block;
+                width: 100px;
+                height: 100px;
+            }
+            margin: 2rem 0 1rem;
         }
         #log {
             position: fixed;
