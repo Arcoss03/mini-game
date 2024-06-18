@@ -58,8 +58,12 @@ const invalidToken = () => {
     }
   });
 };
+const disconnect=()=>{
+  socket.disconnect();
+}
 
-  export default { joinRoom, message, messageResponse,quitRoom,invalidToken,joinLobby,handleJoinedRoom,handleChef}
+
+  export default { joinRoom, message, messageResponse,quitRoom,invalidToken,joinLobby,handleJoinedRoom,handleChef,disconnect}
   
 
   

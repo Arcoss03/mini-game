@@ -3,10 +3,12 @@ import { ref } from 'vue';
 import apiHelper from '@/helpers/apiHelper';
 import router from '@/router';
 import { useUtilsStore } from '@/stores/utilsStore';
+import socketHelper from '@/helpers/socketHelper';
 
 const roomId = ref<string>('');
 const showToast = useUtilsStore().showToast;
 
+socketHelper.disconnect()
 interface JoinRoomResponse {
   success: boolean;
   data: {
