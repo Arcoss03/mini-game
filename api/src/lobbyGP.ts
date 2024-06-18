@@ -130,9 +130,6 @@ io.on('connection', (socket) => {
   
       
     }
-    
-    
-    //
        
   }
 }, delay);
