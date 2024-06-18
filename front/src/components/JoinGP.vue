@@ -8,7 +8,7 @@ import socketHelper from '@/helpers/socketHelper';
 const roomId = ref<string>('');
 const showToast = useUtilsStore().showToast;
 
-
+socketHelper.disconnect()
 interface JoinRoomResponse {
   success: boolean;
   data: {
