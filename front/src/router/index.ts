@@ -35,7 +35,12 @@ const router = createRouter({
     {
       path: '/profil',
       name: 'profil',
-      component: () => import('../views/ProfileView.vue')
+      component: () => import('../views/PrivateProfileView.vue')
+    },
+    {
+      path: '/profil/:pseudo',
+      name: 'profil-public',
+      component: () => import('../views/PublicProfileView.vue')
     },
     {
 
@@ -67,16 +72,21 @@ const router = createRouter({
 
     },
     {
-      path: '/:catchAll(.*)',
-      name: 'NotFound',
-      component: () => import('../views/NotFoundView.vue')
-    },
-    {
       path: '/settings',
       name: 'settings',
       component: () => import('../views/SettingsView.vue')
-    }
-
+    },
+    //error pages
+    {
+      path: '/:catchAll(.*)',
+      name: 'NotFound',
+      component: () => import('../views/errors/NotFoundView.vue')
+    },
+    {
+      path: '/profil-not-found',
+      name: 'profilNotFound',
+      component: () => import('../views/errors/ProfilNotFoundView.vue')
+    },
 
   ]
   
