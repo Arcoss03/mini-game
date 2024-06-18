@@ -26,7 +26,7 @@ const props = defineProps<{ lobbyId: string }>();
 
 
 onMounted(async () => {  
-  
+  resize()
   window.addEventListener('resize', resize );
   const res = await apiHelper.kyGetWithToken(`garticPhone/${props.lobbyId}`, localStorage.getItem('token') as string);
   if (!res.success) {
