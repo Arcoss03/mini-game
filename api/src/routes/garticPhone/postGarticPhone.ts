@@ -61,6 +61,14 @@ async function postGPRoutes(fastify: FastifyInstance) {
                 'SELECT * FROM room_GP WHERE id = ?',
                 [data.id]
             )
+            const nbParticipant:any=await fastify.db.query(
+                'SELECT COUNT(*) FROM guess_prompt_participant where room_GP_id=?',
+                [data.id]
+            );
+            if(nbParticipant[0][0]['COUNT(*)']>=8){
+                reply.status(500).send({ error: 'Lobby full' });
+                return;
+            }
             await fastify.db.query(
                 'INSERT INTO chat_participant (chat_room_id,user_id) VALUES (?,?)',
                 [room_play[0].chat_room_id,payload.id]
@@ -69,6 +77,7 @@ async function postGPRoutes(fastify: FastifyInstance) {
                 reply.status(400).send({ error: 'Room is playing' });
                 return;
             }
+            
             
 
             
