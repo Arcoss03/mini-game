@@ -99,7 +99,6 @@ router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormali
   if(!useUserStore().isLogedIn) {
     await useUserStore().tokenLogin();
   }
-  useUtilsStore().initializeTheme();
   if (routesRequiringAuth.includes(to.name as string) && !useUserStore().isLogedIn) {
     next({ name: 'login' }); // Redirige vers la page de login
   } else {

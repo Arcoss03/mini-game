@@ -1,19 +1,17 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --bg-color : #211D2A;
-  --bg-color-elements : #16141D;
-  --color-text : #E0E0E0;
-  --icon-color : #E0E0E0;
-  --violet: #7938CB;
-  
+  --bg-color: #211d2a;
+  --bg-color-elements: #16141d;
+  --color-text: #e0e0e0;
+  --icon-color: #e0e0e0;
+  --violet: #7938cb;
 }
 
 body.light-theme {
-  --bg-color : #E0E0E0;
-  --color-text : #211D2A;
-  --icon-color : #211D2A;
-  --bg-color-elements : #C0C0C0;
-
+  --bg-color: #e0e0e0;
+  --color-text: #211d2a;
+  --icon-color: #211d2a;
+  --bg-color-elements: #c0c0c0;
 }
 
 *,
@@ -40,11 +38,22 @@ button {
 }
 
 svg {
-  fill:inherit
+  fill: inherit;
 }
 
+textarea {
+  font-family: 'Familjen Grotesk', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+}
 
 body {
+  font-family: 'Familjen Grotesk', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+
   height: 100vh;
   color: var(--color-text);
   background: var(--bg-color);
@@ -52,29 +61,15 @@ body {
     color 0.5s,
     background-color 0.5s;
   line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
+
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
 
-
   @media (min-width: 1024px) {
-
-  &.nav-open {
-    margin-left: 107px;
+    &.nav-open {
+      margin-left: 107px;
+    }
   }
-}
 }

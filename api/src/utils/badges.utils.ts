@@ -8,7 +8,7 @@ const badges = [
   },
   {
     id: 2,
-    type: "conformity",
+    type: "conform-level",
     name: "t'es plus dans la norme ou ?",
     msg: ["divergant", "pas comme toi", "la norme quoi", "comme toi"],
     stat_description:"dans la norme"
