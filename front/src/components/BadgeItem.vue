@@ -111,7 +111,7 @@ const badge: Ref<Badge | null> = ref(null);
             }
         }
 
-        &.conformity {
+        &.conform-level {
             .background-image {
                 width: 100%;
                 height: 100%;

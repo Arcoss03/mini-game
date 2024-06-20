@@ -1,10 +1,19 @@
 
 <script setup lang="ts">
 import { useUtilsStore } from '@/stores/utilsStore';
+import { useUserStore } from '@/stores/userStore';
 import hideNavBar from '@/components/icons/icon-hide-bar.vue'
+import { onMounted, ref } from 'vue';
 
 const toggleNav = useUtilsStore().toogleNavBar;
-const isNavOpen = useUtilsStore().isNavbarOpen; 
+const isNavOpen = useUtilsStore().isNavbarOpen;
+
+//define props:
+
+const props = defineProps<{
+    profil_picture: string;
+}>()
+
 
 </script>
 
@@ -16,13 +25,14 @@ const isNavOpen = useUtilsStore().isNavbarOpen;
     <div class="navbar" :class="{navClose: !isNavOpen()}">
         <RouterLink class="Rte logo" to="/"><img src="../assets/logoMG.svg" alt=""></RouterLink>
 
-        <RouterLink class="Rte" to="/tpf"><img class="img" src="../assets/TPF.svg" alt="">TuPreferes</RouterLink>
+        <RouterLink class="Rte" to="/tpf"><img class="img" src="../assets/TPF.svg" alt="">Tu Preferes</RouterLink>
 
-        <RouterLink class="Rte" to="/create/tpf"><img class="img" src="../assets/AddIcon.svg" alt="">Add</RouterLink>
+        <RouterLink class="Rte" to="/create/tpf"><img class="img" src="../assets/AddIcon.svg" alt="">Ajouter</RouterLink>
 
-        <RouterLink class="Rte" to="/settings"><img class="img" src="../assets/set.svg" alt="">Settings</RouterLink>
+        <RouterLink class="Rte" to="/settings"><img class="img" src="../assets/set.svg" alt="">Paramètres</RouterLink>
 
-        <RouterLink class="Rte" id="log" to="/login"><img src="../assets/login_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="">Se connecter</RouterLink>
+        <RouterLink v-if="profil_picture === ''" class="Rte" id="log" to="/login"><img src="../assets/login_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="">Se Connecter</RouterLink>
+        <RouterLink v-if="profil_picture !== ''" class="Rte" id="log" to="/profil"><img class="pp" :src="profil_picture" alt="">Profil</RouterLink>
 
     </div>
 </template>
@@ -69,6 +79,12 @@ const isNavOpen = useUtilsStore().isNavbarOpen;
     .img {
         width: 20px;
         height: 20px;
+    }
+
+    .pp {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
     }
 
     .hide {

@@ -4,7 +4,7 @@
 
 <template>
     <main class="settings">
-        <h1>Settings</h1>
+        <h1>Paramètres</h1>
         <div class="content">
             <li>
                 <label for="theme">Theme</label>
@@ -27,7 +27,6 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    font-family: "Anton", sans-serif;
     font-weight: 400;
     font-style: normal;
 
