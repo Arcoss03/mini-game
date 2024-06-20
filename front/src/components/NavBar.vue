@@ -40,6 +40,7 @@ const props = defineProps<{
 
 <style scoped lang="scss">
 
+
 .navbar {
     //les classes pour le mobile
     position: fixed;

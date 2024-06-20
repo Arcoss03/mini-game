@@ -36,7 +36,7 @@ const JoinRoom = async () => {
     <form @submit.prevent="JoinRoom">
       <input id="room-name" v-model="roomId" type="text" placeholder="ID Room" required />
       <div>
-      <button class="join" type="submit">JOIN</button>
+      <button class="button join" type="submit" >JOIN</button>
     </div>
     </form>
   </div>
@@ -87,36 +87,7 @@ form{
   }
 
   button {
-    align-items: center;
-    appearance: none;
-    border: 0;
-    border-radius: 15px;
-    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, rgba(58, 65, 111, 0.5) 0 -3px 0 inset;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    display: inline-flex;
-    height: 60px;
-    justify-content: center;
-    line-height: 1;
-    list-style: none;
-    margin: 10px;
-    overflow: hidden;
-    position: relative;
-    text-align: center;
-    text-decoration: none;
-    transition: box-shadow 0.15s, transform 0.15s;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    white-space: nowrap;
-    will-change: box-shadow, transform;
-    font-size: 20px;
-    font-weight: bold;
-    font-family:Arial, Helvetica, sans-serif;
-    min-width: 9rem;
-    margin-bottom: 3rem;
-
+    
     &.join{
       background: #7520FF;
       

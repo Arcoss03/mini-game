@@ -147,6 +147,7 @@ main {
       padding-bottom: 1rem;
     }
 
+    
     button {
       width: 100%;
       height: 100%;
