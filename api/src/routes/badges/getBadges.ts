@@ -44,7 +44,7 @@ async function getBadgesRoutes(fastify: FastifyInstance) {
                     reply.send(getBadgeById(1, level1, `${counter/1000}`));
 
                     break;
-                case '2': // Conformity badge
+                case '2': // conform-level badge
                     const [rows2]: any = await fastify.db.query(`
                         SELECT ROUND((SUM(vote_majority = 1) / COUNT(*)) * 100) AS percentage
                         FROM play_tpf

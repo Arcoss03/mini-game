@@ -31,6 +31,14 @@ export const useUserStore = defineStore('userStore', () => {
         return null;
     }
 
+    const getUserDetailsByPseudo = async (pseudo:string):Promise<UserDetails | null> => {
+        const response = await apiHelper.kyGet(`profil/pseudo/${pseudo}`);
+        if(response.success) {
+            return response.data.user as unknown as UserDetails;
+        }
+        return null;
+    }
+
     const updateUserProfile = async (user:UserDetails, token:string) => {
         const response = await apiHelper.kyPut('profil', user, token);
         if(response.success) {
@@ -41,5 +49,5 @@ export const useUserStore = defineStore('userStore', () => {
 
     
 
-return { isLogedIn, tokenLogin, getUserDetailsById, currentUser, updateUserProfile}
+return { isLogedIn, tokenLogin, getUserDetailsById, currentUser, updateUserProfile, getUserDetailsByPseudo}
 })

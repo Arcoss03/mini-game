@@ -20,9 +20,16 @@ async function postGPRoutes(fastify: FastifyInstance) {
     
         try {
             const data = request.body as { name: string};
+            const [newChat]:any=await fastify.db.query(
+                'INSERT INTO chat_room (creation_date) VALUES (?)',[new Date()]
+            )
             const [result] : any = await fastify.db.query(
-                'INSERT INTO room_GP (name,creation_date,type,creator_id) VALUES (?,?,?,?)',
-                [data.name ,new Date(),"lobby",payload.id]
+                'INSERT INTO room_GP (name,creation_date,type,creator_id,chat_room_id) VALUES (?,?,?,?,?)',
+                [data.name ,new Date(),"lobby",payload.id,newChat.insertId]
+            );
+            await fastify.db.query(
+                'INSERT INTO chat_participant (chat_room_id,user_id) VALUES (?,?)',
+                [newChat.insertId,payload.id]
             );
             await fastify.db.query(
                 'INSERT INTO guess_prompt_participant (room_GP_id,user_id) VALUES (?, ?)',
@@ -54,10 +61,23 @@ async function postGPRoutes(fastify: FastifyInstance) {
                 'SELECT * FROM room_GP WHERE id = ?',
                 [data.id]
             )
+            const nbParticipant:any=await fastify.db.query(
+                'SELECT COUNT(*) FROM guess_prompt_participant where room_GP_id=?',
+                [data.id]
+            );
+            if(nbParticipant[0][0]['COUNT(*)']>=8){
+                reply.status(500).send({ error: 'Lobby full' });
+                return;
+            }
+            await fastify.db.query(
+                'INSERT INTO chat_participant (chat_room_id,user_id) VALUES (?,?)',
+                [room_play[0].chat_room_id,payload.id]
+            );
             if(room_play[0].type!=="lobby"){
                 reply.status(400).send({ error: 'Room is playing' });
                 return;
             }
+            
             
 
             

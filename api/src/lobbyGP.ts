@@ -39,13 +39,23 @@ io.on('connection', (socket) => {
         'SELECT creator_id FROM room_GP WHERE id = ?',
         [roomId]
       );
+      
 
-      let chef=""
-
+      
+      let chef
       if(owner[0].creator_id==id){
-        chef="courone"
+        chef=true
         socket.emit("chef",{isChef:true});
       }
+      else if((!pseudosInRoom[room.roomId])||pseudosInRoom[room.roomId].length==0){
+        await fastify.db.query(
+          'UPDATE room_GP SET creator_id=? where id=?',
+          [id,roomId]
+        );
+        chef=true
+        socket.emit("chef",{isChef:true});
+      }
+
       if (participantRows.length > 0) {
         socket.join(room.roomId);
 
@@ -67,6 +77,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', async() => {
     const disconnectedToken = socketTokens[socket.id];
+    
     const roomId=parseInt(socketRoom[socket.id])-11111;
     try{
 
@@ -79,15 +90,47 @@ io.on('connection', (socket) => {
         return;
       }
 
-    const delay = 5000;
+    const delay = 500;
 
     setTimeout(async() => {
+      const room=socketRoom[socket.id];
     if (pseudosInRoom[socketRoom[socket.id]].every(tuple => tuple[0] !== userRows[0].pseudo)){
-      const [delParticipant]:any= await fastify.db.query(
+      await fastify.db.query(
         'DELETE FROM guess_prompt_participant WHERE room_GP_id=? and user_id=?',
         [roomId, disconnectedToken]
       );
-      io.to(socketRoom[socket.id]).emit('joinedRoom', { pseudos: pseudosInRoom[socketRoom[socket.id]]}); 
+
+     const[chatRoom]:any= await fastify.db.query(
+        'SELECT chat_room_id FROM room_GP WHERE id=?',
+        [roomId]
+      );
+      await fastify.db.query(
+        'DELETE FROM chat_participant WHERE chat_room_id=? and user_id=?',
+        [chatRoom[0].chat_room_id, disconnectedToken]
+      );
+
+      if (socketTokens[socket.id] === disconnectedToken) {
+        delete socketTokens[socket.id];        
+    }
+
+    let firstElement=pseudosInRoom[socketRoom[socket.id]][0];
+    if(firstElement){
+      firstElement[2]=true;
+      
+      io.to(socketRoom[socket.id]).emit('joinedRoom', { pseudos: pseudosInRoom[socketRoom[socket.id]]});
+      delete socketRoom[socket.id]
+      let [cleTrouvee]:any = Object.entries(socketRoom).find(([cle, valeur]) => valeur === room) || [];
+      io.to(cleTrouvee.toString()).emit("chef",{isChef:true})
+      if(socketTokens[cleTrouvee.toString()]){
+      await fastify.db.query(
+        'UPDATE room_GP SET creator_id=? where id=?',
+        [socketTokens[cleTrouvee.toString()],roomId]
+        
+      );}
+  
+      
+    }
+       
   }
 }, delay);
            

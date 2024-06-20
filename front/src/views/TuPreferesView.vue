@@ -3,6 +3,8 @@ import Tpf from '../components/TuPreferes.vue'
 </script>
 
 <template>
-    <Tpf />
+
+<Tpf/>
 </template>
+
 

@@ -20,5 +20,20 @@ async function getProfilRoutes(fastify: FastifyInstance) {
             reply.status(500).send({ error: 'Database error' });
         }
     });
+    fastify.get<{ Params: { pseudo: string } }>('/pseudo/:pseudo', async (request: FastifyRequest<{ Params: { pseudo: string } }>, reply: FastifyReply) => {
+    
+        
+        try {
+            const pseudo = request.params.pseudo 
+            const [rows]: any = await fastify.db.query('SELECT id, pseudo, email, profil, creation_date, profil_picture, description FROM users WHERE pseudo = ?', [pseudo]);
+            if (rows.length === 0) {
+                reply.status(404).send({ error: 'User not found' });
+                return;
+            }
+            reply.send({ user: rows[0] });
+        } catch (error) {
+            reply.status(500).send({ error: 'Database error' });
+        }
+    });
 }
 export default getProfilRoutes;

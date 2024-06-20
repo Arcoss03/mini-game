@@ -7,7 +7,6 @@ import apiHelper from '../helpers/apiHelper';
 import router from '@/router';
 import { useUserStore } from '@/stores/userStore';
 const currentUser = useUserStore().currentUser;
-import NavBar from './NavBar.vue';
 
 const showToast = useUtilsStore().showToast;
 
@@ -57,10 +56,7 @@ async function SendPost() {
 </script>
 
 <template>
-  <NavBar />
   <main>
-    
-
     <!-- <img src="../assets/logoMG.svg" alt="logo"> -->
     <div class="desc-create">
       <h2>Créé ton propre "Tu-préfères?" !</h2>
@@ -90,7 +86,6 @@ main {
   width: 100%;
   background-color: #211D2A ;
   overflow: hidden;
-  font-family: "Anton", sans-serif;
   font-weight: 400;
   font-style: normal;
 
@@ -124,7 +119,6 @@ main {
       border: 2px solid #fff;
       border-radius: 8px;
       outline: none;
-      font-family: "Anton", sans-serif;
     }
   }
 

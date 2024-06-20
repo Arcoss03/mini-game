@@ -11,6 +11,28 @@ async function getGPRoutes(fastify: FastifyInstance) {
         }
     });
     // Route to get name/creation_date GF
+    fastify.get('/room/:id', async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
+        const payload = request.user as JwtPayload;
+        if (!payload.id) {
+            reply.status(401).send({ error: 'Invalid token' });
+            return;
+        }
+        try {
+            const roomId = parseInt(request.params.id, 10);
+            const adjustedId = roomId - 11111;
+            const [roomChat]: any = await fastify.db.query(
+                'SELECT chat_room_id FROM room_GP WHERE id = (?)',
+                [adjustedId]
+            );
+            if (roomChat.length === 0) {
+                reply.status(400).send({ error: 'Room not exist' });
+                return;
+            }
+            reply.send({ roomChat:roomChat[0].chat_room_id});
+        } catch (error) {
+            reply.status(500).send({ error: 'Database error' });
+        }
+    });
     fastify.get('/:id', async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
         const payload = request.user as JwtPayload;
         if (!payload.id) {

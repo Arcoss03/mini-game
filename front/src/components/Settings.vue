@@ -1,18 +1,10 @@
 <script setup lang="ts">
 
-import { onMounted, ref, type Ref} from 'vue';
-import { useUtilsStore } from '@/stores/utilsStore';
-import NavBar from './NavBar.vue';
-
 </script>
 
-
 <template>
-    <NavBar />
     <main class="settings">
-        <h1>Settings</h1>
-
-        
+        <h1>Paramètres</h1>
         <div class="content">
             <li>
                 <label for="theme">Theme</label>
@@ -23,21 +15,18 @@ import NavBar from './NavBar.vue';
                 <a href="">Mon score CO2</a>
             </li>
         </div>
-        
     </main>
 </template>
 
 <style scoped lang="scss">
 main {
-
     //les classes pour le mobile
     min-height: 100vh;
-    background-color : #211D2A;
+    background-color: #211D2A;
     color: white;
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
     justify-content: flex-start;
-    font-family: "Anton", sans-serif;
     font-weight: 400;
     font-style: normal;
 
@@ -46,6 +35,7 @@ main {
         margin-top: 20px;
         margin-left: 20px;
     }
+
     li {
         margin-top: 20px;
         list-style: none;
@@ -53,11 +43,13 @@ main {
         flex-direction: column;
         margin-left: 20px;
     }
+
     a {
         color: inherit;
         text-decoration: none;
         margin-bottom: 20px;
     }
+
     .theme {
         width: 100px;
         height: 30px;
@@ -80,9 +72,11 @@ main {
             display: flex;
             flex-direction: column;
         }
+
         .content {
-        margin-left: 150px;
+            margin-left: 150px;
         }
+
         h1 {
             margin-left: 150px;
         }

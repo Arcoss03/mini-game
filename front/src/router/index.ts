@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type NavigationGuardNext, type RouteLocationNormalized } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import { useUserStore } from '@/stores/userStore';
+import { useUtilsStore } from '@/stores/utilsStore';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,8 +23,8 @@ const router = createRouter({
     },
     
     {
-      path: '/create',
-      name: 'create',
+      path: '/create/tpf',
+      name: 'createTpf',
       component: () => import('../views/PostCreationView.vue')
     },
     {
@@ -34,19 +35,34 @@ const router = createRouter({
     {
       path: '/profil',
       name: 'profil',
-      component: () => import('../views/ProfileView.vue')
+      component: () => import('../views/PrivateProfileView.vue')
+    },
+    {
+      path: '/profil/:pseudo',
+      name: 'profil-public',
+      component: () => import('../views/PublicProfileView.vue')
     },
     {
 
       path: '/lobby/:lobbyId',
       name: 'lobby',
-      component: () => import('../views/LobbyGFView.vue'),
+      component: () => import('../views/LobbyGPView.vue'),
       props: true
     },
     {
-      path: '/joinGF',
-      name: 'joinGF',
-      component: () => import('../views/LobbyGFcreation-joinView.vue'),
+      path: '/choice-gmp',
+      name: 'choiceGmp',
+      component: () => import('../views/LobbyGPcreation-joinView.vue'),
+    },
+    {
+      path: '/join/gmp',
+      name: 'joinGmp',
+      component: () => import('../views/LobbyGPjoinView.vue'),
+    },
+    {
+      path: '/create/gmp',
+      name: 'createGmp',
+      component: () => import('../views/LobbyGPcreateView.vue'),
     },
     {
 
@@ -56,16 +72,21 @@ const router = createRouter({
 
     },
     {
-      path: '/:catchAll(.*)',
-      name: 'NotFound',
-      component: () => import('../views/NotFoundView.vue')
-    },
-    {
       path: '/settings',
       name: 'settings',
       component: () => import('../views/SettingsView.vue')
-    }
-
+    },
+    //error pages
+    {
+      path: '/:catchAll(.*)',
+      name: 'NotFound',
+      component: () => import('../views/errors/NotFoundView.vue')
+    },
+    {
+      path: '/profil-not-found',
+      name: 'profilNotFound',
+      component: () => import('../views/errors/ProfilNotFoundView.vue')
+    },
 
   ]
   
