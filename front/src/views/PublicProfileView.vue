@@ -5,6 +5,5 @@ import PublicProfile from '@/components/PublicProfile.vue';
 </script>
 
 <template>
-    <NavBar />
      <PublicProfile />
 </template>
