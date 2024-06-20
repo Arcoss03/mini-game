@@ -60,7 +60,9 @@ const invalidToken = () => {
 };
 const disconnect=()=>{
   socket.disconnect();
+  socket.connect();
 }
+
 
 
   export default { joinRoom, message, messageResponse,quitRoom,invalidToken,joinLobby,handleJoinedRoom,handleChef,disconnect}
