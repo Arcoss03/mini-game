@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { reactive, onMounted, ref } from 'vue';
+import { reactive, ref, onMounted, defineProps, onUpdated, onUnmounted, onBeforeUnmount } from 'vue';
 import apiHelper from '@/helpers/apiHelper';
 import router from '@/router';
-import socketClient from '../helpers/socketHelper'
+import socketClient from '../helpers/socketHelper';
 import Chat from './Chat.vue';
+
 
 const state = reactive({
   messages: [] as Array<[string, string, string]>,
@@ -11,23 +12,23 @@ const state = reactive({
   date: new Date(),
   isChef: false,
   chatRoom: 0 as number,
-  maxHeight : ref('13rem')
+  maxHeight: ref('13rem')
 });
 
-const resize=()=>{
-    if (window.innerWidth >= 1024) {
+const resize = () => {
+  if (window.innerWidth >= 1024) {
     state.maxHeight = '20rem';
   } else {
     state.maxHeight = '13rem';
   }
-  }
+};
 
 const props = defineProps<{ lobbyId: string }>();
 
 
-onMounted(async () => {  
-  resize()
-  window.addEventListener('resize', resize );
+onMounted(async () => {
+  resize();
+  window.addEventListener('resize', resize);
   const res = await apiHelper.kyGetWithToken(`garticPhone/${props.lobbyId}`, localStorage.getItem('token') as string);
   if (!res.success) {
     router.push('/choice-gmp');
@@ -35,23 +36,21 @@ onMounted(async () => {
     const chatRoom = await apiHelper.kyGetWithToken(`garticPhone/room/${props.lobbyId}`, localStorage.getItem('token') as string);
     if (!chatRoom.success) {
       router.push('/choice-gmp');
-    }
-    else {
-
+    } else {
       state.chatRoom = chatRoom.data.roomChat as number;
-
       let room: any = res.data.room;
       state.name = room.name;
       state.date = new Date(room.creation_date);
 
       socketClient.joinLobby(localStorage.getItem('token') as any, props.lobbyId);
-      socketClient.handleJoinedRoom(state)
-      socketClient.handleChef(state)
-      
+      socketClient.handleJoinedRoom(state);
+      socketClient.handleChef(state);
+
+
     }
   }
-
 });
+
 
 const startGame = async () => {
   const res = await apiHelper.kyPost(`garticPhone/play`, { id: props.lobbyId }, localStorage.getItem('token') as string);
@@ -59,7 +58,6 @@ const startGame = async () => {
     router.push('/login');
   }
 };
-
 
 // Ensure there are always 8 elements in state.messages
 const filledMessages = () => {
@@ -70,17 +68,21 @@ const filledMessages = () => {
   return messagesCopy;
 };
 
+
 </script>
 
 
 <template>
+  <audio autoplay  ref="audio"volume="0.2" loop>
+    <source src="../assets/MusiqueAttente.mp3" type="audio/mpeg">
+  </audio>
   <main>
     <div class="container">
       <div class="container-first">
         <h1>Guess My Prompt</h1>
         <div class="size-chat" v-if="state.chatRoom !== 0">
         <div  v-if="state.maxHeight=== '13rem'">
-          <chat :roomId="state.chatRoom" roomName="" maxHeight="3rem" class="chat" />
+          <chat :roomId="state.chatRoom" roomName="" maxHeight="13rem" class="chat" />
         </div>
         <div v-if="state.maxHeight === '20rem'">
           <chat :roomId="state.chatRoom" roomName="" maxHeight="20rem" class="chat" />
