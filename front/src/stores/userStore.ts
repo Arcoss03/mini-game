@@ -43,7 +43,6 @@ export const useUserStore = defineStore('userStore', () => {
         const response = await apiHelper.kyPut('profil', user, token);
         if(response.success) {
             currentUser.value!.profil_picture = response.data.profil_picture as string;
-            console.log("test",currentUser.value);
         }
         return response.success;
     }
