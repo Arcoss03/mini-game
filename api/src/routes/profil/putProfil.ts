@@ -105,7 +105,7 @@ async function putProfilRoutes(fastify: FastifyInstance) {
                 "UPDATE users SET profil = ?, pseudo = ?, profil_picture = ?, description = ? WHERE id = ?",
                 [JSON.stringify(data.profil), data.pseudo, data.profil_picture, data.description, payload.id]
             );
-            reply.status(200);
+            reply.status(200).send({profil_picture: data.profil_picture})
             return;
             
             
