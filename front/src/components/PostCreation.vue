@@ -71,7 +71,7 @@ async function SendPost() {
         <label for="prompt2">Second Prompt</label>
         <input v-model="text2">
       </div>
-      <button type=submit>Create</button>
+      <button class="button" type=submit>Create</button>
     </form>
   </main>
 </template>
@@ -123,10 +123,22 @@ main {
   }
 
   button {
-    padding: 0px 20px;
-    border: solid #fff;
-    border-radius: 20px;
-    color: #fff;
+    background-color: #7520FF;
+    height: 3rem;
+    font-size: 18px;
+    &:focus {
+          box-shadow: #6C63FF 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
+        }
+
+        &:active {
+          box-shadow: #6C63FF 0 3px 7px inset;
+          transform: translateY(2px);
+        }
+
+        &:hover {
+          box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
+          transform: translateY(-2px);
+        }
   }
   .desc-create {
     display: flex;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import apiHelper from '@/helpers/apiHelper';
-import {  ref, type Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { type signUp } from '@/interfaces/user';
 import { useUtilsStore } from '@/stores/utilsStore';
 import router from '@/router';
@@ -70,8 +70,8 @@ async function Singup() {
     <main>
         <div class="blush">
             <div class="imgContainer">
-            <img src="../assets/logo.svg" alt="logo">
-        </div>
+                <img src="../assets/logo.svg" alt="logo">
+            </div>
         </div>
 
         <form @submit.prevent="Singup()">
@@ -87,19 +87,22 @@ async function Singup() {
 
             <div class="password_container">
                 <label for="password"></label>
-                <input v-model="password" :type="passwordFieldType"  placeholder="Password" required>
+                <input v-model="password" :type="passwordFieldType" placeholder="Password" required>
                 <img v-if="eyeIconBool1" @click="toogleEyeIcon(1)" src="../assets/oeil.svg" alt="oeil" class="icon">
-                <img v-if="!eyeIconBool1"@click="toogleEyeIcon(1)" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
+                <img v-if="!eyeIconBool1" @click="toogleEyeIcon(1)" src="../assets/oeilFerme.svg" alt="oeil"
+                    class="icon">
             </div>
 
             <div class="password_container">
                 <label for="confirmPassword"></label>
-                <input v-model="confirmPassword" :type="ConfirmPasswordFieldType" placeholder="Confirm Password" required>
+                <input v-model="confirmPassword" :type="ConfirmPasswordFieldType" placeholder="Confirm Password"
+                    required>
                 <img v-if="eyeIconBool2" @click="toogleEyeIcon(2)" src="../assets/oeil.svg" alt="oeil" class="icon">
-                <img v-if="!eyeIconBool2"@click="toogleEyeIcon(2)" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
+                <img v-if="!eyeIconBool2" @click="toogleEyeIcon(2)" src="../assets/oeilFerme.svg" alt="oeil"
+                    class="icon">
             </div>
             <a href="/login">Already an account ?</a>
-            <button type=submit>Sign up</button>
+            <button type=submit class="button">Sign up</button>
         </form>
 
 
@@ -167,7 +170,7 @@ main {
             font-size: 16px;
             font-family: Arial, Helvetica, sans-serif;
             padding-left: 2rem;
-            padding-right:4rem;
+            padding-right: 4rem;
             width: 100%;
             margin-bottom: 1rem;
 
@@ -190,7 +193,7 @@ main {
                 transform: translateY(-50%);
                 width: 20px;
                 height: 20px;
-                right:20px;
+                right: 20px;
                 top: 22px;
                 cursor: pointer;
             }
@@ -213,16 +216,23 @@ main {
 
         button {
             margin-top: 0.5rem;
-            border: solid #BEBEBE;
-            border-radius: 12px;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-            width: 30%;
-            margin-left: auto;
-            margin-right: auto;
-            color: #BEBEBE;
-            font-size: 16px;
-            font-family: Arial, Helvetica, sans-serif;
+            height: 3rem;
+            background-color: #7D50DD;
+            font-size: 18px;
+
+            &:focus {
+                box-shadow: #6C63FF 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
+            }
+
+            &:active {
+                box-shadow: #6C63FF 0 3px 7px inset;
+                transform: translateY(2px);
+            }
+
+            &:hover {
+                box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
+                transform: translateY(-2px);
+            }
         }
 
     }

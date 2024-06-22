@@ -124,7 +124,7 @@ const filledMessages = () => {
           </div>
         </ul>
         <div class="position-button">
-          <button class="blue" v-if="state.isChef" @click="startGame">Play</button>
+          <button class="button blue" v-if="state.isChef" @click="startGame">Play</button>
         </div>
 
       </div>
@@ -235,11 +235,13 @@ main {
         width: 100%;
         list-style-type: none;
         align-items: center;
+        
+        
 
         .container-player {
           display: flex;
-          justify-content: center;
           flex-direction: column;
+          margin-right: 10%;
 
           .row {
             display: flex;
@@ -330,6 +332,7 @@ main {
         }
 
         ul {
+          
           margin-top: 1rem;
           margin-bottom: 3rem;
           width: 70%;
@@ -340,6 +343,7 @@ main {
             display: flex;
             justify-content: center;
             flex-direction: column;
+            margin-right: 0;
 
             .row {
               display: flex;
@@ -360,35 +364,8 @@ main {
       justify-content: end;
 
       button {
-        align-items: center;
-        appearance: none;
-        border: 0;
-        border-radius: 15px;
-        box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, rgba(58, 65, 111, 0.5) 0 -3px 0 inset;
-        box-sizing: border-box;
-        color: #fff;
-        cursor: pointer;
-        display: inline-flex;
         height: 40px;
-        justify-content: center;
-        line-height: 1;
-        list-style: none;
         margin: 10px;
-        overflow: hidden;
-        position: relative;
-        text-align: center;
-        text-decoration: none;
-        transition: box-shadow 0.15s, transform 0.15s;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        white-space: nowrap;
-        will-change: box-shadow, transform;
-        font-size: 20px;
-        font-weight: bold;
-        font-family: Arial, Helvetica, sans-serif;
-        min-width: 9rem;
-
         &.blue {
           background: #7520FF;
 
