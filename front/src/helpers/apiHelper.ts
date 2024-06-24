@@ -30,6 +30,23 @@ const kyPost = async (url: string, data: any, token:string): Promise<ApiResponse
     }
 };
 
+//kyPost with long timeout
+const kyPostLongTimeout = async (url: string, data: any, token:string): Promise<ApiResponse> => {
+    try {
+        const response:Record<string, unknown> = await api.post(url, { 
+            json: data,
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            timeout: 600000
+        }).json();
+        return { success: true, data: response} as ApiResponse;
+    } catch (error) {
+        console.error(error);
+        return { success: false, data: {} } as ApiResponse;
+    }
+};
+
 //function to make a put request with token
 const kyPut = async (url: string, data: any, token:string): Promise<ApiResponse> => {
     try {
@@ -117,4 +134,4 @@ const getCat = async (): Promise<string> => {
     }
 }
 
-export default { kyPost, kyPut, kyDelete, kyGet, kyPostWithoutToken,kyPutWithoutToken, getCat,kyGetWithToken}
+export default { kyPost, kyPut, kyDelete, kyGet, kyPostWithoutToken,kyPutWithoutToken, getCat,kyGetWithToken, kyPostLongTimeout}

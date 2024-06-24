@@ -19,7 +19,6 @@ let isToastVisible = ref(false);
 
 async function SendPost() {
     // Utiliser ky pour obtenir les données des images
-    const data:any = await ky.get('https://api.thecatapi.com/v1/images/search?limit=2').json();
     const token = localStorage.getItem('token');
     const userId = currentUser?.id;
     if (!token || !userId) {
@@ -34,15 +33,15 @@ async function SendPost() {
 
     const postData: Post = {
       prompt1: text1.value,
-      img_url1: data[0].url,
+      img_url1: '',
       nb_clic1: 0,
       prompt2: text2.value,
-      img_url2: data[1].url,
+      img_url2: '',
       nb_clic2: 0,
       author_id: userId,
     };
 
-    const res = await apiHelper.kyPost('tpf', postData, token);
+    const res = await apiHelper.kyPostLongTimeout('tpf', postData, token);
 
     if (res.success) {
       showToast('Post created', true);
