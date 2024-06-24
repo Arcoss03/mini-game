@@ -40,8 +40,6 @@ io.on('connection', (socket) => {
         [roomId]
       );
       
-
-      
       let chef
       if(owner[0].creator_id==id){
         chef=true
@@ -75,6 +73,20 @@ io.on('connection', (socket) => {
     }
   });
 
+
+
+  socket.on("createPrompt",(room)=>{
+    console.log(room);
+  })
+
+
+  socket.on('play',(room)=>{
+    socket.emit('start');
+    io.to(room).emit('start');
+    
+
+  })
+
   socket.on('disconnect', async() => {
     const disconnectedToken = socketTokens[socket.id];
     
@@ -85,10 +97,7 @@ io.on('connection', (socket) => {
       if (pseudosInRoom[socketRoom[socket.id]].some(tuple => tuple[0] ===userRows[0].pseudo)) {
         pseudosInRoom[socketRoom[socket.id]] = pseudosInRoom[socketRoom[socket.id]].filter(tuple => tuple[0] !== userRows[0].pseudo);
     }
-    const [room]:any=await fastify.db.query('SELECT type FROM room_GP WHERE id = ?', [roomId]);
-      if(room[0].type!=="lobby"){
-        return;
-      }
+    
 
     const delay = 500;
 

@@ -57,8 +57,12 @@ const startGame = async () => {
   if (!res.success) {
     router.push('/login');
   }
+  else{
+    socketClient.play(props.lobbyId);
+  }
 };
 
+socketClient.startGame(props.lobbyId);
 // Ensure there are always 8 elements in state.messages
 const filledMessages = () => {
   const messagesCopy = [...state.messages];
