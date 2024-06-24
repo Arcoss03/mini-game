@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, onMounted, defineProps, onUpdated, onUnmounted, onBeforeUnmount } from 'vue';
+import { reactive, ref, onMounted, defineProps } from 'vue';
 import apiHelper from '@/helpers/apiHelper';
 import router from '@/router';
 import socketClient from '../helpers/socketHelper';
