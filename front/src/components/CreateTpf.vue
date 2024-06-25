@@ -5,63 +5,40 @@ import { useUtilsStore } from '@/stores/utilsStore';
 import { onMounted, ref, type Ref } from 'vue';
 import apiHelper from '../helpers/apiHelper';
 import router from '@/router';
+import GenerateImgPopup from './popups/GenerateImgPopup.vue';
 import { useUserStore } from '@/stores/userStore';
-const currentUser = useUserStore().currentUser;
 
 const showToast = useUtilsStore().showToast;
 
 let text1: Ref<string> = ref('');
 let text2: Ref<string> = ref('');
-let toastMessage = ref('');
-let toastStatus = ref(false);
-let isToastVisible = ref(false);
 
+const popupIsVisible = ref(false);
 
-async function SendPost() {
-    // Utiliser ky pour obtenir les données des images
-    const token = localStorage.getItem('token');
-    const userId = currentUser?.id;
-    if (!token || !userId) {
-      router.push('/login');
-      return;
-    }
+const closePopup = () => {
+  popupIsVisible.value = false;
+  text1.value = '';
+  text2.value = '';
+};
 
-    if (text1.value === '' || text2.value === '') {
-      showToast('Please fill in both prompts', false);
-      return;
-    }
-
-    const postData: Post = {
-      prompt1: text1.value,
-      img_url1: '',
-      nb_clic1: 0,
-      prompt2: text2.value,
-      img_url2: '',
-      nb_clic2: 0,
-      author_id: userId,
-    };
-
-    const res = await apiHelper.kyPostLongTimeout('tpf', postData, token);
-
-    if (res.success) {
-      showToast('Post created', true);
-      text1.value = '';
-      text2.value = '';
-    } else {
-      showToast('Failed to create post', false);
-    }
+const callPopupGeneration = () => {
+  if (text1.value && text2.value) {
+    popupIsVisible.value = true;
+  } else {
+    showToast('Veuillez remplir les deux champs', false);
   }
-
+};
 </script>
 
 <template>
+  <GenerateImgPopup v-if="popupIsVisible" :is-visible="popupIsVisible" :close-popup="closePopup" :text1="text1" :text2="text2" />
   <main>
     <!-- <img src="../assets/logoMG.svg" alt="logo"> -->
     <div class="desc-create">
       <h2>Créé ton propre “ Tu-Préfères ? “ !</h2>
       <p>Ajoute 2 propositions et l'intelligence supérieure artificielle se charge de te créer de superbes images !</p>
     </div>
-    <form @submit.prevent="SendPost()">
+    <form @submit.prevent="callPopupGeneration()">
       <h3>Tu préfères</h3>
       <div class='prompt-input'>
         <input v-model="text1">
@@ -70,7 +47,7 @@ async function SendPost() {
       <div class='prompt-input'>
         <input v-model="text2">
       </div>
-      <button class="button" type=submit>Create</button>
+      <button class="button" type=submit>Générer</button>
     </form>
   </main>
 </template>

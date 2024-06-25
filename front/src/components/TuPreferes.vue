@@ -89,7 +89,7 @@ const getCenterBtnTxt = () => {
   if (img1IsActive.value || img2IsActive.value) {
     return 'Next';
   }
-  return 'OR';
+  return 'OU';
 };
 
 </script>
