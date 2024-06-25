@@ -58,16 +58,16 @@ async function SendPost() {
   <main>
     <!-- <img src="../assets/logoMG.svg" alt="logo"> -->
     <div class="desc-create">
-      <h2>Créé ton propre "Tu-préfères?" !</h2>
+      <h2>Créé ton propre “ Tu-Préfères ? “ !</h2>
       <p>Ajoute 2 propositions et l'intelligence supérieure artificielle se charge de te créer de superbes images !</p>
     </div>
     <form @submit.prevent="SendPost()">
+      <h3>Tu préfères</h3>
       <div class='prompt-input'>
-        <label for="prompt1">First Prompt</label>
         <input v-model="text1">
       </div>
+      <h3>ou</h3>
       <div class='prompt-input'>
-        <label for="prompt2">Second Prompt</label>
         <input v-model="text2">
       </div>
       <button class="button" type=submit>Create</button>
@@ -83,19 +83,12 @@ main {
   justify-content: space-evenly;
   height: 100%;
   width: 100%;
+  padding: 0 2rem;
   background-color: #211D2A ;
   overflow: hidden;
   font-weight: 400;
   font-style: normal;
-
-
-  .toast {
-    opacity: 0;
-
-    &.show {
-      opacity: 1;
-    }
-  }
+  
 
   .small-svg {
     border: solid;
@@ -109,15 +102,24 @@ main {
   .prompt-input {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10%;
+    width: 100%;
 
     input {
-      width: 300px;
+      width: 80vw;
       height: 40px;
-      padding: 8px;
+      padding: 1rem;
       border: 2px solid #fff;
       border-radius: 8px;
       outline: none;
+      font-size: 16px;
+      margin-bottom: 1rem;
+    }
+    @media screen and (min-width: 1024px){
+      input {
+        width: 40vw;
+      }
+      padding-bottom: 2rem;
+      
     }
   }
 
@@ -142,7 +144,7 @@ main {
   .desc-create {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     justify-content: center;
     color: white;
     font-size: 1.5em;
