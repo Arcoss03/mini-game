@@ -9,6 +9,8 @@ const setupSocketGF = (fastify: FastifyInstance) => {
   
   const pseudosInRoom: { [roomId: string]: any[] } = {};
 
+  const roomGp: { [roomId: string]: any[] } = {};
+  const socketTokenRoom: { [roomId: string]: any[] } = {};
  let socketTokens: { [socketId: string]:string } = {};
  let socketRoom: { [socketId: string]:string } = {};
 io.on('connection', (socket) => {
@@ -75,8 +77,54 @@ io.on('connection', (socket) => {
 
 
 
-  socket.on("createPrompt",(room)=>{
-    console.log(room);
+  socket.on("createPrompt",async (room)=>{
+    roomGp[room.roomId] = [];
+    console.log(socketTokenRoom[room.roomId])
+    try{
+    const token = room.token;
+      const decoded = await fastify.jwt.verify(token);
+      const { id } = decoded as { id: string };
+      const [insertPrompt]: any = await fastify.db.query(
+        'INSERT INTO guess_prompt (img_url, prompt, turn, user_id, game_GP_id, id_GP_before) VALUES (?, ?, ?, ?, ?, ?);'
+        , [room.data,room.prompt,room.turn,id,room.roomId-11111,room.last]);
+        const insertId = insertPrompt.insertId;
+        if (!roomGp[room.roomId]) {
+          roomGp[room.roomId] = [];
+        }
+
+        if (!roomGp[room.roomId].includes(insertId)) {
+          roomGp[room.roomId].push(insertId);
+        }
+        if (!socketTokenRoom[room.roomId]) {
+          socketTokenRoom[room.roomId] = [];
+        }
+
+        if (!socketTokenRoom[room.roomId].some(pair => pair[0] === socket.id && pair[1] === id)) {
+          socketTokenRoom[room.roomId].push([socket.id, id]);
+        }
+        const delay=room.timer*1000+3000;
+
+        setTimeout(async() => {
+          let index = socketTokenRoom[room.roomId].findIndex(pair => pair[0] === socket.id && pair[1] === id);
+          if(socketTokenRoom[room.roomId][index+room.turn+1]==undefined){
+            index=0;
+          }else{
+            index+=room.turn+1;
+          }
+          /*if(socketTokenRoom[room.roomId].length==turn+1){
+            socket.emit("resume");
+          }else{*/
+          const [nextPrompt]: any = await fastify.db.query(
+            'SELECT * FROM guess_prompt WHERE id=?'
+            , [roomGp[room.roomId][index]]);
+            socket.emit("nextPrompt",{img:nextPrompt[0].img_url,turn:nextPrompt[0].turn,id:nextPrompt[0].id})
+         // }
+    }, delay);}
+    catch{
+      console.log("error")
+    }
+        
+      
   })
 
 
