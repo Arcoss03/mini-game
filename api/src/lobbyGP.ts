@@ -12,6 +12,7 @@ const setupSocketGF = (fastify: FastifyInstance) => {
   const roomGp: { [roomId: string]: any[] } = {};
   const socketTokenRoom: { [roomId: string]: any[] } = {};
  let socketTokens: { [socketId: string]:string } = {};
+ let turn: { [roomId: string]:string } = {};
  let socketRoom: { [socketId: string]:string } = {};
 io.on('connection', (socket) => {
   socket.on('joinGF', async (room) => {
@@ -77,9 +78,14 @@ io.on('connection', (socket) => {
 
 
 
+ 
   socket.on("createPrompt",async (room)=>{
-    roomGp[room.roomId] = [];
-    console.log(socketTokenRoom[room.roomId])
+
+    if(turn[room.roomId]!=room.turn){
+      turn[room.roomId]=room.turn;
+      roomGp[room.roomId] = [];
+    }
+    
     try{
     const token = room.token;
       const decoded = await fastify.jwt.verify(token);
@@ -88,37 +94,47 @@ io.on('connection', (socket) => {
         'INSERT INTO guess_prompt (img_url, prompt, turn, user_id, game_GP_id, id_GP_before) VALUES (?, ?, ?, ?, ?, ?);'
         , [room.data,room.prompt,room.turn,id,room.roomId-11111,room.last]);
         const insertId = insertPrompt.insertId;
+        
         if (!roomGp[room.roomId]) {
           roomGp[room.roomId] = [];
         }
+        
 
-        if (!roomGp[room.roomId].includes(insertId)) {
-          roomGp[room.roomId].push(insertId);
+        if (!roomGp[room.roomId].some(pair => pair[0] === socket.id )) {
+          roomGp[room.roomId].push([socket.id,insertId]);
         }
         if (!socketTokenRoom[room.roomId]) {
           socketTokenRoom[room.roomId] = [];
         }
 
-        if (!socketTokenRoom[room.roomId].some(pair => pair[0] === socket.id && pair[1] === id)) {
+        if (!socketTokenRoom[room.roomId].some(pair => pair[0] === socket.id || pair[1] === id)) {
           socketTokenRoom[room.roomId].push([socket.id, id]);
         }
+        
         const delay=room.timer*1000+3000;
-
         setTimeout(async() => {
-          let index = socketTokenRoom[room.roomId].findIndex(pair => pair[0] === socket.id && pair[1] === id);
-          if(socketTokenRoom[room.roomId][index+room.turn+1]==undefined){
-            index=0;
-          }else{
-            index+=room.turn+1;
-          }
-          /*if(socketTokenRoom[room.roomId].length==turn+1){
-            socket.emit("resume");
-          }else{*/
-          const [nextPrompt]: any = await fastify.db.query(
-            'SELECT * FROM guess_prompt WHERE id=?'
-            , [roomGp[room.roomId][index]]);
-            socket.emit("nextPrompt",{img:nextPrompt[0].img_url,turn:nextPrompt[0].turn,id:nextPrompt[0].id})
-         // }
+          
+            let index :any= socketTokenRoom[room.roomId].findIndex(pair => pair[0] === socket.id && pair[1] === id);
+            if(socketTokenRoom[room.roomId][index+room.turn+1]==undefined){
+              index=0;
+            }else{
+              index+=room.turn+1;
+            }
+            if(socketTokenRoom[room.roomId].length==room.turn+1){
+              socket.emit("resume");
+              const delay2=3000;
+        setTimeout(async() => {socketTokenRoom[room.roomId]=[]}, delay2)
+            }else{
+             let preIndex=socketTokenRoom[room.roomId][index];
+            index=preIndex[0];     
+            let  idGP= roomGp[room.roomId].find(subArray => subArray[0] === index);
+            const [nextPrompt]: any = await fastify.db.query(
+              'SELECT * FROM guess_prompt WHERE id=?'
+              , [idGP[1]]);
+              socket.emit("nextPrompt",{img:nextPrompt[0].img_url,turn:nextPrompt[0].turn,id:nextPrompt[0].id})
+           }
+          
+          
     }, delay);}
     catch{
       console.log("error")

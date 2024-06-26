@@ -67,6 +67,13 @@ const router = createRouter({
       path: '/gmp/:gmpId',
       name: 'GameGmp',
       component: () => import('../views/GuessMyPromptView.vue'),
+      props: true
+    },
+    {
+      path: '/resume/:gmpId',
+      name: 'ResumeGameGmp',
+      component: () => import('../views/ResumeGmpView.vue'),
+      props: true
     },
     {
 

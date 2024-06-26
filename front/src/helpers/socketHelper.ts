@@ -69,8 +69,8 @@ const play=(room:any)=>{
 }
 
 const startGame=(gmpId:any)=>{
-  socket.on('start',()=>{
-    router.push({ name: 'gmp', params: { gmpId } });
+  socket.on('start',()=>{ 
+    router.push({ name: 'GameGmp', params: { gmpId } });
   });
 }
 
