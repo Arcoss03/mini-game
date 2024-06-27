@@ -5,8 +5,8 @@ import { useUtilsStore } from '@/stores/utilsStore';
 import { onMounted, ref, type Ref } from 'vue';
 import apiHelper from '../helpers/apiHelper';
 import router from '@/router';
-import GenerateImgPopup from './popups/GenerateImgPopup.vue';
 import { useUserStore } from '@/stores/userStore';
+import GenerateImgPopup from './popups/generateImgPopup.vue';
 
 const showToast = useUtilsStore().showToast;
 
