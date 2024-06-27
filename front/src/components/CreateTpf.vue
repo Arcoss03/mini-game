@@ -124,7 +124,7 @@ main {
     }
 
     padding: 0px 20px;
-    border: solid #fff;
+
     border-radius: 20px;
     color: var(--color-text);
   }
