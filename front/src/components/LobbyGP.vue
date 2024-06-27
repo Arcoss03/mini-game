@@ -5,7 +5,7 @@ import router from '@/router';
 import socketClient from '../helpers/socketHelper';
 import Chat from './Chat.vue';
 
-
+localStorage.removeItem('endTime');
 const state = reactive({
   messages: [] as Array<[string, string, string]>,
   name: '',

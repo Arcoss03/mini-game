@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, defineProps, reactive } from 'vue';
 import ky from 'ky';
+import socketHelper from '@/helpers/socketHelper';
 import { io } from 'socket.io-client';
 import router from '@/router';
 
@@ -70,6 +71,8 @@ socket.on("resume",()=>{
   let gmpId=props.gmpId
   router.push({ name: 'ResumeGameGmp', params: { gmpId } });
 })
+
+
 
 onMounted(() => {
   const storedEndTime: any = localStorage.getItem('endTime');

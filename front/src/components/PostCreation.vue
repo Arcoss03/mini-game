@@ -9,12 +9,10 @@ import { useUserStore } from '@/stores/userStore';
 const currentUser = useUserStore().currentUser;
 
 const showToast = useUtilsStore().showToast;
-
+localStorage.removeItem('endTime');
 let text1: Ref<string> = ref('');
 let text2: Ref<string> = ref('');
-let toastMessage = ref('');
-let toastStatus = ref(false);
-let isToastVisible = ref(false);
+
 
 
 async function SendPost() {

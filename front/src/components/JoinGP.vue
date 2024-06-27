@@ -7,7 +7,7 @@ import socketHelper from '@/helpers/socketHelper';
 
 const roomId = ref<string>('');
 const showToast = useUtilsStore().showToast;
-
+localStorage.removeItem('endTime');
 socketHelper.disconnect();
 
 interface JoinRoomResponse {

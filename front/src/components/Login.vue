@@ -5,7 +5,7 @@ import apiHelper from '@/helpers/apiHelper';
 import { useUtilsStore } from '@/stores/utilsStore';
 import router from '@/router';
 
-
+localStorage.removeItem('endTime');
 const showToast = useUtilsStore().showToast;
 
 let username: Ref<string> = ref('');

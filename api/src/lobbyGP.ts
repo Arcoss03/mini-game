@@ -94,6 +94,7 @@ io.on('connection', (socket) => {
         'INSERT INTO guess_prompt (img_url, prompt, turn, user_id, game_GP_id, id_GP_before) VALUES (?, ?, ?, ?, ?, ?);'
         , [room.data,room.prompt,room.turn,id,room.roomId-11111,room.last]);
         const insertId = insertPrompt.insertId;
+       
         
         if (!roomGp[room.roomId]) {
           roomGp[room.roomId] = [];
@@ -136,8 +137,8 @@ io.on('connection', (socket) => {
           
           
     }, delay);}
-    catch{
-      console.log("error")
+    catch(error){
+      socket.emit("error",(error));
     }
         
       
