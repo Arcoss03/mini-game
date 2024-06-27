@@ -66,7 +66,7 @@ async function Login() {
                 <img v-if="!eyeIconBool" @click="toogleEyeIcon" src="../assets/oeilFerme.svg" alt="oeil" class="icon">
             </div>
             <a href="/signup">Sign in</a>
-            <button type=submit>Log In</button>
+            <button type=submit class="button">Log In</button>
         </form>
 
 
@@ -179,17 +179,24 @@ main {
         }
 
         button {
-            margin-top: 1.5rem;
-            border: solid #BEBEBE;
-            border-radius: 12px;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-            width: 30%;
-            margin-left: auto;
-            margin-right: auto;
-            color: #BEBEBE;
-            font-size: 16px;
-            font-family: Arial, Helvetica, sans-serif;
+            margin-top: 0.5rem;
+            height: 3rem;
+            background-color: #7D50DD;
+            font-size: 18px;
+
+            &:focus {
+                box-shadow: #6C63FF 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
+            }
+
+            &:active {
+                box-shadow: #6C63FF 0 3px 7px inset;
+                transform: translateY(2px);
+            }
+
+            &:hover {
+                box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
+                transform: translateY(-2px);
+            }
         }
 
     }

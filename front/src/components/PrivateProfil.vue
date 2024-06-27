@@ -16,7 +16,7 @@ import apiHelper from '@/helpers/apiHelper';
 import iconAddImg from './icons/icon-add-img.vue';
 import iconAddText from './icons/icon-add-text.vue';
 import iconAddBadge from './icons/icon-add-badge.vue';
-import BadgesPopupList from './BadgesPopupList.vue';
+import BadgesPopupList from './popups/BadgesPopupList.vue';
 import type { BadgeTypes } from '@/interfaces/badges';
 import badgeItem  from '@/components/BadgeItem.vue';
 

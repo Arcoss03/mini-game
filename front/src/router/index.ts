@@ -25,7 +25,7 @@ const router = createRouter({
     {
       path: '/create/tpf',
       name: 'createTpf',
-      component: () => import('../views/PostCreationView.vue')
+      component: () => import('../views/CreateTpfView.vue')
     },
     {
       path: '/tpf',

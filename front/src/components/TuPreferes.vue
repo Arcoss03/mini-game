@@ -89,7 +89,7 @@ const getCenterBtnTxt = () => {
   if (img1IsActive.value || img2IsActive.value) {
     return 'Next';
   }
-  return 'OR';
+  return 'OU';
 };
 
 </script>
@@ -147,6 +147,7 @@ main {
       padding-bottom: 1rem;
     }
 
+    
     button {
       width: 100%;
       height: 100%;
