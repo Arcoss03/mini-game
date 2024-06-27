@@ -37,6 +37,7 @@ export const useUtilsStore = defineStore('utils', () => {
   const toggleTheme = () => {
     theme.value = theme.value === 'light' ? 'dark' : 'light'
     localStorage.setItem('theme', theme.value)
+    applyTheme(theme.value)
   }
 
   const applyTheme = (theme: string) => {

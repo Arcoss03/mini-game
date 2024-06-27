@@ -116,7 +116,7 @@ const updateItemDim = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #17141D;
+    background-color: var(--bg-color-elements);
 
     img {
         border-radius: 8px;

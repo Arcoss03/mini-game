@@ -1,5 +1,17 @@
 <script setup lang="ts">
 
+import { useUtilsStore } from '@/stores/utilsStore';
+
+const utilsStore = useUtilsStore();
+
+const onThemeChange = (event: Event) => {
+    const target = (event.target as HTMLSelectElement); // Utilisation de 'as' pour le cast
+    const selectedTheme = target.value; // Accès sécurisé à `value`
+    utilsStore.toggleTheme(); // Supposons que cela change le thème basé sur `selectedTheme`
+
+    console.log(selectedTheme);
+};
+
 </script>
 
 <template>
@@ -8,7 +20,7 @@
         <div class="content">
             <li>
                 <label for="theme">Theme</label>
-                <select name="theme" class="theme">
+                <select name="theme" class="theme" @change="onThemeChange" >
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
                 </select>
@@ -22,8 +34,8 @@
 main {
     //les classes pour le mobile
     min-height: 100vh;
-    background-color: #211D2A;
-    color: white;
+    background-color: var(--bg-color);
+    color: var(--color-text);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -54,8 +66,8 @@ main {
         width: 100px;
         height: 30px;
         border-radius: 5px;
-        background-color: #211D2A;
-        color: white;
+        background-color: var(--bg-color);
+        color: var(--color-text);
         border: 1px solid white;
         margin-bottom: 20px;
     }

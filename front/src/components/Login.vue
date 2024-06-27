@@ -76,7 +76,7 @@ async function Login() {
 <style scoped lang="scss">
 main {
     min-height: 100vh;
-    background: #211D2A;
+    background: var(--bg-color);
     display: flex;
     flex-direction: column;
     align-items: center;

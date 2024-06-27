@@ -331,8 +331,8 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
   width: 50px;
   height: 50px;
   border-radius: 9999px;
-  background-color: #7D50DD;
-  color: #fff;
+  background-color: var(--violet);
+  color: var(--color-text);
   font-size: 30px;
   display: flex;
   justify-content: space-around;
@@ -350,7 +350,7 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
     flex-direction: column;
     gap: 10px;
     padding: 10px 0;
-    color: #fff;
+    color: var(--color-text);
 
     .icon {
       width: 24px;
@@ -361,7 +361,7 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
   }
 
   &:hover {
-    background-color: #6a1f8a;
+    background-color: var(--violet);
     width: 200px; // Agrandir le bouton
     justify-content: space-between; // Pour séparer les boutons correctement
     padding: 0 20px; // Ajouter un padding pour le confort visuel
@@ -382,12 +382,12 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
 
 .vgl-layout {
   background: transparent;
-  --vgl-placeholder-bg: #7D50DD;
+  --vgl-placeholder-bg: var(--violet);
   width: 100%;
 }
 
 :deep(.vgl-item:not(.vgl-item--placeholder)) {
-  background-color: #ccc;
+  background-color: var(--bg-color-elements);
   border-radius: 12px;
   position: relative;
   z-index: 4;
@@ -410,8 +410,8 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
     overflow: auto;
     resize: none;
     border-radius: 8px;
-    background-color: #17141D;
-    color: white;
+    background-color: var(--bg-color-elements);
+    color: var(--color-text);
     padding: 10px;
     outline: none;
     /* enlève l'outline */
@@ -458,7 +458,7 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
         border-radius: 999px;
       }
       .btn-pp {
-        background: #7D50DD;
+        background: var(--violet);
         position: absolute;
         border-radius: 999px;
         display: flex;
@@ -480,13 +480,13 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
     input {
       font-size: 44px;
       font-weight: 700;
-      color: white;
+      color: var(--color-text);
       background: transparent;
       border: none;
       outline: none;
     }
     .descrition {
-      color: white;
+      color: var(--color-text);
       word-break: break-all;
       font-size: 20px;
       background: transparent;
@@ -542,7 +542,7 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #7d50dda8;
+  background-color: var(--violet);
   padding: 5px;
   border-radius: 5px;
   text-align: center;
@@ -553,7 +553,7 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
   margin: 0 20px;
 
   button {
-    color: white;
+    color: var(--color-text);
     flex-grow: 1;
     width: 100%;
     height: 100%;
@@ -601,7 +601,7 @@ const isBadgeInLayout = (badges: BadgeTypes[]) => {
   top: 8px;
   left: 8px;
   font-size: 18px;
-  color: white;
+  color: var(--color-text);
   text-shadow: 0 0 5px black;
 }
 </style>
