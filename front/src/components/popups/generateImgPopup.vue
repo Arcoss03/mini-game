@@ -69,11 +69,11 @@ async function SendPost() {
                     <h2>Tu-Préfères Généré</h2>
                     <div class="tpf">
                         <div class="or">OU</div>
-                        <div>
+                        <div class="contain">
                             <img class="first" :src="img_url1" alt="second img">
                             <h4>{{ text1 }}</h4>
                         </div>
-                        <div>
+                        <div class="contain">
                             <img class="second" :src="img_url2" alt="second img">
 
                             <h4>{{ text2 }}</h4>
@@ -139,21 +139,26 @@ async function SendPost() {
             .tpf {
                 display: flex;
                 font-size: 1rem;
-                img {
-                    display: flex;
-                    width: 100%;
-                    aspect-ratio: 1;
-                    object-fit: cover;
+                width: 100%;
+                .contain {
+                    width: 50%;
 
-                    &.first {
-                        border-radius: 12px 0 0 12px;
-                        border-right: #17141D 5px solid;
-                    }
-                    &.second {
-                        border-radius: 0 12px 12px 0;
-                        border-left: #17141D 5px solid;
+                    img {
+                        width: 100%;
+                        aspect-ratio: 1;
+                        object-fit: cover;
+    
+                        &.first {
+                            border-radius: 12px 0 0 12px;
+                            border-right: #17141D 5px solid;
+                        }
+                        &.second {
+                            border-radius: 0 12px 12px 0;
+                            border-left: #17141D 5px solid;
+                        }
                     }
                 }
+                
                 text-align: center;
 
                 .or {
