@@ -6,7 +6,7 @@ async function getRoutes(fastify: FastifyInstance) {
 
     //get all tu_preferes
     fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
-        const [rows] = await fastify.db.query('SELECT * FROM tu_preferes ORDER BY RAND()');
+        const [rows] = await fastify.db.query('SELECT * FROM tu_preferes ORDER BY RAND() LIMIT 30;');
         reply.send(rows);
     });
 
@@ -18,7 +18,10 @@ async function getRoutes(fastify: FastifyInstance) {
             `SELECT tp.*
             FROM tu_preferes tp
             LEFT JOIN play_tpf pt ON tp.id = pt.tu_preferes_id AND pt.user_id = ?
-            WHERE pt.tu_preferes_id IS NULL;`,
+            WHERE pt.tu_preferes_id IS NULL
+            ORDER BY RAND()
+            LIMIT 30;
+            `,
             [userId]
           );
     

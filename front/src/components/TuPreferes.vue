@@ -9,21 +9,21 @@ const showToast = useUtilsStore().showToast;
 const utilsStore = useUtilsStore();
 let img1IsActive = ref(false);
 let img2IsActive = ref(false);
-let postTab: Ref<Post[]> = ref([]);
+let tabTpf: Ref<Post[]> = ref([]);
 let tabPosition: Ref<number> = ref(0);
 const isNavOpen = useUtilsStore().isNavbarOpen;
 
 const currentUser = useUserStore().currentUser;
 
 onMounted(async () => {
-  postTab.value = await getAllPosts() ?? [];
+  tabTpf.value = await getTpfs() ?? [];
 });
 
 const setImg1 = () => {
-  if (!img1IsActive.value && !img2IsActive.value && postTab.value.length !== 0) {
+  if (!img1IsActive.value && !img2IsActive.value && tabTpf.value.length !== 0) {
     img1IsActive.value = true;
     img2IsActive.value = false;
-    vote(postTab.value[tabPosition.value].id!, 1);
+    vote(tabTpf.value[tabPosition.value].id!, 1);
   }
 };
 
@@ -32,11 +32,11 @@ const setImg2 = () => {
     img1IsActive.value = false;
     img2IsActive.value = true;
 
-    vote(postTab.value[tabPosition.value].id!, 2);
+    vote(tabTpf.value[tabPosition.value].id!, 2);
   }
 };
 
-async function getAllPosts(): Promise<Post[] | undefined> {
+async function getTpfs(): Promise<Post[] | undefined> {
   let res;
   if (currentUser?.id) {
     res = await apiHelper.kyGet(`tpf/${currentUser.id}`);
@@ -59,9 +59,9 @@ const getPercentage = (nbClic1: number, nbClic2: number) => {
 
 const isVoteMajority = (selectedClick: number) => {
   if (selectedClick === 1) {
-    return postTab.value[tabPosition.value].nb_clic1 > postTab.value[tabPosition.value].nb_clic2;
+    return tabTpf.value[tabPosition.value].nb_clic1 > tabTpf.value[tabPosition.value].nb_clic2;
   } else {
-    return postTab.value[tabPosition.value].nb_clic2 > postTab.value[tabPosition.value].nb_clic1;
+    return tabTpf.value[tabPosition.value].nb_clic2 > tabTpf.value[tabPosition.value].nb_clic1;
   }
 };
 
@@ -76,10 +76,13 @@ const vote = async (id: number, selectedClick: number) => {
   }
 };
 
-const nextPost = () => {
+const nextPost = async() => {
   tabPosition.value++;
-  if (tabPosition.value >= postTab.value.length) {
-    tabPosition.value = 0;
+  if (!img1IsActive.value && !img2IsActive.value) {
+    return;
+  }
+  if (tabPosition.value >= tabTpf.value.length -1) {
+    tabTpf.value = [...tabTpf.value, ...(await getTpfs() ?? [])];
   }
   img1IsActive.value = false;
   img2IsActive.value = false;
@@ -95,7 +98,7 @@ const getCenterBtnTxt = () => {
 </script>
 
 <template>
-  <main v-if="postTab.length !== 0">
+  <main v-if="tabTpf.length !== 0">
     <button :class="{ hide: !(img1IsActive || img2IsActive), navopen: isNavOpen()}" class="button-next"
       @click="nextPost()">{{ getCenterBtnTxt() }}
     </button>
@@ -103,21 +106,21 @@ const getCenterBtnTxt = () => {
     <div class="container first">
       <button class="img-container fisrt-img">
         <img @click="setImg1()" :class="{ active: img1IsActive, no_colors: img2IsActive }"
-          :src="postTab[tabPosition].img_url1" alt="">
+          :src="tabTpf[tabPosition].img_url1" alt="">
       </button>
-      <h2 :class="{ navopen: isNavOpen() }" class="first" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic1,
-        postTab[tabPosition].nb_clic2) }}</h2>
-      <h3 :class="{ navopen: isNavOpen() }" class="first">{{ postTab[tabPosition].prompt1 }}</h3>
+      <h2 :class="{ navopen: isNavOpen() }" class="first" v-if="img1IsActive || img2IsActive">{{ getPercentage(tabTpf[tabPosition].nb_clic1,
+        tabTpf[tabPosition].nb_clic2) }}</h2>
+      <h3 :class="{ navopen: isNavOpen() }" class="first">{{ tabTpf[tabPosition].prompt1 }}</h3>
     </div>
     <div :class="{ navopen: isNavOpen() }" class="divide-bar"></div>
     <div class="container second">
       <button class="img-container second-img">
         <img @click="setImg2()" :class="{ active: img2IsActive, no_colors: img1IsActive }"
-          :src="postTab[tabPosition].img_url2" alt="">
+          :src="tabTpf[tabPosition].img_url2" alt="">
       </button>
-      <h2 :class="{ navopen: isNavOpen() }" class="second" v-if="img1IsActive || img2IsActive">{{ getPercentage(postTab[tabPosition].nb_clic2,
-        postTab[tabPosition].nb_clic1) }}</h2>
-      <h3 :class="{ navopen: isNavOpen() }" class="second">{{ postTab[tabPosition].prompt2 }}</h3>
+      <h2 :class="{ navopen: isNavOpen() }" class="second" v-if="img1IsActive || img2IsActive">{{ getPercentage(tabTpf[tabPosition].nb_clic2,
+        tabTpf[tabPosition].nb_clic1) }}</h2>
+      <h3 :class="{ navopen: isNavOpen() }" class="second">{{ tabTpf[tabPosition].prompt2 }}</h3>
     </div>
   </main>
 </template>
