@@ -4,15 +4,31 @@ import { useUtilsStore } from '@/stores/utilsStore';
 import { useUserStore } from '@/stores/userStore';
 import hideNavBar from '@/components/icons/icon-hide-bar.vue'
 import { onMounted, ref } from 'vue';
+import { watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 const toggleNav = useUtilsStore().toogleNavBar;
 const isNavOpen = useUtilsStore().isNavbarOpen;
 
-//define props:
+const currentUrl = ref(window.location.pathname);
+
+const route = useRoute();
+
+// Mettre à jour currentUrl chaque fois que l'URL change
+watch(route, () => {
+    currentUrl.value = window.location.pathname;
+});
 
 const props = defineProps<{
     profil_picture: string;
 }>()
+
+const isInUrl = (url: string) => {
+    console.log(currentUrl.value);
+    console.log(url);
+    return currentUrl.value.includes(url);
+}
+
 
 
 </script>
@@ -25,14 +41,17 @@ const props = defineProps<{
     <div class="navbar" :class="{navClose: !isNavOpen()}">
         <RouterLink class="Rte logo" to="/"><img src="../assets/logoMG.svg" alt=""></RouterLink>
 
-        <RouterLink class="Rte" to="/tpf"><img class="img" src="../assets/TPF.svg" alt="">Tu Preferes</RouterLink>
+        <RouterLink :class="{active: isInUrl('tpf')}" class="Rte" to="/tpf"><img class="img" src="../assets/TPF.svg" alt="">Tu Preferes</RouterLink>
 
-        <RouterLink class="Rte" to="/create/tpf"><img class="img" src="../assets/AddIcon.svg" alt="">Ajouter</RouterLink>
+        <RouterLink :class="{active: isInUrl('create/tpf')}" class="Rte" to="/create/tpf"><img class="img" src="../assets/AddIcon.svg" alt="">Ajouter</RouterLink>
 
         <RouterLink class="Rte" to="/settings"><img class="img" src="../assets/set.svg" alt="">Paramètres</RouterLink>
 
-        <RouterLink v-if="profil_picture === ''" class="Rte" id="log" to="/login"><img src="../assets/login_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="">Se Connecter</RouterLink>
-        <RouterLink v-if="profil_picture !== ''" class="Rte" id="log" to="/profil"><img class="pp" :src="profil_picture" alt="">Profil</RouterLink>
+        <RouterLink v-if="profil_picture === ''" class="Rte" id="log" to="/login">
+            <img src="../assets/login_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+            <div>Connexion</div>
+        </RouterLink>
+        <RouterLink :class="{active: isInUrl('profil')}" v-if="profil_picture !== ''" class="Rte" id="log" to="/profil"><img class="pp" :src="profil_picture" alt="">Profil</RouterLink>
 
     </div>
 </template>
@@ -53,19 +72,11 @@ const props = defineProps<{
     padding: 10px;
     width: 100vw;
     z-index: 999;
-
-
-    .logo {
-        display: none;
-        img {
-            display: none;
-        }
-    }
+    gap: 10px;
 
     a {
         color: white;
         text-decoration: none;
-        margin: 10px;
     }
 
     .log {
@@ -76,6 +87,19 @@ const props = defineProps<{
         display: flex;
         flex-direction: column;
         align-items: center;
+        flex-grow: 1;
+        flex: 1;
+        padding: 10px 0;
+
+        &.active {
+            background-color: red;
+            border-radius: 8px;
+            
+        }
+
+        &.logo {
+        display: none;
+    }
     }
     .img {
         width: 20px;
@@ -83,13 +107,9 @@ const props = defineProps<{
     }
 
     .pp {
-        width: 40px;
-        height: 40px;
+        width: 24px;
+        height: 24px;
         border-radius: 999px;
-    }
-
-    .hide {
-        color: red;
     }
 
     //les classes pour le desktop
@@ -101,26 +121,35 @@ const props = defineProps<{
         width: 110px;
         height: 100vh;
 
+        .pp {
+            width: 40px;
+            height: 40px;
+        }
+
         &.navClose {
             display: none;
             width: 0;
         }
 
-        .logo {
-            display: block;
-            img {
-                display: block;
-                width: 100px;
-                height: 100px;
+        .Rte {
+            &.logo {
+                display: flex;
+                img {
+                    display: block;
+                    width: 100px;
+                    height: 100px;
+                    margin-top: 1rem;
+                }
             }
-            margin: 2rem 0 1rem;
+
+            flex: auto;
+            flex-grow: 0;
+            width: 100%;
         }
+
         #log {
             position: fixed;
             bottom: 0;
-        }
-        a {
-            margin: 10px 0;
         }
     }
 
