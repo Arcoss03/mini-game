@@ -26,6 +26,7 @@ const initialTime = 10;
 const timeLeft = ref(initialTime);
 let timer: any = null;
 let last: any = null;
+let genere: boolean = true;
 
 const startTimer = () => {
   if (timer) clearInterval(timer);
@@ -43,19 +44,23 @@ const startTimer = () => {
 };
 
 const submitPrompt = async () => {
-  const data: any = await ky.get('https://api.thecatapi.com/v1/images/search?limit=1').json();
-
-  if (prompt.value === '') {
-    prompt.value = "Quand tu réalises que même un œuf a une meilleure chance de devenir quelque chose de plus extraordinaire que toi";
+  if (genere == true) {
+    if (prompt.value === '') {
+      prompt.value = "Quand tu réalises que même un œuf a une meilleure chance de devenir quelque chose de plus extraordinaire que toi";
+    }
+    const data: any = await ky.get('https://api.thecatapi.com/v1/images/search?limit=1').json();
+    socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, data: data[0].url, timer: timeLeft.value, turn: state.turn, last: last }); socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, data: data[0].url, timer: timeLeft.value, turn: state.turn, last: last });
+    genere=false;
   }
 
   clearInterval(timer);
-  socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, data: data[0].url, timer: timeLeft.value, turn: state.turn, last: last });
+
   timeLeft.value = 0;
   localStorage.removeItem('endTime');
 };
 
 socket.on("nextPrompt", (data) => {
+  genere=true;
   state.turn = data.turn + 1;
   last = data.id;
   state.img = data.img;
@@ -104,8 +109,8 @@ onUnmounted(() => {
         </p>
       </div>
       <div class="image">
-      <img v-if="state.img" :src="state.img" alt="">
-    </div>
+        <img v-if="state.img" :src="state.img" alt="">
+      </div>
       <div class="form">
         <form @submit.prevent="submitPrompt">
           <input type="text" v-model="prompt" id="prompt" placeholder="Saisir votre prompt">
@@ -146,34 +151,37 @@ main {
         margin-left: 8%;
       }
     }
-    .image{
+
+    .image {
       display: flex;
+
       img {
-      margin-top: 5rem;
-      max-width: 20rem;
-      border:solid red;
-      border-radius: 16px;
+        margin-top: 5rem;
+        max-width: 20rem;
+        border: solid red;
+        border-radius: 16px;
 
-      @media(min-width: 1024px) {
-        min-width: 30rem;
-        margin-top: 2rem ;
+        @media(min-width: 1024px) {
+          min-width: 30rem;
+          margin-top: 2rem;
+        }
       }
-    }
-    
-    justify-content: center;
+
+      justify-content: center;
     }
 
-    
+
 
     .form {
       min-width: 90%;
       margin-top: 5rem;
       display: flex;
-      flex-direction: column;      
+      flex-direction: column;
 
       .positionButton {
-        margin-top:1rem ;
+        margin-top: 1rem;
         text-align: center;
+
         .create {
           background: red;
           height: 2.5rem;
@@ -191,14 +199,15 @@ main {
             box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #ff4e50 0 -3px 0 inset;
             transform: translateY(-2px);
           }
+
           @media(min-width: 1024px) {
             height: 3rem;
             margin-left: 10%;
           }
 
         }
-        
-        
+
+
       }
 
 
@@ -215,26 +224,28 @@ main {
         &::placeholder {
           font-size: 1rem;
         }
-        
+
       }
+
       @media(min-width: 1024px) {
         text-align: end;
         width: 80%;
-        margin-top:2rem;
+        margin-top: 2rem;
       }
     }
 
     .info {
-      margin: 1rem 1rem 0 ;
+      margin: 1rem 1rem 0;
       display: flex;
       justify-content: space-between;
+
       @media(min-width: 1024px) {
         margin-left: 10%;
         margin-right: 10%;
         margin-top: 0.5rem;
       }
     }
-    
+
 
 
   }
