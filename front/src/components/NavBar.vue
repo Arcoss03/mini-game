@@ -26,7 +26,7 @@ const props = defineProps<{
 const isInUrl = (url: string) => {
     console.log(currentUrl.value);
     console.log(url);
-    return currentUrl.value.includes(url);
+    return currentUrl.value === `/${url}`;
 }
 
 
@@ -45,13 +45,16 @@ const isInUrl = (url: string) => {
 
         <RouterLink :class="{active: isInUrl('create/tpf')}" class="Rte" to="/create/tpf"><img class="img" src="../assets/AddIcon.svg" alt="">Ajouter</RouterLink>
 
-        <RouterLink class="Rte" to="/settings"><img class="img" src="../assets/set.svg" alt="">Paramètres</RouterLink>
+        <RouterLink :class="{active: isInUrl('settings')}" class="Rte desktop" to="/settings"><img class="img" src="../assets/set.svg" alt="">Paramètres</RouterLink>
+
+        <RouterLink :class="{active: isInUrl('choice-gmp')}" class="Rte gmp" to="/choice-gmp"><img class="img" src="../assets/gess_my_prompt.svg" alt="">Gess My Prompt</RouterLink>        
 
         <RouterLink v-if="profil_picture === ''" class="Rte" id="log" to="/login">
             <img src="../assets/login_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="">
             <div>Connexion</div>
         </RouterLink>
-        <RouterLink :class="{active: isInUrl('profil')}" v-if="profil_picture !== ''" class="Rte" id="log" to="/profil"><img class="pp" :src="profil_picture" alt="">Profil</RouterLink>
+        <RouterLink :class="{active: isInUrl('profil')}" v-if="profil_picture !== ''" class="Rte desktop" id="log" to="/profil"><img class="pp" :src="profil_picture" alt="">Profil</RouterLink>
+        <RouterLink :class="{active: isInUrl('settings')}" v-if="profil_picture !== ''" class="Rte mobile" id="log" to="/settings"><img class="pp" :src="profil_picture" alt="">Profil</RouterLink>
 
     </div>
 </template>
@@ -90,16 +93,25 @@ const isInUrl = (url: string) => {
         flex-grow: 1;
         flex: 1;
         padding: 10px 0;
+        font-size: 13px;
+
+        &.gmp {
+            font-size: 11px;
+        }
 
         &.active {
-            background-color: red;
+            background-color: rgba(255, 255, 255, 0.15);
             border-radius: 8px;
             
         }
 
         &.logo {
         display: none;
-    }
+        }
+
+        &.desktop {
+            display: none;
+        }
     }
     .img {
         width: 20px;
@@ -132,6 +144,7 @@ const isInUrl = (url: string) => {
         }
 
         .Rte {
+            font-size: 16px;
             &.logo {
                 display: flex;
                 img {
@@ -140,6 +153,22 @@ const isInUrl = (url: string) => {
                     height: 100px;
                     margin-top: 1rem;
                 }
+            }
+
+            &.desktop {
+                display: flex;
+            }
+
+            &.mobile {
+                display: none;
+            }
+
+            &.gmp {
+                img {
+                    margin-bottom: 3px
+                }
+
+                font-size: 13px;
             }
 
             flex: auto;
