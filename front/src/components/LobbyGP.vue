@@ -5,7 +5,7 @@ import router from '@/router';
 import socketClient from '../helpers/socketHelper';
 import Chat from './Chat.vue';
 
-
+localStorage.removeItem('endTime');
 const state = reactive({
   messages: [] as Array<[string, string, string]>,
   name: '',
@@ -57,8 +57,12 @@ const startGame = async () => {
   if (!res.success) {
     router.push('/login');
   }
+  else{
+    socketClient.play(props.lobbyId);
+  }
 };
 
+socketClient.startGame(props.lobbyId);
 // Ensure there are always 8 elements in state.messages
 const filledMessages = () => {
   const messagesCopy = [...state.messages];

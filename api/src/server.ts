@@ -8,6 +8,7 @@ import setupSocket from './chat';
 import setupSocketGF from './lobbyGP';
 
 
+
 dotenv.config(); // Load environment variables
 
 // create fastify instance
@@ -45,6 +46,7 @@ fastify.register(jwt, {
 
 setupSocket(fastify);
 setupSocketGF(fastify);
+
 
 fastify.register(routes, { prefix: '/' });
 fastify.register(db);

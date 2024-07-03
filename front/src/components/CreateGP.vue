@@ -4,7 +4,7 @@ import apiHelper from '@/helpers/apiHelper';
 import { useUtilsStore } from '@/stores/utilsStore';
 import router from '@/router';
 import socketHelper from '@/helpers/socketHelper';
-
+localStorage.removeItem('endTime');
 socketHelper.disconnect()
 
 const roomName = ref('')

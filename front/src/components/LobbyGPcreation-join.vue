@@ -3,7 +3,7 @@ import { ref } from 'vue';;
 import router from '@/router';
 
 const currentComponent = ref<string | null>(null);
-
+  localStorage.removeItem('endTime');
 const navigateToCreate = () => {
   currentComponent.value = 'Create';
   router.push('/create/gmp');
