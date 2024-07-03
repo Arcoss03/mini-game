@@ -24,8 +24,6 @@ const props = defineProps<{
 }>()
 
 const isInUrl = (url: string) => {
-    console.log(currentUrl.value);
-    console.log(url);
     return currentUrl.value === `/${url}`;
 }
 
