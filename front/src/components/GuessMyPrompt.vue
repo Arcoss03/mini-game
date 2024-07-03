@@ -19,7 +19,7 @@ const state = reactive({
 });
 
 const props = defineProps<{ gmpId: string }>();
-
+let  isSubmitted:boolean= false;
 const prompt = ref('');
 const initialTime = 10;
 const timeLeft = ref(initialTime);
@@ -42,6 +42,9 @@ const startTimer = () => {
   }, 1000);
 };
 
+const submit =()=>{
+  isSubmitted=true;
+}
 const submitPrompt = async () => {
   if (generate == true) {
     if (prompt.value === '') {
@@ -53,13 +56,13 @@ const submitPrompt = async () => {
   }
 
   clearInterval(timer);
-
   timeLeft.value = 0;
   localStorage.removeItem('endTime');
 };
 
 socket.on("nextPrompt", (data) => {
   generate=true;
+  isSubmitted=false;
   state.turn = data.turn + 1;
   lastPrompt = data.id;
   state.img = data.img;
@@ -111,8 +114,8 @@ onUnmounted(() => {
         <img v-if="state.img" :src="state.img" alt="">
       </div>
       <div class="form">
-        <form @submit.prevent="submitPrompt">
-          <input type="text" v-model="prompt" id="prompt" placeholder="Saisir votre prompt">
+        <form @submit.prevent="submit">
+          <input type="text" v-model="prompt" id="prompt" placeholder="Saisir votre prompt" :disabled="isSubmitted">
           <div class="positionButton">
             <button type="submit" class="create button">SOUMETTRE</button>
           </div>
