@@ -69,7 +69,7 @@ async function getGPRoutes(fastify: FastifyInstance) {
         }
         try {
             const roomId = parseInt(request.params.id, 10);
-            const adjustedId = roomId - 11111;
+            const adjustedId = roomId - 11111; // The room that the user sees = Id room + 11111 to never have a room with only 1 number is used to find the real id of the room.
             const [nbPlayer]: any = await fastify.db.query(
                 'SELECT COUNT(*) FROM guess_prompt_participant WHERE room_GP_id = (?)',
                 [adjustedId]

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, defineProps, reactive } from 'vue';
 import ky from 'ky';
-import socketHelper from '@/helpers/socketHelper';
 import { io } from 'socket.io-client';
 import router from '@/router';
 
@@ -25,8 +24,8 @@ const prompt = ref('');
 const initialTime = 10;
 const timeLeft = ref(initialTime);
 let timer: any = null;
-let last: any = null;
-let genere: boolean = true;
+let lastPrompt: any = null;
+let generate: boolean = true;
 
 const startTimer = () => {
   if (timer) clearInterval(timer);
@@ -44,13 +43,13 @@ const startTimer = () => {
 };
 
 const submitPrompt = async () => {
-  if (genere == true) {
+  if (generate == true) {
     if (prompt.value === '') {
       prompt.value = "Quand tu réalises que même un œuf a une meilleure chance de devenir quelque chose de plus extraordinaire que toi";
     }
     const data: any = await ky.get('https://api.thecatapi.com/v1/images/search?limit=1').json();
-    socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, data: data[0].url, timer: timeLeft.value, turn: state.turn, last: last }); socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, data: data[0].url, timer: timeLeft.value, turn: state.turn, last: last });
-    genere=false;
+    socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, data: data[0].url, timer: timeLeft.value, turn: state.turn, last: lastPrompt }); 
+    generate=false;
   }
 
   clearInterval(timer);
@@ -60,9 +59,9 @@ const submitPrompt = async () => {
 };
 
 socket.on("nextPrompt", (data) => {
-  genere=true;
+  generate=true;
   state.turn = data.turn + 1;
-  last = data.id;
+  lastPrompt = data.id;
   state.img = data.img;
   // Reset the timer when a new prompt is received
   timeLeft.value = initialTime;

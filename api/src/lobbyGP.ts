@@ -43,9 +43,9 @@ io.on('connection', (socket) => {
         [roomId]
       );
       
-      let chef
+      let isOwner
       if(owner[0].creator_id==id){
-        chef=true
+        isOwner=true
         socket.emit("chef",{isChef:true});
       }
       else if((!pseudosInRoom[room.roomId])||pseudosInRoom[room.roomId].length==0){
@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
           'UPDATE room_GP SET creator_id=? where id=?',
           [id,roomId]
         );
-        chef=true
+        isOwner=true
         socket.emit("chef",{isChef:true});
       }
 
@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
         }
 
         if (!pseudosInRoom[room.roomId].includes(userPseudo)) {
-          pseudosInRoom[room.roomId].push([userPseudo, userRows[0].profil_picture,chef]);
+          pseudosInRoom[room.roomId].push([userPseudo, userRows[0].profil_picture,isOwner]);
         }
         io.to(room.roomId).emit('joinedRoom', { pseudos: pseudosInRoom[room.roomId]});
       } else {
