@@ -151,6 +151,7 @@ main {
     }
 
     
+
     button {
       width: 100%;
       height: 100%;
@@ -217,7 +218,7 @@ main {
 .button-next {
   position: absolute;
   right: 50%;
-  top: calc(50% - 45px);
+  top: calc(50vh - 45px);
   transform: translate(50%, -50%);
   z-index: 10;
   background-color: #17141D;
@@ -244,7 +245,7 @@ main {
 .divide-bar {
   position: absolute;
   z-index: 9;
-  top: calc(50% - 45px);
+  top: calc(50vh - 45px);
   right: 50%;
   transform: translate(50%, -50%);
   width: 100%;
