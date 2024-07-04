@@ -44,6 +44,9 @@ const startTimer = () => {
 
 const submit =()=>{
   isSubmitted=true;
+  if (prompt.value === '') {
+      prompt.value = "Quand tu réalises que même un œuf a une meilleure chance de devenir quelque chose de plus extraordinaire que toi";
+    }
 }
 const submitPrompt = async () => {
   if (generate == true) {
