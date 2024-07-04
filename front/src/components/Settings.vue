@@ -1,8 +1,10 @@
 <script setup lang="ts">
 
 import { useUtilsStore } from '@/stores/utilsStore';
-import { on } from 'events';
-import { onMounted } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+
+const profil_picture = useUserStore().currentUser?.profil_picture;
+const name = useUserStore().currentUser?.pseudo;
 
 const utilsStore = useUtilsStore();
 
@@ -19,6 +21,10 @@ const onThemeChange = (event: Event) => {
 <template>
     <main class="settings">
         <h1>Paramètres</h1>
+        <RouterLink v-if="profil_picture !== ''" class="profil" id="log" to="/profil">
+            <img class="pp" :src="profil_picture" alt="">
+            <div>{{ name }}</div>
+        </RouterLink>
         <div class="content">
             <li>
                 <label for="theme">Theme</label>
@@ -43,6 +49,7 @@ main {
     justify-content: flex-start;
     font-weight: 400;
     font-style: normal;
+    margin-left: 1.5rem;
 
     h1 {
         font-size: 2rem;
@@ -50,12 +57,27 @@ main {
         margin-left: 20px;
     }
 
+    .profil {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+        gap:1rem;
+        
+        img {
+            width: 50px;
+            height: 50px;
+            border-radius: 999px;
+        }
+        div {
+            font-size: 2rem;
+        }
+    }
+
     li {
         margin-top: 20px;
         list-style: none;
         display: flex;
         flex-direction: column;
-        margin-left: 20px;
     }
 
     a {
@@ -75,24 +97,19 @@ main {
     }
 
     //les classes pour le desktop
-    @media (min-width: 769px) {
+    @media (min-width: 1024px) {
         display: flex;
         flex-direction: column;
         justify-content: start;
 
+        .profil {
+            display: none;
+        }
+
         li {
-            margin-top: 20px;
             list-style: none;
             display: flex;
             flex-direction: column;
-        }
-
-        .content {
-            margin-left: 150px;
-        }
-
-        h1 {
-            margin-left: 150px;
         }
     }
 }
