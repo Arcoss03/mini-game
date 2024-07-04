@@ -118,7 +118,7 @@ onUpdated(() => {
 
 <style scoped lang="scss">
 main {
-  background-color: #211D2A;
+  background-color: var(--bg-color);
   .barre {
     margin-left: 2rem;
     border-radius: 2rem;
@@ -137,7 +137,7 @@ main {
     justify-content: center;
     align-items: center;
     border-radius: 12px;
-    background: white;
+    background: var(--color-text);
     width: 80%;
     margin: 1rem 0 0 1rem;
     padding: 0 1rem;
@@ -206,7 +206,7 @@ main {
       }
       li {
         word-break: break-word;
-        color: #fff;
+        color: var(--color-text);
         .message {
           display: flex;
           flex-wrap: wrap;

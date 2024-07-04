@@ -76,7 +76,7 @@ const isInUrl = (url: string) => {
     gap: 10px;
 
     a {
-        color: white;
+        color: var(--color-text);
         text-decoration: none;
     }
 
@@ -192,7 +192,7 @@ const isInUrl = (url: string) => {
             position: absolute;
             top: 0.5rem;
             left: 5rem;
-            fill: #fff;
+            fill: var(--color-text);
             z-index: 1000;
 
             &.navClose {

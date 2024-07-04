@@ -143,7 +143,7 @@ const filledMessages = () => {
 main {
   width: 100%;
   height: 100%;
-  background-color: #211D2A;
+  background-color: var(--bg-color);
 
   .container {
     display: flex;
@@ -171,7 +171,7 @@ main {
 
         .chat {
           border-radius: 1.5rem;
-          background-color: #17141D;
+          background-color: var(--bg-color-elements);
           overflow-y: auto;
         }
       }
@@ -370,6 +370,15 @@ main {
       justify-content: end;
 
       button {
+        align-items: center;
+        appearance: none;
+        border: 0;
+        border-radius: 15px;
+        box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, rgba(58, 65, 111, 0.5) 0 -3px 0 inset;
+        box-sizing: border-box;
+        color: var(--color-text);
+        cursor: pointer;
+        display: inline-flex;
         height: 40px;
         margin: 10px;
         &.blue {

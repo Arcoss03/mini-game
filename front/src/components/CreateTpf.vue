@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ky from 'ky';
-import {type Post} from '@/interfaces/post';
+import { type Post } from '@/interfaces/post';
 import { useUtilsStore } from '@/stores/utilsStore';
 import { onMounted, ref, type Ref } from 'vue';
 import apiHelper from '../helpers/apiHelper';
@@ -31,7 +31,8 @@ const callPopupGeneration = () => {
 </script>
 
 <template>
-  <GenerateImgPopup v-if="popupIsVisible" :is-visible="popupIsVisible" :close-popup="closePopup" :text1="text1" :text2="text2" />
+  <GenerateImgPopup v-if="popupIsVisible" :is-visible="popupIsVisible" :close-popup="closePopup" :text1="text1"
+    :text2="text2" />
   <main>
     <!-- <img src="../assets/logoMG.svg" alt="logo"> -->
     <div class="desc-create">
@@ -61,11 +62,12 @@ main {
   height: 100%;
   width: 100%;
   padding: 0 2rem;
-  background-color: #211D2A ;
+  background-color: #211D2A;
+  background-color: var(--bg-color);
   overflow: hidden;
   font-weight: 400;
   font-style: normal;
-  
+
 
   .small-svg {
     border: solid;
@@ -91,12 +93,14 @@ main {
       font-size: 16px;
       margin-bottom: 1rem;
     }
-    @media screen and (min-width: 1024px){
+
+    @media screen and (min-width: 1024px) {
       input {
         width: 40vw;
       }
+
       padding-bottom: 2rem;
-      
+
     }
   }
 
@@ -104,30 +108,38 @@ main {
     background-color: #7520FF;
     height: 3rem;
     font-size: 18px;
+
     &:focus {
-          box-shadow: #6C63FF 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
-        }
+      box-shadow: #6C63FF 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
+    }
 
-        &:active {
-          box-shadow: #6C63FF 0 3px 7px inset;
-          transform: translateY(2px);
-        }
+    &:active {
+      box-shadow: #6C63FF 0 3px 7px inset;
+      transform: translateY(2px);
+    }
 
-        &:hover {
-          box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
-          transform: translateY(-2px);
-        }
+    &:hover {
+      box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6C63FF 0 -3px 0 inset;
+      transform: translateY(-2px);
+    }
+
+    padding: 0px 20px;
+
+    border-radius: 20px;
+    color: var(--color-text);
   }
+
   .desc-create {
     display: flex;
     flex-direction: column;
     align-items: start;
     justify-content: center;
-    color: white;
+    color: var(--color-text);
     font-size: 1.5em;
     font-weight: 300;
     font-style: normal;
   }
+
   img {
     width: 250px;
     height: 250px;
