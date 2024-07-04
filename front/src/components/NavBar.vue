@@ -51,8 +51,8 @@ const isInUrl = (url: string) => {
             <img src="../assets/login_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="">
             <div>Connexion</div>
         </RouterLink>
-        <RouterLink :class="{active: isInUrl('profil')}" v-if="profil_picture !== ''" class="Rte desktop" id="log" to="/profil"><img class="pp" :src="profil_picture" alt="">Profil</RouterLink>
-        <RouterLink :class="{active: isInUrl('settings')}" v-if="profil_picture !== ''" class="Rte mobile" id="log" to="/settings"><img class="pp" :src="profil_picture" alt="">Profil</RouterLink>
+        <RouterLink v-if="profil_picture !== ''" class="Rte desktop profil" id="log" to="/profil"><img class="pp" :src="profil_picture" alt="">Profil</RouterLink>
+        <RouterLink :class="{active: isInUrl('settings')}" v-if="profil_picture !== ''" class="Rte mobile" id="log" to="/settings"><img class="pp" :src="profil_picture" alt="">Paramètres</RouterLink>
 
     </div>
 </template>
@@ -151,6 +151,9 @@ const isInUrl = (url: string) => {
                     height: 100px;
                     margin-top: 1rem;
                 }
+            }
+            &.profil {
+                width: fit-content;
             }
 
             &.desktop {
