@@ -50,7 +50,7 @@ main {
 
     }
 
-    button {
+    .button {
       align-items: center;
       appearance: none;
       border: 0;
@@ -65,22 +65,8 @@ main {
       align-items: center;
       flex-direction: column;
 
-      h1 {
-        line-height: 4.5rem;
-        margin-top: 5rem;
-        margin-bottom: 5rem;
-        font-size: 9vh;
-        max-width: 30rem;
-        text-align: center;
-        font-style: italic;
-        font-weight: bold;
-
-      }
-
-      button {
-
-        &.create {
-          background: red;
+      &.create {
+          background: red ;
 
           &:focus {
             box-shadow: #ff4e50 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #ff4e50 0 -3px 0 inset;
@@ -115,7 +101,8 @@ main {
             transform: translateY(-2px);
           }
         }
-      }
+
+    
     }
   }
 

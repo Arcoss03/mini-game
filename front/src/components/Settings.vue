@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
 import { useUtilsStore } from '@/stores/utilsStore';
+import { on } from 'events';
+import { onMounted } from 'vue';
 
 const utilsStore = useUtilsStore();
 
@@ -21,8 +23,8 @@ const onThemeChange = (event: Event) => {
             <li>
                 <label for="theme">Theme</label>
                 <select name="theme" class="theme" @change="onThemeChange" >
-                    <option value="light">Light</option>
                     <option value="dark">Dark</option>
+                    <option value="light">Light</option>
                 </select>
                 <a href="">Mon score CO2</a>
             </li>
