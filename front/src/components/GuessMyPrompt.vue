@@ -19,13 +19,14 @@ const state = reactive({
 });
 
 const props = defineProps<{ gmpId: string }>();
-let  isSubmitted:boolean= false;
+let isSubmitted: boolean = false;
 const prompt = ref('');
 const initialTime = 10;
 const timeLeft = ref(initialTime);
 let timer: any = null;
 let lastPrompt: any = null;
 let generate: boolean = true;
+let beingGenerated: boolean = false;
 
 const startTimer = () => {
   if (timer) clearInterval(timer);
@@ -42,20 +43,20 @@ const startTimer = () => {
   }, 1000);
 };
 
-const submit =()=>{
-  isSubmitted=true;
+const submit = () => {
+  isSubmitted = true;
   if (prompt.value === '') {
-      prompt.value = "Quand tu réalises que même un œuf a une meilleure chance de devenir quelque chose de plus extraordinaire que toi";
-    }
+    prompt.value = "Quand tu réalises que même un œuf a une meilleure chance de devenir quelque chose de plus extraordinaire que toi";
+  }
 }
 const submitPrompt = async () => {
   if (generate == true) {
     if (prompt.value === '') {
       prompt.value = "Quand tu réalises que même un œuf a une meilleure chance de devenir quelque chose de plus extraordinaire que toi";
     }
-    const data: any = await ky.get('https://api.thecatapi.com/v1/images/search?limit=1').json();
-    socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, data: data[0].url, timer: timeLeft.value, turn: state.turn, last: lastPrompt }); 
-    generate=false;
+    //socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, timer: timeLeft.value, turn: state.turn, last: lastPrompt }); 
+    generate = false;
+    beingGenerated = true;
   }
 
   clearInterval(timer);
@@ -64,8 +65,9 @@ const submitPrompt = async () => {
 };
 
 socket.on("nextPrompt", (data) => {
-  generate=true;
-  isSubmitted=false;
+  beingGenerated = false;
+  generate = true;
+  isSubmitted = false;
   state.turn = data.turn + 1;
   lastPrompt = data.id;
   state.img = data.img;
@@ -123,6 +125,15 @@ onUnmounted(() => {
             <button type="submit" class="create button">SOUMETTRE</button>
           </div>
         </form>
+      </div>
+      <div class="generate">
+        <div v-if="beingGenerated == true" class="whileGenerated">
+          <div class="loading">
+            <h2>Image en cours de génération</h2>
+            <p>Veuillez patienter...</p>
+            <div class="progress-bar"></div>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -250,7 +261,46 @@ main {
         margin-top: 0.5rem;
       }
     }
+    .generate{
 
+    display:block;
+    position: center;
+    width: 80%;
+    margin-left:10%;
+    border-radius: 15px;
+    background-color: #211D2A;
+
+    .whileGenerated {
+      .progress-bar {
+        width: 100%;
+        height: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+
+        &:after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background-image: linear-gradient(90deg, #EC1414 0.16%, #7D50DD 99.9%);
+          animation: progress 1s linear infinite;
+        }
+
+
+        @keyframes progress {
+          0% {
+            transform: translateX(-100%);
+          }
+
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      }
+    }
+    }
 
 
   }
