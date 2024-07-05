@@ -58,7 +58,7 @@ const submitForm = () => {
                 padding-left: 1rem;
                 width: 250px;
                 height: 40px;
-                border: 2px solid var(--color-text);
+                border: 2px solid var(--bg-color-elements);
                 border-radius: 8px;
             }
 
@@ -68,7 +68,7 @@ const submitForm = () => {
                 align-items: center;
                 width: 40px;
                 height: 40px;
-                border: solid #fff;
+                border: solid var(--bg-color-elements);
                 border-radius: 8px;
                 color: var(--color-text);
             }

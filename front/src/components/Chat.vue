@@ -137,7 +137,7 @@ main {
     justify-content: center;
     align-items: center;
     border-radius: 12px;
-    background: var(--color-text);
+    background: var(--textarea-bg);
     width: 80%;
     margin: 1rem 0 0 1rem;
     padding: 0 1rem;
