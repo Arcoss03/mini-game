@@ -21,7 +21,7 @@ const state = reactive({
 const props = defineProps<{ gmpId: string }>();
 let isSubmitted: boolean = false;
 const prompt = ref('');
-const initialTime = 10;
+const initialTime = 30;
 const timeLeft = ref(initialTime);
 let timer: any = null;
 let lastPrompt: any = null;
@@ -54,7 +54,7 @@ const submitPrompt = async () => {
     if (prompt.value === '') {
       prompt.value = "Quand tu réalises que même un œuf a une meilleure chance de devenir quelque chose de plus extraordinaire que toi";
     }
-    //socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, timer: timeLeft.value, turn: state.turn, last: lastPrompt }); 
+    socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, timer: timeLeft.value, turn: state.turn, last: lastPrompt }); 
     generate = false;
     beingGenerated = true;
   }
