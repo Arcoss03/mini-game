@@ -68,6 +68,11 @@ main {
   font-weight: 400;
   font-style: normal;
 
+  .button {
+    color: var(--bg-color);
+
+  }
+
 
   .small-svg {
     border: solid;
