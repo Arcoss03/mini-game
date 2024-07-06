@@ -192,7 +192,7 @@ const isInUrl = (url: string) => {
 @media (min-width: 1024px) {
     .toogleNav {
             display: block;
-            position: absolute;
+            position: fixed; 
             top: 0.5rem;
             left: 5rem;
             fill: var(--color-text);
