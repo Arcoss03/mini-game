@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { io } from './chat';
+import {generateAndStoreImage} from "./utils/generateImg.utils"
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -90,9 +91,10 @@ io.on('connection', (socket) => {
     const token = room.token;
       const decoded = await fastify.jwt.verify(token);
       const { id } = decoded as { id: string };
+      const url = await generateAndStoreImage(`Génere une image de ${room.prompt}`)
       const [insertPrompt]: any = await fastify.db.query(
         'INSERT INTO guess_prompt (img_url, prompt, turn, user_id, game_GP_id, id_GP_before) VALUES (?, ?, ?, ?, ?, ?);'
-        , [room.data,room.prompt,room.turn,id,room.roomId-11111,room.last]);
+        , [url,room.prompt,room.turn,id,room.roomId-11111,room.last]);
         const insertId = insertPrompt.insertId;
        
         
