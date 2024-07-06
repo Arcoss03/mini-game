@@ -24,73 +24,56 @@ const submitForm = () => {
                 </div>
             </form>
             <div class="feed-container">
-                <h1>Feed</h1>
 
                 <div class="article">
-                    <h1 class="article-header">Tu-prefères?</h1>
+                    <h2 class="article-header">Tu-prefères?</h2>
                     <div class="article-content">
-                        <img src="../assets/feed.svg" alt="article" />
-                        <p>
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptate earum itaque
-                            ducimus cumque ad quod voluptatem expedita deserunt eaque dolorem libero reiciendis
-                            possimus autem, aliquid dicta repellat ullam pariatur numquam?
+                        <img src="../assets/tpf_exemple.png" alt="article" />
+                        <p class="content">
+                            Choisissez entre deux situations difficiles. Une IA (DALL·E) génère des images pour
+                            illustrer chaque choix. <br> <br> Comparez ensuite vos préférences avec celles des autres
+                            joueurs grâce aux pourcentages des votes.
                         </p>
                     </div>
                 </div>
                 <div class="article">
-                    <h1 class="article-header">Gartic-Phone</h1>
+                    <h2 class="article-header">Gess My Prompt</h2>
                     <div class="article-content">
-                        <img src="../assets/GP.svg" alt="article" />
-                        <p>
-                            Le Gartic-Phone d'IA games utilise l'intelligence artificielle pour générer des images
-                            correspondant aux prompts écrits par les joueurs, les joueurs suivant doivent deviner le
-                            prompt initial.
+                        <img src="../assets/GP-exemple.png" alt="article" />
+                        <p class="content">
+                            Devinez le prompt qui a servi à générer l'image. Votre réponse génère ensuite une nouvelle
+                            image. <br> <br>Chaque tour est une nouvelle interprétation, offrant une expérience de jeu
+                            visuel amusante et créative.
                         </p>
                     </div>
                 </div>
                 <div class="article">
-                    <h1 class="article-header">The cost of IA</h1>
-                    <p class="article-content">
-                        L'IA générative, qui crée des contenus comme des textes, images et vidéos, a un impact
-                        environnemental significatif. Voici les principaux points à considérer :
-                    </p>
-                    <br />
-                    <h2>1. Consommation Énergétique</h2>
-                    <p class="article-content">
-                        L'entraînement des modèles d'IA comme GPT-4 nécessite une énorme quantité d'énergie. Un
-                        seul grand modèle peut émettre autant de CO2 qu'une voiture parcourant des centaines de
-                        milliers de kilomètres.
-                    </p>
-                    <h2>2. Empreinte Carbone</h2>
-                    <p class="article-content">
-                        L'empreinte carbone des centres de données dépend de leur source d'énergie. Dans les
-                        régions utilisant des combustibles fossiles, cette empreinte est particulièrement
-                        élevée.
-                    </p>
-                    <h2>3. Ressources Matérielles</h2>
-                    <p class="article-content">
-                        La fabrication des composants électroniques requiert des minéraux rares et des métaux,
-                        dont l'extraction impacte l'environnement.
-                    </p>
-                    <h2>4. Solutions</h2>
-                    <p class="article-content">
-                        Optimisation des modèles pour une efficacité énergétique accrue. Énergies renouvelables
-                        pour alimenter les centres de données. Recyclage des composants électroniques.
-                        Amélioration de l'efficacité énergétique des centres de données.
-                    </p>
-                    <h2>5. Sensibilisation et Régulation</h2>
-                    <p class="article-content">
-                        Les entreprises et les décideurs doivent établir des normes environnementales strictes
-                        et promouvoir la transparence sur l'empreinte écologique des projets d'IA.
-                    </p>
-                    <h2>Conclusion</h2>
-                    <p>
-                        Réduire l'impact écologique de l'IA générative est essentiel pour un avenir durable.
-                        Adopter des pratiques plus responsables et durables dans le développement de l'IA est
-                        une nécessité.
-                    </p>
+                    <h2 class="article-header">Le Réel cout de l'ia</h2>
+                    <div class="article-content bot">
+                        <div class="content">
+                            <div>
+                                <p>L'IA générative a un impact environnemental significatif :</p>
+                                <h4>1. Consommation Énergétique</h4>
+                                <p>Les modèles d'IA consomment énormément d'énergie et émettent beaucoup de CO2.</p>
+                                <h4>2. Empreinte Carbone</h4>
+                                <p>Les centres de données ont une empreinte carbone élevée, surtout avec des
+                                    combustibles fossiles.</p>
+                                <h4>3. Ressources Matérielles</h4>
+                                <p>La fabrication des composants utilise des minéraux rares, impactant l'environnement.
+                                </p>
+                                <h4>4. Solutions</h4>
+                                <p>Optimiser les modèles, utiliser des énergies renouvelables, recycler les composants.
+                                </p>
+                                <h4>5. Sensibilisation et Régulation</h4>
+                                <p>Établir des normes environnementales strictes et promouvoir la transparence.</p>
+                                <br>
+                                <p>Réduire l'impact écologique de l'IA est essentiel pour un avenir durable.</p>
+                                <br>
+                            </div>
+                        </div>
+                        <img src="../assets/cost_ai.jpg" alt="article" />
+                    </div>
 
-                    <p class="article-date">Chat-GPT 06/07/2024</p>
                 </div>
             </div>
         </div>
@@ -102,16 +85,19 @@ const submitForm = () => {
 
 <style scoped lang="scss">
 .home {
-    min-height: 100vh;
+    height: 100vh;
     background: var(--bg-color);
     border: solid var(--bg-color-elements);
     display: flex;
     width: 100%;
-    // overflow: hidden;
+    overflow: hidden;
 
     .feed {
         flex: 1;
-        margin: 2rem;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto; // Permet le défilement vertical
 
         .search {
             display: flex;
@@ -135,34 +121,16 @@ const submitForm = () => {
                 color: var(--color-text);
             }
         }
-    }
-
-    .chat-container {
-        display: none;
-    }
-
-    @media (min-width: 1024px) {
-        .feed {
-            flex: 1.4;
-        }
-
-        .chat-container {
-            display: block;
-            flex: 0.6;
-            width: 100%;
-            height: 100vh;
-            border-left: solid 10px var(--bg-color-elements);
-            position: sticky;
-            top: 0;
-        }
 
         .feed-container {
+            flex: 1; // Permet à ce conteneur de prendre tout l'espace restant
             display: flex;
             flex-direction: column;
             margin-top: 2rem;
+            width: 100%;
 
-            h1 {
-                font-size: 3rem;
+            h2 {
+                font-size: 2rem;
                 color: var(--color-text);
                 font-family: Arial, Helvetica, sans-serif;
             }
@@ -198,15 +166,45 @@ const submitForm = () => {
                     justify-content: space-around;
                     font-size: 1.2rem;
                     color: var(--color-text);
+                    flex-grow: 1;
+
+                    &.bot {
+                        flex-direction: column;
+                    }
                 }
 
                 img {
-                    width: 50%;
+                    flex: 0.8;
+                    width: 100%;
                     height: auto;
                     border-radius: 8px;
                     margin-right: 20px;
                 }
+
+                .content {
+                    flex: 1.2;
+                }
             }
+        }
+    }
+
+    .chat-container {
+        display: none;
+    }
+
+    @media (min-width: 1024px) {
+        .feed {
+            flex: 1.4;
+        }
+
+        .chat-container {
+            display: block;
+            flex: 0.6;
+            width: 100%;
+            height: 100vh;
+            border-left: solid 10px var(--bg-color-elements);
+            position: sticky;
+            top: 0;
         }
     }
 }
