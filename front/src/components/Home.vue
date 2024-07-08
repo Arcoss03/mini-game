@@ -10,6 +10,14 @@ let router = useRouter()
 const submitForm = () => {
     router.push(`/profil/${searchTerm.value}`)
 }
+
+const redirectTo = (path: string) => {
+    router.push(path)
+}
+
+const redirectToExternal = (path: string) => {
+    window.location.href = path;
+}
 </script>
 
 <template>
@@ -28,7 +36,7 @@ const submitForm = () => {
                 <div class="article">
                     <h2 class="article-header">Tu-prefères?</h2>
                     <div class="article-content">
-                        <img src="../assets/tpf_exemple.png" alt="article" />
+                        <img @click="redirectTo('/tpf')" src="../assets/tpf_exemple.png" alt="article" />
                         <p class="content">
                             Choisissez entre deux situations difficiles. Une IA (DALL·E) génère des images pour
                             illustrer chaque choix. <br> <br> Comparez ensuite vos préférences avec celles des autres
@@ -39,11 +47,20 @@ const submitForm = () => {
                 <div class="article">
                     <h2 class="article-header">Gess My Prompt</h2>
                     <div class="article-content">
-                        <img src="../assets/GP-exemple.png" alt="article" />
+                        <img  @click="redirectTo('/choice-gmp')" src="../assets/GP-exemple.png" alt="article" />
                         <p class="content">
                             Devinez le prompt qui a servi à générer l'image. Votre réponse génère ensuite une nouvelle
                             image. <br> <br>Chaque tour est une nouvelle interprétation, offrant une expérience de jeu
                             visuel amusante et créative.
+                        </p>
+                    </div>
+                </div>
+                <div class="article">
+                    <h2 class="article-header">BroCode</h2>
+                    <div class="article-content">
+                        <img @click="redirectToExternal('https://github.com/AdrienDhmx/Brocode')" src="../assets/brocode.png" alt="brocode">
+                        <p class="contnet">
+                            BroCode est un jeu de tir multijoueur en 2D, développé avec Flutter et le moteur Flame par 3 développeurs talentueux de l'ESGI. <br> <br> Dans ce jeu les joueurs s'affrontent dans une map utilisant diverses armes et stratégies pour dominer leurs adversaires. Avec ses graphismes stylisés et son gameplay fluide, BroCode offre une expérience de jeu immersive et intense, parfaite pour les amateurs de shooters multijoueurs.
                         </p>
                     </div>
                 </div>
@@ -162,28 +179,37 @@ const submitForm = () => {
                 }
 
                 .article-content {
+                    width: 100%;
                     display: flex;
                     justify-content: space-around;
                     font-size: 1.2rem;
                     color: var(--color-text);
                     flex-grow: 1;
 
+                    img {
+                        width: 40%;
+                        cursor: pointer;
+                        height: auto;
+                        border-radius: 8px;
+                        margin-right: 20px;
+                        object-fit: cover;
+                    }
+    
+                    .content {
+                        flex: 1.2;
+                    }
+
                     &.bot {
                         flex-direction: column;
+
+                        img {
+                            width: 100%;
+                            cursor: default;
+
+                        }
                     }
                 }
 
-                img {
-                    flex: 0.8;
-                    width: 100%;
-                    height: auto;
-                    border-radius: 8px;
-                    margin-right: 20px;
-                }
-
-                .content {
-                    flex: 1.2;
-                }
             }
         }
     }
