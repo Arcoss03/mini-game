@@ -146,11 +146,12 @@ main {
     }
 
     &.second {
-      background-color: #7938CB;
+      background-color: var(--violet);
       padding-bottom: 1rem;
     }
 
     
+
     button {
       width: 100%;
       height: 100%;
@@ -197,14 +198,14 @@ main {
       }
 
       &.img-container {
-        border: 10px solid #17141D;
+        border: 10px solid var(--bg-color-elements);
         border-radius: 12px;
       }
 
       button {
         width: 50vh;
         height: 50vh;
-        border: 10px solid #17141D;
+        border: 10px solid var(--bg-color-elements);
         border-radius: 12px;
         overflow: hidden;
 
@@ -217,12 +218,12 @@ main {
 .button-next {
   position: absolute;
   right: 50%;
-  top: calc(50% - 45px);
+  top: calc(50vh - 45px);
   transform: translate(50%, -50%);
   z-index: 10;
-  background-color: #17141D;
+  background-color: var(--bg-color-elements);
   border: 3px solid #FFF;
-  color: #FFF;
+  color: var(--color-text);
   font-size: 2rem;
   width: 5rem;
   height: 5rem;
@@ -244,7 +245,7 @@ main {
 .divide-bar {
   position: absolute;
   z-index: 9;
-  top: calc(50% - 45px);
+  top: calc(50vh - 45px);
   right: 50%;
   transform: translate(50%, -50%);
   width: 100%;
@@ -266,7 +267,7 @@ main {
 }
 
 h2 {
-  color: #FFF;
+  color: var(--color-text);
   font-size: 5rem;
   font-weight: 600;
   text-shadow: 2px 2px 4px #000;

@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, type NavigationGuardNext, type RouteLocationNormalized } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import { useUserStore } from '@/stores/userStore';
-import { useUtilsStore } from '@/stores/utilsStore';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,6 +62,18 @@ const router = createRouter({
       path: '/create/gmp',
       name: 'createGmp',
       component: () => import('../views/LobbyGPcreateView.vue'),
+    },
+    {
+      path: '/gmp/:gmpId',
+      name: 'GameGmp',
+      component: () => import('../views/GuessMyPromptView.vue'),
+      props: true
+    },
+    {
+      path: '/resume/:gmpId',
+      name: 'ResumeGameGmp',
+      component: () => import('../views/ResumeGmpView.vue'),
+      props: true
     },
     {
 

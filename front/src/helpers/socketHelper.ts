@@ -2,6 +2,7 @@ import { io} from 'socket.io-client';
 import router from '@/router';
 
 
+
     const apiUrl = import.meta.env.VITE_API_URL;
     const apiKey = import.meta.env.VITE_API_KEY;
     
@@ -63,9 +64,19 @@ const disconnect=()=>{
   socket.connect();
 }
 
+const play=(room:any)=>{
+  socket.emit('play',room);
+}
+
+const startGame=(gmpId:any)=>{
+  socket.on('start',()=>{ 
+    router.push({ name: 'GameGmp', params: { gmpId } });
+  });
+}
 
 
-  export default { joinRoom, message, messageResponse,quitRoom,invalidToken,joinLobby,handleJoinedRoom,handleChef,disconnect}
+
+  export default { joinRoom, message, messageResponse,quitRoom,invalidToken,joinLobby,handleJoinedRoom,handleChef,disconnect,play,startGame}
   
 
   

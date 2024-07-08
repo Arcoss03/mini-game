@@ -53,7 +53,7 @@ const badge: Ref<Badge | null> = ref(null);
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #17141D;
+    background-color: var(--bg-color);
 
     .badge {
         position: relative;
@@ -71,7 +71,7 @@ const badge: Ref<Badge | null> = ref(null);
 
         .title {
             position: absolute;
-            color: white;
+            color: var(--color-text);
             font-size: 1.2rem;
             height: 1.5rem;
             width: 100%;
@@ -87,7 +87,7 @@ const badge: Ref<Badge | null> = ref(null);
             top: 35%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: white;
+            color: var(--color-text);
             font-size: 2.5rem;
         }
 
@@ -98,7 +98,7 @@ const badge: Ref<Badge | null> = ref(null);
             width: 100%;
             text-align: center;
             transform: translate(-50%, -50%);
-            color: white;
+            color: var(--color-text);
             font-size: 1rem;
             font-weight: 600;
         }

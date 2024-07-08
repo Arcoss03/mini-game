@@ -5,7 +5,7 @@ import apiHelper from '@/helpers/apiHelper';
 import { useUtilsStore } from '@/stores/utilsStore';
 import router from '@/router';
 
-
+localStorage.removeItem('endTime');
 const showToast = useUtilsStore().showToast;
 
 let username: Ref<string> = ref('');
@@ -76,7 +76,7 @@ async function Login() {
 <style scoped lang="scss">
 main {
     min-height: 100vh;
-    background: #211D2A;
+    background: var(--bg-color);
     display: flex;
     flex-direction: column;
     align-items: center;

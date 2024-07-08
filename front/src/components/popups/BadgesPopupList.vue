@@ -50,7 +50,7 @@ function addbadge(badge: BadgeTypes) {
         justify-content: space-around;
         align-items: center;
         gap: 20px;
-        background-color: #211D2A;
+        background-color: var(--bg-color);
         border-radius: 12px;
         max-height: 50%;
         max-width: 50%;
@@ -59,12 +59,12 @@ function addbadge(badge: BadgeTypes) {
         .badge-list {
             padding: 0 1rem;
             border-radius: 10px;
-            border-right: #7938CB 5px solid;
-            border-bottom: #7938CB 5px solid;
+            border-right: var(--violet) 5px solid;
+            border-bottom: var(--violet) 5px solid;
             max-height: 3rem;
             text-align: center;
             font-size: 1.5rem;
-            background-color: #7938CB;
+            background-color: var(--violet);
 
             &.isUsed {
                 background-color: #0000003b;
