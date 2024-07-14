@@ -108,5 +108,41 @@ async function getGPRoutes(fastify: FastifyInstance) {
             reply.status(500).send({ error: 'Database error' });
         }
     });
+
+
+
+    fastify.get('/yourPlayerResume', async (request: FastifyRequest, reply: FastifyReply) => {
+        const payload = request.user as JwtPayload;
+        if (!payload.id) {
+            reply.status(401).send({ error: 'Invalid token' });
+            return;
+        }
+        try {
+            
+            const [room]: any = await fastify.db.query(
+                'SELECT room_GP.name,room_GP.id+11111 as id,room_GP.creation_date FROM guess_prompt_participant JOIN room_GP ON room_GP.id=guess_prompt_participant.room_GP_id WHERE guess_prompt_participant.user_id = (?)',
+                [payload.id]
+            );
+            
+            reply.send(room);
+        } catch (error) {
+            reply.status(500).send({ error: 'Database error' });
+        }
+    });
+
+    fastify.get<{ Params: { id: string } }>('/playerResume/:id', async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
+        try {
+            
+            const id = request.params.id 
+            const [room]: any = await fastify.db.query(
+                'SELECT room_GP.name,room_GP.id+11111 as id,room_GP.creation_date FROM guess_prompt_participant JOIN room_GP ON room_GP.id=guess_prompt_participant.room_GP_id WHERE guess_prompt_participant.user_id = (?)',
+                [id]
+            );
+            
+            reply.send(room);
+        } catch (error) {
+            reply.status(500).send({ error: 'Database error' });
+        }
+    });
 }
 export default getGPRoutes;
