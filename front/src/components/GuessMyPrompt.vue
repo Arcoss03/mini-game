@@ -58,7 +58,7 @@ const submitPrompt = async () => {
     generate = false;
     beingGenerated = true;
   }
-
+  prompt.value = '';
   clearInterval(timer);
   timeLeft.value = 0;
   localStorage.removeItem('endTime');
