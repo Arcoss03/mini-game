@@ -54,7 +54,7 @@ const submitPrompt = async () => {
     socket.emit("createPrompt", { token: localStorage.getItem('token'), roomId: props.gmpId, prompt: prompt.value, data: data[0].url, timer: timeLeft.value, turn: state.turn, last: lastPrompt }); 
     generate=false;
   }
-
+  prompt.value = '';
   clearInterval(timer);
   timeLeft.value = 0;
   localStorage.removeItem('endTime');
