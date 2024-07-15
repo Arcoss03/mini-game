@@ -69,7 +69,7 @@ main {
   font-style: normal;
 
   .button {
-    color: var(--bg-color);
+    color: #fff;
 
   }
 
