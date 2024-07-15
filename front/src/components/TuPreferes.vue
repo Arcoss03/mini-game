@@ -223,7 +223,7 @@ main {
   z-index: 10;
   background-color: var(--bg-color-elements);
   border: 3px solid #FFF;
-  color: var(--color-text);
+  color: #FFF;
   font-size: 2rem;
   width: 5rem;
   height: 5rem;
@@ -267,7 +267,7 @@ main {
 }
 
 h2 {
-  color: var(--color-text);
+  color: #FFF;
   font-size: 5rem;
   font-weight: 600;
   text-shadow: 2px 2px 4px #000;
@@ -316,6 +316,7 @@ h3 {
   width: 50%;
   text-align: center;
   font-size: 1.5rem;
+  color: #FFF;
   text-shadow: 2px 2px 4px #000;
   font-weight: 600;
 
