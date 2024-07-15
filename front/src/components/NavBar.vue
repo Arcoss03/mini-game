@@ -45,7 +45,7 @@ const isInUrl = (url: string) => {
 
         <RouterLink :class="{active: isInUrl('settings')}" class="Rte desktop" to="/settings"><img class="img" src="../assets/set.svg" alt="">Paramètres</RouterLink>
 
-        <RouterLink :class="{active: isInUrl('choice-gmp')}" class="Rte gmp" to="/choice-gmp"><img class="img" src="../assets/gess_my_prompt.svg" alt="">Gess My Prompt</RouterLink>        
+        <RouterLink :class="{active: isInUrl('choice-gmp')}" class="Rte gmp" to="/choice-gmp"><img class="img" src="../assets/gess_my_prompt.svg" alt="">GuessMyPrompt</RouterLink>        
 
         <RouterLink v-if="profil_picture === ''" class="Rte" id="log" to="/login">
             <img src="../assets/login_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="">
